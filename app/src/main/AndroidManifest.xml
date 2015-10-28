@@ -21,6 +21,18 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
+        <activity
+            android:name=".LocatorActivity"
+            android:label="@string/title_activity_locator" >
+        </activity>
+        <activity
+            android:name=".HikeActivity"
+            android:label="@string/title_activity_hike" >
+        </activity>
+        <activity
+            android:name=".HistoryActivity"
+            android:label="@string/title_activity_history" >
+        </activity>
     </application>
 
 </manifest>

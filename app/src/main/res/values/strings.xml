@@ -4,4 +4,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_locator">LocatorActivity</string>
+    <string name="title_activity_hike">HikeActivity</string>
+    <string name="title_activity_history">HistoryActivity</string>
 </resources>
