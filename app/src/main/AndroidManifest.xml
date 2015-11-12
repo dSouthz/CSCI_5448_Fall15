@@ -33,6 +33,9 @@
             android:name=".HistoryActivity"
             android:label="@string/title_activity_history" >
         </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDp-A8H6MkTDyNKwow1NUUqoE02ypK2lJ4"/>
     </application>
 
 </manifest>

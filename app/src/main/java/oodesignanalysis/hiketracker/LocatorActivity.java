@@ -1,15 +1,20 @@
 package oodesignanalysis.hiketracker;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
 import java.util.List;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Created by Ryan on 10/28/15.
  */
-public class LocatorActivity extends ActionBarActivity {
+public class LocatorActivity extends FragmentActivity implements OnMapReadyCallback {
 
     /*******************  Class variables *******************/
     private MountainDataSource mountainDataSource;
@@ -20,6 +25,9 @@ public class LocatorActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_locator);
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     @Override
@@ -36,6 +44,13 @@ public class LocatorActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(0, 0))
+                .title("Marker"));
     }
 
     /**
