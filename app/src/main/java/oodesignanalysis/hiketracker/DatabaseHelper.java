@@ -12,45 +12,44 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     // Logcat Tag
     private static final String LOG = "DatabaseHelper";
 
-    // SQLiteDatabase
-    protected SQLiteDatabase database;
-
     // Database Version
-    private int DATABASE_VERSION;
+    private static int DATABASE_VERSION = 1;
 
     // Database Name
-    private String DATABASE_NAME;
+    private static String DATABASE_NAME = "HikeTrackerDB";
 
     // Table Names
-    private static final String TABLE_MOUNTAIN = "mountains";
-    private static final String TABLE_HIKEDATA = "hikedata";
+    public static final String TABLE_MOUNTAIN = "mountains";
+    public static final String TABLE_HIKEDATA = "hikedata";
 
     // Common Column Names
-    private static final String KEY_ID = "id";
+    public static final String KEY_ID = "id";
 
     // MOUNTAIN Table - column names
-    private static final String KEY_PEAKNAME = "peakname";
-    private static final String KEY_ELEVATION = "elevation";
-    private static final String KEY_LATLONG = "latlong";
+    public static final String KEY_PEAKNAME = "peakname";
+    public static final String KEY_RANGE = "range";
+    public static final String KEY_ELEVATION = "elevation";
+    public static final String KEY_LATITUDE = "latitude";
+    public static final String KEY_LONGITUDE = "longitude";
+
 
     // HIKEDATA Table - column names
-    private static final String KEY_HIKED = "hiked";
-    private static final String KEY_HIKELENGTH = "hikelength";
-    private static final String KEY_HIKEDATE = "hikedate";
+    public static final String KEY_HIKED = "hiked";
+    public static final String KEY_HIKELENGTH = "hikelength";
+    public static final String KEY_HIKEDATE = "hikedate";
 
     // Table Create Statements
     // MOUNTAIN table create statement
-    private static final String CREATE_TABLE_MOUNTAIN = "CREATE TABLE "
+    public static final String CREATE_TABLE_MOUNTAIN = "CREATE TABLE "
             + TABLE_MOUNTAIN + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_PEAKNAME
-            + " TEXT," + KEY_ELEVATION + " TEXT," + KEY_LATLONG
-            + " TEXT" + ")";
+            + " TEXT," + KEY_RANGE + "TEXT" +  KEY_ELEVATION + " TEXT," + KEY_LATITUDE
+            + " INTEGER" + KEY_LONGITUDE + "INTEGER" +")";
 
     // HIKEDATA table create statement
-    private static final String CREATE_TABLE_HIKEDATA = "CREATE TABLE "
+    public static final String CREATE_TABLE_HIKEDATA = "CREATE TABLE "
             + TABLE_HIKEDATA + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_HIKED
             + " INTEGER," + KEY_HIKELENGTH + " TEXT," + KEY_HIKEDATE
             + " DATETIME" + ")";
-
 
 
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -65,6 +64,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL(CREATE_TABLE_HIKEDATA);
     }
 
+    private DatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
@@ -76,6 +79,27 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         onCreate(db);
 
     }
+
+    // Synchronized access to the database, necessary for the multiple
+    // tables and helper classes accessing the data
+    private static DatabaseHelper instance;
+
+    public static synchronized DatabaseHelper getHelper(Context context) {
+        if (instance == null)
+            instance = new DatabaseHelper(context);
+        return instance;
+    }
+
+
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        if (!db.isReadOnly()) {
+            // Enable foreign key constraints
+            db.execSQL("PRAGMA foreign_keys=ON;");
+        }
+    }
+
 
 
 }
