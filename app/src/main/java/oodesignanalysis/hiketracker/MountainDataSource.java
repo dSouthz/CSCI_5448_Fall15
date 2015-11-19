@@ -93,6 +93,7 @@ public class MountainDataSource extends HikeTrackerDBDAO{
 
     // Method to load mountains if not already in database
     public void loadMountains() {
+
         List<Mountain> mountains = addMountains();
 
         // insert into the database

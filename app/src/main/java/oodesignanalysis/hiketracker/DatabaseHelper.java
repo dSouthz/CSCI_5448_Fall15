@@ -40,15 +40,16 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     // Table Create Statements
     // MOUNTAIN table create statement
     public static final String CREATE_TABLE_MOUNTAIN = "CREATE TABLE "
-            + TABLE_MOUNTAIN + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_PEAKNAME
-            + " TEXT," + KEY_RANGE + "TEXT" +  KEY_ELEVATION + " TEXT," + KEY_LATITUDE
-            + " INTEGER" + KEY_LONGITUDE + "INTEGER," + KEY_HIKED + " INTEGER" +")";
+            + TABLE_MOUNTAIN + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_PEAKNAME
+            + " TEXT, " + KEY_RANGE + " TEXT, " +  KEY_ELEVATION + " TEXT, " + KEY_LATITUDE
+            + " INTEGER, " + KEY_LONGITUDE + " INTEGER, " + KEY_HIKED + " INTEGER" +")";
 
     // HIKEDATA table create statement
     public static final String CREATE_TABLE_HIKEDATA = "CREATE TABLE "
-            + TABLE_HIKEDATA + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_HIKELENGTH
-            + " TEXT," + KEY_HIKEDATE + " DATETIME," + " FOREIGN KEY(" + KEY_PEAKNAME
-            + ") REFERENCES "+ TABLE_MOUNTAIN + "(" + KEY_PEAKNAME +")" + ")";
+            + TABLE_HIKEDATA + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_HIKELENGTH
+            + " TEXT, " + KEY_HIKEDATE + " DATETIME, " + KEY_PEAKNAME + " TEXT,"
+            + " FOREIGN KEY(" + KEY_PEAKNAME + ") REFERENCES "
+            + TABLE_MOUNTAIN + "(" + KEY_PEAKNAME +")" + ")";
 
 
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
