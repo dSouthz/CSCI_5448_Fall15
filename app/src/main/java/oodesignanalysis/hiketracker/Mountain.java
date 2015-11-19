@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by diana on 10/22/15.
  */
-public class Mountain implements Parcelable{
+public class Mountain implements Parcelable, Comparable<Mountain>{
 
 
 
@@ -14,7 +14,7 @@ public class Mountain implements Parcelable{
     private int id;
     private String mName;
     private String mRange;
-    private double mElevation;
+    private int mElevation;
     private double mLatitude,mLongtidue;
     private boolean hiked;
 
@@ -57,7 +57,7 @@ public class Mountain implements Parcelable{
         super();
         this.mName = in.readString();
         this.mRange = in.readString();
-        this.mElevation = in.readDouble();
+        this.mElevation = in.readInt();
         this.mLatitude = in.readDouble();
         this.mLongtidue = in.readDouble();
         this.hiked = (in.readInt() != 0);
@@ -97,13 +97,11 @@ public class Mountain implements Parcelable{
         this.hiked = hiked;
     }
 
-    public void setmElevation(double mElevation) {
+    public void setmElevation(int mElevation) {
         this.mElevation = mElevation;
     }
 
-    public double getmElevation() {
-        return mElevation;
-    }
+    public int getmElevation() {return mElevation; }
 
     public String getmRange() { return mRange; }
 
@@ -145,11 +143,15 @@ public class Mountain implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(getmName());
         dest.writeString(getmRange());
-        dest.writeDouble(getmElevation());
+        dest.writeInt(getmElevation());
         dest.writeDouble(getmLatitude());
         dest.writeDouble(getmLongtidue());
         dest.writeInt((!isHiked()) ? 0 : 1);
     }
 
 
+    @Override
+    public int compareTo(Mountain another) {
+        return getmElevation() - another.getmElevation();
+    }
 }

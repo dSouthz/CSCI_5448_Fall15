@@ -2,10 +2,10 @@ package oodesignanalysis.hiketracker;
 
 import android.app.ListActivity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.widget.ListView;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Ryan on 10/28/15.
@@ -15,21 +15,28 @@ public class HistoryActivity extends ListActivity {
     /*******************  Class variables *******************/
     private ListView mListView;
     //private ListViewAdapter TODO: This reference does not resolve, is something else needed?
-    private ArrayList<HikeData> hikeDataArray;
+    private List<HikeData> hikeDataArray;
+    private HikeDataSource hikeDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
+        // initialize database
+        hikeDataSource = new HikeDataSource(this);
+
+        if (hikeDataSource.getAllHikes().size() <= 0) {
+            // Currently no hikes
+        }
+
+        else {
+            hikeDataArray = hikeDataSource.getAllHikes();
+            Collections.sort(hikeDataArray);    // Sort by date
+        }
+
     }
 
-    /**
-     * Retrieves data from a file
-     * @return the data in the file
-     */
-    private String readFromFile() {
-        return "";
-    }
 
     /**
      * Modifies an existing entry in the history

@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Created by Ryan on 10/28/15.
  */
-public class HikeData implements Parcelable{
+public class HikeData implements Parcelable, Comparable<HikeData>{
 
     /*******************  Class variables *******************/
     private int id;
@@ -100,5 +100,10 @@ public class HikeData implements Parcelable{
         dest.writeInt(getHikeLength());
         dest.writeLong(getHikeDate().getTime());
         dest.writeInt(getPeakId());
+    }
+
+    @Override
+    public int compareTo(HikeData another) {
+        return getHikeDate().compareTo(another.getHikeDate());
     }
 }
