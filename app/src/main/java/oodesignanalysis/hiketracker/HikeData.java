@@ -15,14 +15,12 @@ public class HikeData implements Parcelable, Comparable<HikeData>{
     private String peakName;
     private int hikeLength;
     private Date hikeDate;
-    private int peakId;
 
     public HikeData(int id, String peakName, int hikeLength, Date hikeDate, int peakId) {
         this.id = id;
         this.peakName = peakName;
         this.hikeLength = hikeLength;
         this.hikeDate = hikeDate;
-        this.peakId = peakId;
     }
 
     public HikeData(String peakName, int hikeLength, Date hikeDate, int peakId) {
@@ -39,7 +37,6 @@ public class HikeData implements Parcelable, Comparable<HikeData>{
         this.peakName = in.readString();
         this.hikeLength = in.readInt();
         this.hikeDate = new Date(in.readLong());
-        this.peakId = in.readInt();
     }
 
     public String getPeakName() {
@@ -65,10 +62,6 @@ public class HikeData implements Parcelable, Comparable<HikeData>{
     public void setHikeDate(Date hikeDate) {
         this.hikeDate = hikeDate;
     }
-
-    public int getPeakId() { return peakId;}
-
-    public void setPeakId(int peakId) { this.peakId = peakId; }
 
     public int getId() { return id;}
 
@@ -99,7 +92,6 @@ public class HikeData implements Parcelable, Comparable<HikeData>{
         dest.writeString(getPeakName());
         dest.writeInt(getHikeLength());
         dest.writeLong(getHikeDate().getTime());
-        dest.writeInt(getPeakId());
     }
 
     @Override

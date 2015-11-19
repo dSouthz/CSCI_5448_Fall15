@@ -24,9 +24,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     // Common Column Names
     public static final String KEY_ID = "id";
+    public static final String KEY_PEAKNAME = "peakname";
 
     // MOUNTAIN Table - column names
-    public static final String KEY_PEAKNAME = "peakname";
     public static final String KEY_RANGE = "range";
     public static final String KEY_ELEVATION = "elevation";
     public static final String KEY_LATITUDE = "latitude";
@@ -36,7 +36,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     // HIKEDATA Table - column names
     public static final String KEY_HIKELENGTH = "hikelength";
     public static final String KEY_HIKEDATE = "hikedate";
-    public static final String KEY_PEAKID = "peakid";
 
     // Table Create Statements
     // MOUNTAIN table create statement
@@ -48,8 +47,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     // HIKEDATA table create statement
     public static final String CREATE_TABLE_HIKEDATA = "CREATE TABLE "
             + TABLE_HIKEDATA + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_HIKELENGTH
-            + " TEXT," + KEY_HIKEDATE + " DATETIME," + " FOREIGN KEY(" + KEY_PEAKID
-            + ") REFERENCES "+ TABLE_MOUNTAIN + "(" + KEY_ID +")" + ")";
+            + " TEXT," + KEY_HIKEDATE + " DATETIME," + " FOREIGN KEY(" + KEY_PEAKNAME
+            + ") REFERENCES "+ TABLE_MOUNTAIN + "(" + KEY_PEAKNAME +")" + ")";
 
 
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {

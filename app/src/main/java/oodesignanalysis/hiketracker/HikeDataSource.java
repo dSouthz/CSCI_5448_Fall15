@@ -32,7 +32,7 @@ public class HikeDataSource extends HikeTrackerDBDAO{
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.KEY_HIKEDATE, formatter.format(hikeData.getHikeLength()));
         values.put(DatabaseHelper.KEY_HIKELENGTH, hikeData.getHikeLength());
-        values.put(DatabaseHelper.KEY_PEAKID, hikeData.getPeakId());
+        values.put(DatabaseHelper.KEY_PEAKNAME, hikeData.getPeakName());
 
         return database.insert(DatabaseHelper.TABLE_HIKEDATA, null, values);
     }
@@ -41,7 +41,7 @@ public class HikeDataSource extends HikeTrackerDBDAO{
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.KEY_HIKEDATE, formatter.format(hikeData.getHikeLength()));
         values.put(DatabaseHelper.KEY_HIKELENGTH, hikeData.getHikeLength());
-        values.put(DatabaseHelper.KEY_PEAKID, hikeData.getPeakId());
+        values.put(DatabaseHelper.KEY_PEAKNAME, hikeData.getPeakName());
 
         long result = database.update(DatabaseHelper.TABLE_HIKEDATA, values,
                 WHERE_ID_EQUALS,
@@ -74,7 +74,7 @@ public class HikeDataSource extends HikeTrackerDBDAO{
                         } catch (ParseException e) {
                             hikeData.setHikeDate(null);
                         }
-                        hikeData.setPeakId(cursor.getInt(3));
+                        hikeData.setPeakName(cursor.getString(3));
 
                         hikes.add(hikeData);
                     } while (cursor.moveToNext());
