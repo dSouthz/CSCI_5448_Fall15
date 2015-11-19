@@ -22,14 +22,26 @@ public class MountainDataSource extends HikeTrackerDBDAO{
 
     public long save(Mountain mountain) {
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.KEY_PEAKNAME, mountain.getmName());
 
+        // Pull out all values from mountain
+        values.put(DatabaseHelper.KEY_PEAKNAME, mountain.getmName());
+        values.put(DatabaseHelper.KEY_RANGE, mountain.getmRange());
+        values.put(DatabaseHelper.KEY_ELEVATION, mountain.getmElevation());
+        values.put(DatabaseHelper.KEY_LATITUDE, mountain.getmLatitude());
+        values.put(DatabaseHelper.KEY_LONGITUDE, mountain.getmLongtidue());
+
+        // Save to database
         return database.insert(DatabaseHelper.TABLE_MOUNTAIN, null, values);
     }
 
     public long update(Mountain mountain) {
         ContentValues values = new ContentValues();
+        // Pull out all values from mountain
         values.put(DatabaseHelper.KEY_PEAKNAME, mountain.getmName());
+        values.put(DatabaseHelper.KEY_RANGE, mountain.getmRange());
+        values.put(DatabaseHelper.KEY_ELEVATION, mountain.getmElevation());
+        values.put(DatabaseHelper.KEY_LATITUDE, mountain.getmLatitude());
+        values.put(DatabaseHelper.KEY_LONGITUDE, mountain.getmLongtidue());
 
         long result = database.update(DatabaseHelper.TABLE_MOUNTAIN, values,
                 WHERE_ID_EQUALS,
@@ -41,22 +53,41 @@ public class MountainDataSource extends HikeTrackerDBDAO{
 
     public int deleteMountain(Mountain mountain) {
         return database.delete(DatabaseHelper.TABLE_MOUNTAIN,
-                WHERE_ID_EQUALS, new String[] { mountain.getmName() + "" });
+                WHERE_ID_EQUALS, new String[] { String.valueOf(mountain.getId()) });
     }
 
     public List<Mountain> getMountains() {
         List<Mountain> mountains = new ArrayList<Mountain>();
-        Cursor cursor = database.query(DatabaseHelper.TABLE_MOUNTAIN,
-                new String[] { DatabaseHelper.KEY_ID,
-                        DatabaseHelper.KEY_PEAKNAME }, null, null, null, null,
-                null);
 
-        while (cursor.moveToNext()) {
-            Mountain mountain = new Mountain();
-            mountain.setId(cursor.getInt(0));
-            mountain.setmName(cursor.getString(1));
-            mountains.add(mountain);
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_MOUNTAIN;
+
+        try {
+            Cursor cursor = database.rawQuery(selectQuery, null);
+
+            try {
+                // looping through all rows and adding to list
+                if (cursor.moveToFirst()) {
+                    do {
+                        Mountain mount = new Mountain();
+                        mount.setId(cursor.getInt(0));
+                        mount.setmName(cursor.getString(1));
+                        mount.setmRange(cursor.getString(2));
+                        mount.setmElevation(cursor.getInt(3));
+                        mount.setmLatitude(cursor.getDouble(4));
+                        mount.setmLongtidue((cursor.getDouble(5)));
+                        mount.setHiked((cursor.getInt(6)) == 0? false:true);
+
+                        mountains.add(mount);
+                    } while (cursor.moveToNext());
+                }
+            } finally {
+                try { cursor.close(); } catch (Exception ignore) {}
+            }
+
+        } finally {
+            try { database.close(); } catch (Exception ignore) {}
         }
+
         return mountains;
     }
 
@@ -76,6 +107,7 @@ public class MountainDataSource extends HikeTrackerDBDAO{
         }
     }
 
+    // All mountain data is taken from www.14ers.com
     private List<Mountain> addMountains() {
         List<Mountain> mountains = new ArrayList<>();
         mountains.add(new Mountain("Grays Peak", "Front Range", 14270, 39.633820, 105.817520));

@@ -11,21 +11,35 @@ import java.util.Date;
 public class HikeData implements Parcelable{
 
     /*******************  Class variables *******************/
+    private int id;
     private String peakName;
     private int hikeLength;
     private Date hikeDate;
+    private int peakId;
 
-    public HikeData(String peakName, int hikeLength, Date hikeDate) {
+    public HikeData(int id, String peakName, int hikeLength, Date hikeDate, int peakId) {
+        this.id = id;
         this.peakName = peakName;
         this.hikeLength = hikeLength;
         this.hikeDate = hikeDate;
+        this.peakId = peakId;
+    }
+
+    public HikeData(String peakName, int hikeLength, Date hikeDate, int peakId) {
+        this(0, peakName, hikeLength, hikeDate, peakId);
+    }
+
+    public HikeData() {
+        this(0, "Na", 0, new Date(), 0);
     }
 
     private HikeData(Parcel in){
         super();
+        this.id = in.readInt();
         this.peakName = in.readString();
         this.hikeLength = in.readInt();
         this.hikeDate = new Date(in.readLong());
+        this.peakId = in.readInt();
     }
 
     public String getPeakName() {
@@ -52,6 +66,14 @@ public class HikeData implements Parcelable{
         this.hikeDate = hikeDate;
     }
 
+    public int getPeakId() { return peakId;}
+
+    public void setPeakId(int peakId) { this.peakId = peakId; }
+
+    public int getId() { return id;}
+
+    public void setId(int id) { this.id = id; }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -61,7 +83,7 @@ public class HikeData implements Parcelable{
         if (getClass() != obj.getClass())
             return false;
         HikeData other = (HikeData) obj;
-        if (hikeDate != other.getHikeDate())
+        if (id != other.getId())
             return false;
         return true;
     }
@@ -73,8 +95,10 @@ public class HikeData implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(getId());
         dest.writeString(getPeakName());
         dest.writeInt(getHikeLength());
         dest.writeLong(getHikeDate().getTime());
+        dest.writeInt(getPeakId());
     }
 }

@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 /**
  * Created by diana on 11/8/15.
+ *
+ * DBDAO: Database Data Access Object
  */
 public class HikeTrackerDBDAO {
 

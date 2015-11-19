@@ -31,25 +31,25 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String KEY_ELEVATION = "elevation";
     public static final String KEY_LATITUDE = "latitude";
     public static final String KEY_LONGITUDE = "longitude";
-
+    public static final String KEY_HIKED = "hiked";
 
     // HIKEDATA Table - column names
-    public static final String KEY_HIKED = "hiked";
     public static final String KEY_HIKELENGTH = "hikelength";
     public static final String KEY_HIKEDATE = "hikedate";
+    public static final String KEY_PEAKID = "peakid";
 
     // Table Create Statements
     // MOUNTAIN table create statement
     public static final String CREATE_TABLE_MOUNTAIN = "CREATE TABLE "
             + TABLE_MOUNTAIN + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_PEAKNAME
             + " TEXT," + KEY_RANGE + "TEXT" +  KEY_ELEVATION + " TEXT," + KEY_LATITUDE
-            + " INTEGER" + KEY_LONGITUDE + "INTEGER" +")";
+            + " INTEGER" + KEY_LONGITUDE + "INTEGER," + KEY_HIKED + " INTEGER" +")";
 
     // HIKEDATA table create statement
     public static final String CREATE_TABLE_HIKEDATA = "CREATE TABLE "
-            + TABLE_HIKEDATA + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_HIKED
-            + " INTEGER," + KEY_HIKELENGTH + " TEXT," + KEY_HIKEDATE
-            + " DATETIME" + ")";
+            + TABLE_HIKEDATA + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_HIKELENGTH
+            + " TEXT," + KEY_HIKEDATE + " DATETIME," + " FOREIGN KEY(" + KEY_PEAKID
+            + ") REFERENCES "+ TABLE_MOUNTAIN + "(" + KEY_ID +")" + ")";
 
 
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
