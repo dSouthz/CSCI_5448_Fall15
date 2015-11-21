@@ -32,14 +32,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_locator);
 
-        mountainDataSource = new MountainDataSource(this);  // initialize mountain db
-        if (mountainDataSource.getMountains().size() <= 0) {
-            // Mountains have never been loaded before --> Load mountain data
-            mountainDataSource.loadMountains(); // load mountain data into database
-        }
-
-        mountains = mountainDataSource.getMountains();   // local list of mountain data
-
+        mountainInfo();
 
         // Get the map and register for the ready callback
         SupportMapFragment mapFragment =
@@ -53,15 +46,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
         super.onResume();
         //setContentView(R.layout.activity_locator);
 
-        mountainDataSource = new MountainDataSource(this);  // initialize mountain db
-        if (mountainDataSource.getMountains().size() <= 0) {
-            // Mountains have never been loaded before --> Load mountain data
-            mountainDataSource.loadMountains(); // load mountain data into database
-        }
-
-        mountains = mountainDataSource.getMountains();   // local list of mountain data
-
-
+        mountainInfo();
     }
 
     @Override
@@ -78,24 +63,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap map) {
 
-
-        // Add all mountain markers to map
-        for (Mountain mount : mountains) {
-            // Info that will pop up when user clicks on marker
-            String snippet = new String(mount.getmName() + ", "
-            + mount.getmRange() + "\n" + mount.getmElevation());
-
-            // TODO: Update Marker snippet to include listener to start hike recording
-
-            map.addMarker(new MarkerOptions()
-                .position(new LatLng(mount.getmLatitude(), mount.getmLongitude()))
-                .title(mount.getmName()).draggable(false)
-                .snippet(snippet)
-                .icon(BitmapDescriptorFactory.fromBitmap(BitmapHelper.resizeMapIcons(this, "mountain_marker", 110, 110)))
-                    //.icon(BitmapDescriptorFactory.fromResource(R.drawable.mountain_marker))
-            );
-        }
-
+        addMarkers(map);
         setMarkerInteration(map);
         updateCameraPosition(mountains, map);
 
@@ -127,10 +95,38 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(firstMountain.getmLatitude(), firstMountain.getmLongitude()), DEFAULT_ZOOM));
     }
 
+
     /**
-     * Populates mountain info
+     * Populates mountain information with information from database
      */
-    public void mountainInfo() {
+    private void mountainInfo() {
+        mountainDataSource = new MountainDataSource(this);  // initialize mountain db
+        if (mountainDataSource.getMountains().size() <= 0) {
+            // Mountains have never been loaded before --> Load mountain data
+            mountainDataSource.loadMountains(); // load mountain data into database
+        }
+
+        mountains = mountainDataSource.getMountains();   // local list of mountain data
+    }
+
+    /**
+     * Adds markers to the map
+     * @param map The map that will be augmented
+     */
+    private void addMarkers(GoogleMap map) {
+        for (Mountain mount : mountains) {
+            // Info that will pop up when user clicks on marker
+            String snippet = new String(mount.getmName() + ", "
+                    + mount.getmRange() + "\n" + mount.getmElevation());
+
+            map.addMarker(new MarkerOptions()
+                            .position(new LatLng(mount.getmLatitude(), mount.getmLongitude()))
+                            .title(mount.getmName()).draggable(false)
+                            .snippet(snippet)
+                            .icon(BitmapDescriptorFactory.fromBitmap(BitmapHelper.resizeMapIcons(this, "mountain_marker", 110, 110)))
+                    //.icon(BitmapDescriptorFactory.fromResource(R.drawable.mountain_marker))
+            );
+        }
     }
 
     /**
