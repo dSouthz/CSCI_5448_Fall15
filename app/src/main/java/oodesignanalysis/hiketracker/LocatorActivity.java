@@ -2,14 +2,16 @@ package oodesignanalysis.hiketracker;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
@@ -24,18 +26,14 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     private List<Mountain> mountains;
     private GoogleMap mMap;
 
+    private final float DEFAULT_ZOOM = 9.5f;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_locator);
 
         mountainDataSource = new MountainDataSource(this);  // initialize mountain db
-
-        mountainDataSource.database.execSQL("DROP TABLE IF EXISTS " + DatabaseHelper.TABLE_MOUNTAIN);
-        mountainDataSource.database.execSQL("DROP TABLE IF EXISTS " + DatabaseHelper.TABLE_HIKEDATA);
-
-        DatabaseHelper.getHelper(this).onCreate(mountainDataSource.database);
-
         if (mountainDataSource.getMountains().size() <= 0) {
             // Mountains have never been loaded before --> Load mountain data
             mountainDataSource.loadMountains(); // load mountain data into database
@@ -94,13 +92,41 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
             map.addMarker(new MarkerOptions()
                 .position(new LatLng(mount.getmLatitude(), mount.getmLongitude()))
                 .title(mount.getmName()).draggable(false)
-                    .snippet(snippet)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.mountain_marker))
+                .snippet(snippet)
+                .icon(BitmapDescriptorFactory.fromBitmap(BitmapHelper.resizeMapIcons(this, "mountain_marker", 110, 110)))
+                    //.icon(BitmapDescriptorFactory.fromResource(R.drawable.mountain_marker))
             );
         }
 
+        setMarkerInteration(mMap);
+        updateCameraPosition(mountains, mMap);
+
+    }
+
+    /**
+     * Applies and configures an onClick listener for map marker info boxes
+     * @param map The map that will be manipulated
+     */
+    private void setMarkerInteration(GoogleMap map) {
+        map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+
+                Log.d("", marker.getTitle());
+            }
+        });
+    }
+
+    /**
+     * Moves the camera from its original to position to a new focal point on a provided map
+     *
+     * @param mountains A list of the mountains
+     * @param map The map that will be adjusted
+     */
+    private void updateCameraPosition(List<Mountain> mountains, GoogleMap map) {
         Mountain firstMountain = mountains.get(0);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(firstMountain.getmLatitude(), firstMountain.getmLongitude()), 4.0f));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(firstMountain.getmLatitude(), firstMountain.getmLongitude()), DEFAULT_ZOOM));
     }
 
     /**
