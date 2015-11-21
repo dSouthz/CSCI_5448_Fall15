@@ -24,7 +24,6 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     /*******************  Class variables *******************/
     private MountainDataSource mountainDataSource;
     private List<Mountain> mountains;
-    private GoogleMap mMap;
 
     private final float DEFAULT_ZOOM = 9.5f;
 
@@ -80,7 +79,6 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap map) {
 
 
-        mMap = map;
         // Add all mountain markers to map
         for (Mountain mount : mountains) {
             // Info that will pop up when user clicks on marker
@@ -98,8 +96,8 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
             );
         }
 
-        setMarkerInteration(mMap);
-        updateCameraPosition(mountains, mMap);
+        setMarkerInteration(map);
+        updateCameraPosition(mountains, map);
 
     }
 
