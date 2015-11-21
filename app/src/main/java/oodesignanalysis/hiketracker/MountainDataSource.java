@@ -85,7 +85,7 @@ public class MountainDataSource extends HikeTrackerDBDAO{
             }
 
         } finally {
-            try { database.close(); } catch (Exception ignore) {}
+            //try { database.close(); } catch (Exception ignore) {}
         }
 
         return mountains;

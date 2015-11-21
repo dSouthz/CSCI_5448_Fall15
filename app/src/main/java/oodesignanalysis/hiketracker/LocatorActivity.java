@@ -1,5 +1,9 @@
 package oodesignanalysis.hiketracker;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
@@ -7,6 +11,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -22,6 +27,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     private MountainDataSource mountainDataSource;
     private MapView mapView;
     private List<Mountain> mountains;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +43,9 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
         mountains = mountainDataSource.getMountains();   // local list of mountain data
 
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        // Get the map and register for the ready callback
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
     }
@@ -45,12 +53,27 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     protected void onResume() {
         super.onResume();
-        setContentView(R.layout.activity_locator);
+        //setContentView(R.layout.activity_locator);
+
+        mountainDataSource = new MountainDataSource(this);  // initialize mountain db
+        if (mountainDataSource.getMountains().size() <= 0) {
+            // Mountains have never been loaded before --> Load mountain data
+            mountainDataSource.loadMountains(); // load mountain data into database
+        }
+
+        mountains = mountainDataSource.getMountains();   // local list of mountain data
+
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+//        FragmentManager fm = LocatorActivity.this.getFragmentManager();
+//        Fragment fragment = (fm.findFragmentById(R.id.map));
+//        FragmentTransaction ft = fm.beginTransaction();
+//        ft.remove(fragment);
+//        ft.commit();
     }
 
     @Override
@@ -60,7 +83,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
 
     @Override
     public void onMapReady(GoogleMap map) {
-
+        mMap = map;
         // Add all mountain markers to map
         for (Mountain mount : mountains) {
             // Info that will pop up when user clicks on marker
