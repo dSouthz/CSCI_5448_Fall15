@@ -42,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String CREATE_TABLE_MOUNTAIN = "CREATE TABLE "
             + TABLE_MOUNTAIN + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_PEAKNAME
             + " TEXT, " + KEY_RANGE + " TEXT, " +  KEY_ELEVATION + " TEXT, " + KEY_LATITUDE
-            + " INTEGER, " + KEY_LONGITUDE + " INTEGER, " + KEY_HIKED + " INTEGER" +")";
+            + " FLOAT, " + KEY_LONGITUDE + " FLOAT, " + KEY_HIKED + " INTEGER" +")";
 
     // HIKEDATA table create statement
     public static final String CREATE_TABLE_HIKEDATA = "CREATE TABLE "
