@@ -14,6 +14,9 @@ public class HikeActivity extends AppCompatActivity {
 
     private Button startButton;
     private Button pauseButton;
+    private Button resetButton;
+    private Button saveButton;
+    private Button cancelButton;
 
     private TextView timerValue;
 
@@ -38,17 +41,28 @@ public class HikeActivity extends AppCompatActivity {
         timerValue = (TextView) findViewById(R.id.timerValue);
 
         startButton = (Button) findViewById(R.id.startButton);
+        pauseButton = (Button) findViewById(R.id.pauseButton);
+        pauseButton.setVisibility(View.INVISIBLE);
+
+        resetButton = (Button) findViewById(R.id.resetButton);
+        resetButton.setVisibility(View.INVISIBLE);
+
+        saveButton = (Button) findViewById(R.id.saveButton);
+        saveButton.setVisibility(View.INVISIBLE);
+
+        cancelButton = (Button) findViewById(R.id.cancelButton);
+        cancelButton.setVisibility(View.INVISIBLE);
 
         startButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
                 startTime = SystemClock.uptimeMillis();
+                pauseButton.setVisibility(View.VISIBLE);
+                resetButton.setVisibility(View.VISIBLE);
                 customHandler.postDelayed(updateTimerThread, 0);
 
             }
         });
-
-        pauseButton = (Button) findViewById(R.id.pauseButton);
 
         pauseButton.setOnClickListener(new View.OnClickListener() {
 
@@ -64,18 +78,18 @@ public class HikeActivity extends AppCompatActivity {
     private Runnable updateTimerThread = new Runnable() {
 
         public void run() {
-
             timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
 
             updatedTime = timeSwapBuff + timeInMilliseconds;
 
             int secs = (int) (updatedTime / 1000);
             int mins = secs / 60;
+            int hrs = mins/60;
             secs = secs % 60;
             int milliseconds = (int) (updatedTime % 1000);
-            timerValue.setText("" + mins + ":"
-                    + String.format("%02d", secs) + ":"
-                    + String.format("%03d", milliseconds));
+            timerValue.setText("" + hrs + ":"
+                    + String.format("%02d", mins)
+                    + String.format("%02d", secs));
             customHandler.postDelayed(this, 0);
         }
 
