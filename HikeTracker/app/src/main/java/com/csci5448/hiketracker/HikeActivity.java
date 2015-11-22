@@ -20,15 +20,12 @@ public class HikeActivity extends AppCompatActivity {
     private TextView timerValue;
 
     private long startTime = 0L;
-    private long pausedTime = 0L;
 
     private Handler customHandler = new Handler();
 
     long timeInMilliseconds = 0L;
     long timeSwapBuff = 0L;
     long updatedTime = 0L;
-    boolean wasRunning = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,32 +37,23 @@ public class HikeActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         timerValue = (TextView) findViewById(R.id.timerValue);
+        TextView peakName = (TextView) findViewById(R.id.hikepeakname);
+        peakName.setText("Set Name Here");  // TODO pull info from mountain parcel
 
         startButton = (Button) findViewById(R.id.startButton);
         pauseButton = (Button) findViewById(R.id.pauseButton);
-        pauseButton.setVisibility(View.INVISIBLE);
-
         resetButton = (Button) findViewById(R.id.resetButton);
-        resetButton.setVisibility(View.INVISIBLE);
-
         saveButton = (Button) findViewById(R.id.saveButton);
-        saveButton.setVisibility(View.INVISIBLE);
-
         cancelButton = (Button) findViewById(R.id.cancelButton);
-        cancelButton.setVisibility(View.INVISIBLE);
+
+        setStartingButtons();
 
         startButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
                 setRunningButtons();
-//                if (!wasRunning)startTime = System.currentTimeMillis();
-//                else {
-//                    startTime = System.currentTimeMillis() - pausedTime;
-//                    timeInMilliseconds = savedTime;
-//                }
                 startTime = System.currentTimeMillis();
                 customHandler.postDelayed(updateTimerThread, 0);
-
             }
         });
 
@@ -73,7 +61,6 @@ public class HikeActivity extends AppCompatActivity {
 
             public void onClick(View view) {
                 customHandler.removeCallbacks(updateTimerThread);
-//                pausedTime = System.currentTimeMillis();
                 setPausedButtons();
                 timeSwapBuff += timeInMilliseconds;
             }
@@ -122,8 +109,17 @@ public class HikeActivity extends AppCompatActivity {
         cancelButton.setVisibility(View.VISIBLE);
     }
 
+    private void setStartingButtons(){
+        startButton.setVisibility(View.VISIBLE);
+        pauseButton.setVisibility(View.INVISIBLE);
+        resetButton.setVisibility(View.INVISIBLE);
+        saveButton.setVisibility(View.INVISIBLE);
+        cancelButton.setVisibility(View.INVISIBLE);
+    }
+
     private void saveHike() {
 // TODO Implement saving hike to database, updating user information, updating mountain information
+        // Launch HikeDialogFragment w/ dialog displaying collected info, option to save
     }
 
     private void exit() {
