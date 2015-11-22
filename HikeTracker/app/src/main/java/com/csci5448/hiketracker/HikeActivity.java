@@ -2,7 +2,6 @@ package com.csci5448.hiketracker;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -21,12 +20,14 @@ public class HikeActivity extends AppCompatActivity {
     private TextView timerValue;
 
     private long startTime = 0L;
+    private long pausedTime = 0L;
 
     private Handler customHandler = new Handler();
 
     long timeInMilliseconds = 0L;
     long timeSwapBuff = 0L;
     long updatedTime = 0L;
+    boolean wasRunning = false;
 
 
     @Override
@@ -56,9 +57,13 @@ public class HikeActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                startTime = SystemClock.uptimeMillis();
-                pauseButton.setVisibility(View.VISIBLE);
-                resetButton.setVisibility(View.VISIBLE);
+                setRunningButtons();
+//                if (!wasRunning)startTime = System.currentTimeMillis();
+//                else {
+//                    startTime = System.currentTimeMillis() - pausedTime;
+//                    timeInMilliseconds = savedTime;
+//                }
+                startTime = System.currentTimeMillis();
                 customHandler.postDelayed(updateTimerThread, 0);
 
             }
@@ -67,28 +72,77 @@ public class HikeActivity extends AppCompatActivity {
         pauseButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-
-                timeSwapBuff += timeInMilliseconds;
                 customHandler.removeCallbacks(updateTimerThread);
+//                pausedTime = System.currentTimeMillis();
+                setPausedButtons();
+                timeSwapBuff += timeInMilliseconds;
+            }
+        });
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                startTime = System.currentTimeMillis();
+                timeInMilliseconds = 0L;
+                timeSwapBuff = 0L;
+                updatedTime = 0L;
 
             }
         });
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                saveHike();
+                exit();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                exit();
+            }
+        });
+    }
+
+    private void setRunningButtons(){
+        startButton.setVisibility(View.INVISIBLE);
+        pauseButton.setVisibility(View.VISIBLE);
+        resetButton.setVisibility(View.VISIBLE);
+        saveButton.setVisibility(View.INVISIBLE);
+        cancelButton.setVisibility(View.INVISIBLE);
+    }
+
+    private void setPausedButtons(){
+        startButton.setVisibility(View.VISIBLE);
+        pauseButton.setVisibility(View.INVISIBLE);
+        resetButton.setVisibility(View.VISIBLE);
+        saveButton.setVisibility(View.VISIBLE);
+        cancelButton.setVisibility(View.VISIBLE);
+    }
+
+    private void saveHike() {
+// TODO Implement saving hike to database, updating user information, updating mountain information
+    }
+
+    private void exit() {
+// TODO Return to main activity
     }
 
     private Runnable updateTimerThread = new Runnable() {
 
         public void run() {
-            timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+            timeInMilliseconds = System.currentTimeMillis() - startTime;
 
             updatedTime = timeSwapBuff + timeInMilliseconds;
 
             int secs = (int) (updatedTime / 1000);
             int mins = secs / 60;
-            int hrs = mins/60;
+            int hrs = mins / 60;
             secs = secs % 60;
-            int milliseconds = (int) (updatedTime % 1000);
-            timerValue.setText("" + hrs + ":"
-                    + String.format("%02d", mins)
+            timerValue.setText(String.format("%02d", hrs) + ":"
+                    + String.format("%02d", mins) + ":"
                     + String.format("%02d", secs));
             customHandler.postDelayed(this, 0);
         }
