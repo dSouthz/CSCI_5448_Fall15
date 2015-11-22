@@ -1,4 +1,4 @@
-package oodesignanalysis.hiketracker;
+package com.csci5448.hiketracker;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,6 +13,8 @@ import java.util.List;
  */
 public class MountainDataSource extends HikeTrackerDBDAO{
 
+
+    private static String TAG = "MountainDataSource";  //for debugging logs
     private static final String WHERE_ID_EQUALS = DatabaseHelper.KEY_ID
             + " =?";
 
@@ -21,6 +23,8 @@ public class MountainDataSource extends HikeTrackerDBDAO{
     }
 
     public long save(Mountain mountain) {
+        Log.d(TAG, "Savings new mountain data");
+
         ContentValues values = new ContentValues();
 
         // Pull out all values from mountain
@@ -28,20 +32,23 @@ public class MountainDataSource extends HikeTrackerDBDAO{
         values.put(DatabaseHelper.KEY_RANGE, mountain.getmRange());
         values.put(DatabaseHelper.KEY_ELEVATION, mountain.getmElevation());
         values.put(DatabaseHelper.KEY_LATITUDE, mountain.getmLatitude());
-        values.put(DatabaseHelper.KEY_LONGITUDE, mountain.getmLongitude());
+        values.put(DatabaseHelper.KEY_LONGITUDE, mountain.getmLongtidue());
+        values.put(DatabaseHelper.KEY_HIKED, (mountain.isHiked() == true? 1:0));
 
         // Save to database
         return database.insert(DatabaseHelper.TABLE_MOUNTAIN, null, values);
     }
 
     public long update(Mountain mountain) {
+        Log.d(TAG, "Updating mountain data");
         ContentValues values = new ContentValues();
         // Pull out all values from mountain
         values.put(DatabaseHelper.KEY_PEAKNAME, mountain.getmName());
         values.put(DatabaseHelper.KEY_RANGE, mountain.getmRange());
         values.put(DatabaseHelper.KEY_ELEVATION, mountain.getmElevation());
         values.put(DatabaseHelper.KEY_LATITUDE, mountain.getmLatitude());
-        values.put(DatabaseHelper.KEY_LONGITUDE, mountain.getmLongitude());
+        values.put(DatabaseHelper.KEY_LONGITUDE, mountain.getmLongtidue());
+        values.put(DatabaseHelper.KEY_HIKED, (mountain.isHiked() == true? 1:0));
 
         long result = database.update(DatabaseHelper.TABLE_MOUNTAIN, values,
                 WHERE_ID_EQUALS,
@@ -52,11 +59,13 @@ public class MountainDataSource extends HikeTrackerDBDAO{
     }
 
     public int deleteMountain(Mountain mountain) {
+        Log.d(TAG, "Deleting mountain data");
         return database.delete(DatabaseHelper.TABLE_MOUNTAIN,
                 WHERE_ID_EQUALS, new String[] { String.valueOf(mountain.getId()) });
     }
 
     public List<Mountain> getMountains() {
+        Log.d(TAG, "Retrieving all mountain data");
         List<Mountain> mountains = new ArrayList<Mountain>();
 
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_MOUNTAIN;
@@ -74,7 +83,7 @@ public class MountainDataSource extends HikeTrackerDBDAO{
                         mount.setmRange(cursor.getString(2));
                         mount.setmElevation(cursor.getInt(3));
                         mount.setmLatitude(cursor.getDouble(4));
-                        mount.setmLongitude((cursor.getDouble(5)));
+                        mount.setmLongtidue((cursor.getDouble(5)));
                         mount.setHiked((cursor.getInt(6)) == 0? false:true);
 
                         mountains.add(mount);
@@ -85,15 +94,16 @@ public class MountainDataSource extends HikeTrackerDBDAO{
             }
 
         } finally {
-            //try { database.close(); } catch (Exception ignore) {}
+//            try { database.close(); } catch (Exception ignore) {}
         }
 
+        Log.d(TAG, "Mountain data retrieval complete, size = " + String.valueOf(mountains.size()));
         return mountains;
     }
 
     // Method to load mountains if not already in database
     public void loadMountains() {
-
+        Log.d(TAG, "First insertion of mountain data");
         List<Mountain> mountains = addMountains();
 
         // insert into the database
@@ -103,7 +113,8 @@ public class MountainDataSource extends HikeTrackerDBDAO{
             values.put(DatabaseHelper.KEY_RANGE, mount.getmRange());
             values.put(DatabaseHelper.KEY_ELEVATION, mount.getmElevation());
             values.put(DatabaseHelper.KEY_LATITUDE, mount.getmLatitude());
-            values.put(DatabaseHelper.KEY_LONGITUDE, mount.getmLongitude());
+            values.put(DatabaseHelper.KEY_LONGITUDE, mount.getmLongtidue());
+            values.put(DatabaseHelper.KEY_HIKED, 0);
             database.insert(DatabaseHelper.TABLE_MOUNTAIN, null, values);
         }
     }
@@ -112,7 +123,7 @@ public class MountainDataSource extends HikeTrackerDBDAO{
     private List<Mountain> addMountains() {
         List<Mountain> mountains = new ArrayList<>();
         mountains.add(new Mountain("Grays Peak", "Front Range", 14270, 39.633820, -105.817520));
-        mountains.add(new Mountain("Torreys Peak", "Front Range",14270,  39.633820,-105.817520 ));
+        mountains.add(new Mountain("Torreys Peak", "Front Range",14270,  39.642742, -105.821259 ));
         mountains.add(new Mountain("Mt. Evans", "Front Range",14264, 39.588360, -105.643333 ));
         mountains.add(new Mountain("Longs Peak", "Front Range",14255,40.254902, -105.615738 ));
         mountains.add(new Mountain("Pikes Peak", "Front Range",14110, 38.840542, -105.044357 ));

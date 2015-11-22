@@ -1,4 +1,4 @@
-package oodesignanalysis.hiketracker;
+package com.csci5448.hiketracker;
 
 import android.os.Parcel;
 import android.os.Parcelable;

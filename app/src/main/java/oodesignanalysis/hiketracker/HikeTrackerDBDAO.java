@@ -1,4 +1,4 @@
-package oodesignanalysis.hiketracker;
+package com.csci5448.hiketracker;
 
 import android.content.Context;
 import android.database.SQLException;
@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class HikeTrackerDBDAO {
 
     /*******************  Class variables *******************/
-//    private DatabaseHelper dbHelper;
+//    private static DatabaseHelper dbHelper;
 
     protected SQLiteDatabase database;
     private DatabaseHelper dbHelper;
@@ -22,7 +22,6 @@ public class HikeTrackerDBDAO {
         this.mContext = context;
         dbHelper = DatabaseHelper.getHelper(mContext);
         open();
-
     }
 
     public void open() throws SQLException {
@@ -30,11 +29,4 @@ public class HikeTrackerDBDAO {
             dbHelper = DatabaseHelper.getHelper(mContext);
         database = dbHelper.getWritableDatabase();
     }
-
-    /*public void close() {
-        dbHelper.close();
-        database = null;
-    }*/
-    // Creating a mountain
-
 }

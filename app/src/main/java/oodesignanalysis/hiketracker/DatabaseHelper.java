@@ -1,8 +1,9 @@
-package oodesignanalysis.hiketracker;
+package com.csci5448.hiketracker;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by diana on 10/22/15.
@@ -10,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper{
 
     // Logcat Tag
-    private static final String LOG = "DatabaseHelper";
+    private static final String TAG = "DatabaseHelper";
 
     // Database Version
     private static int DATABASE_VERSION = 1;
@@ -42,14 +43,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String CREATE_TABLE_MOUNTAIN = "CREATE TABLE "
             + TABLE_MOUNTAIN + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_PEAKNAME
             + " TEXT, " + KEY_RANGE + " TEXT, " +  KEY_ELEVATION + " TEXT, " + KEY_LATITUDE
-            + " FLOAT, " + KEY_LONGITUDE + " FLOAT, " + KEY_HIKED + " INTEGER" +")";
+            + " INTEGER, " + KEY_LONGITUDE + " INTEGER, " + KEY_HIKED + " INTEGER" +")";
 
     // HIKEDATA table create statement
     public static final String CREATE_TABLE_HIKEDATA = "CREATE TABLE "
             + TABLE_HIKEDATA + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_HIKELENGTH
-            + " TEXT, " + KEY_HIKEDATE + " DATETIME, " + KEY_PEAKNAME + " TEXT,"
-            + " FOREIGN KEY(" + KEY_PEAKNAME + ") REFERENCES "
-            + TABLE_MOUNTAIN + "(" + KEY_PEAKNAME +")" + ")";
+            + " TEXT, " + KEY_HIKEDATE + " DATETIME, " + KEY_PEAKNAME + " TEXT" + ")";
 
 
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -58,7 +57,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        Log.d(TAG, "Creating databases");
+        Log.d(TAG, "Mountains: " + CREATE_TABLE_MOUNTAIN);
+        Log.d(TAG, "Hikes: " + CREATE_TABLE_HIKEDATA);
         // creating required tables
         db.execSQL(CREATE_TABLE_MOUNTAIN);
         db.execSQL(CREATE_TABLE_HIKEDATA);
@@ -85,6 +86,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     private static DatabaseHelper instance;
 
     public static synchronized DatabaseHelper getHelper(Context context) {
+        // Use the application context, which will ensure that we
+        // don't accidentally leak an Activity's context.
         if (instance == null)
             instance = new DatabaseHelper(context);
         return instance;

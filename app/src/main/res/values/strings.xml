@@ -7,4 +7,14 @@
     <string name="title_activity_locator">LocatorActivity</string>
     <string name="title_activity_hike">HikeActivity</string>
     <string name="title_activity_history">HistoryActivity</string>
+
+
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        AIzaSyDDtg026Hlf_FMQ9NXiOAOtqGHBO4bqEMQ
+    </string>
+
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        AIzaSyDDtg026Hlf_FMQ9NXiOAOtqGHBO4bqEMQ
+    </string>
+    
 </resources>

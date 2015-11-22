@@ -1,4 +1,4 @@
-package oodesignanalysis.hiketracker;
+package com.csci5448.hiketracker;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -15,39 +15,44 @@ public class Mountain implements Parcelable, Comparable<Mountain>{
     private String mName;
     private String mRange;
     private int mElevation;
-    private double mLatitude, mLongitude;
+    private double mLatitude,mLongtidue;
     private boolean hiked;
 
     public static final int TOTAL_MOUNTAINS = 53;   // Total number of peaks
 
     /*******************  Constructor *******************/
 
-    public Mountain(String mName, String mRange, int mElevation, double mLatitude, double mLongitude, int id, boolean hiked){
+//    public Mountain(String mName, String mRange, int mElevation, double mlatitude, double mLongtidue, int id, boolean hiked){
+//        super();
+//        this.mName = mName;
+//        this.mRange = mRange;
+//        this.mElevation = mElevation;
+//        this.id = id;
+//        this.hiked = hiked;
+//    }
+//
+//    // Constructor Variations
+//    public Mountain(String mName, String mRange, int mElevation, int id) {
+//        this(mName, mRange, mElevation, 0, 0, id, false);
+//    }
+//
+//    public Mountain(String mName, String mRange, int mElevation, int id, boolean hiked){
+//        this(mName, mRange, mElevation, 0, 0, id, hiked);
+//    }
+//
+//    public Mountain(String mName, String mRange, int mElevation, double mlatitude, double mLongtidue, boolean hiked){
+//        this(mName, mRange, mElevation, mlatitude, mLongtidue, 0, hiked);
+//    }
+
+    public Mountain(String mName, String mRange, int mElevation, double mlatitude, double mLongtidue){
         super();
         this.mName = mName;
         this.mRange = mRange;
         this.mElevation = mElevation;
-        this.mLatitude = mLatitude;
-        this.mLongitude = mLongitude;
-        this.id = id;
-        this.hiked = hiked;
-    }
-
-    // Constructor Variations
-    public Mountain(String mName, String mRange, int mElevation, int id) {
-        this(mName, mRange, mElevation, 0, 0, id, false);
-    }
-
-    public Mountain(String mName, String mRange, int mElevation, int id, boolean hiked){
-        this(mName, mRange, mElevation, 0, 0, id, hiked);
-    }
-
-    public Mountain(String mName, String mRange, int mElevation, double mlatitude, double mLongitude, boolean hiked){
-        this(mName, mRange, mElevation, mlatitude, mLongitude, 0, hiked);
-    }
-
-    public Mountain(String mName, String mRange, int mElevation, double mlatitude, double mLongitude){
-        this(mName, mRange, mElevation, mlatitude, mLongitude, 0, false);
+        this.id = 0;
+        this.hiked = false;
+        this.mLatitude = mlatitude;
+        this.mLongtidue = mLongtidue;
     }
 
     public Mountain() {
@@ -61,7 +66,7 @@ public class Mountain implements Parcelable, Comparable<Mountain>{
         this.mRange = in.readString();
         this.mElevation = in.readInt();
         this.mLatitude = in.readDouble();
-        this.mLongitude = in.readDouble();
+        this.mLongtidue = in.readDouble();
         this.hiked = (in.readInt() != 0);
     }
 
@@ -83,12 +88,12 @@ public class Mountain implements Parcelable, Comparable<Mountain>{
         this.mLatitude = mLatitude;
     }
 
-    public double getmLongitude() {
-        return mLongitude;
+    public double getmLongtidue() {
+        return mLongtidue;
     }
 
-    public void setmLongitude(double mLongitude) {
-        this.mLongitude = mLongitude;
+    public void setmLongtidue(double mLongtidue) {
+        this.mLongtidue = mLongtidue;
     }
 
     public boolean isHiked() {
@@ -118,7 +123,7 @@ public class Mountain implements Parcelable, Comparable<Mountain>{
         return "Mountain name: " + mName +
                 " --  Elevation: " + String.valueOf(mElevation) +
                 " -- Location: " + String.valueOf(mLatitude) +
-                ", " + String.valueOf(mLongitude) +
+                ", " + String.valueOf(mLongtidue) +
                 " -- Hiked: " + String.valueOf(hiked) + "\n";
     }
 
@@ -147,7 +152,7 @@ public class Mountain implements Parcelable, Comparable<Mountain>{
         dest.writeString(getmRange());
         dest.writeInt(getmElevation());
         dest.writeDouble(getmLatitude());
-        dest.writeDouble(getmLongitude());
+        dest.writeDouble(getmLongtidue());
         dest.writeInt((!isHiked()) ? 0 : 1);
     }
 

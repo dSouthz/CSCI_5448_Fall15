@@ -1,4 +1,4 @@
-package oodesignanalysis.hiketracker;
+package com.csci5448.hiketracker;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -84,7 +84,7 @@ public class HikeDataSource extends HikeTrackerDBDAO{
             }
 
         } finally {
-            try { database.close(); } catch (Exception ignore) {}
+//            try { database.close(); } catch (Exception ignore) {}
         }
 
         return hikes;
