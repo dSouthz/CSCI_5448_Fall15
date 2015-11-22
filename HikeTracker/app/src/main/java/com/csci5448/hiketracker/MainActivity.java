@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     public void startLocator(View view){
         Intent myIntent = new Intent(MainActivity.this, LocatorActivity.class);
         startActivity(myIntent);
