@@ -94,27 +94,27 @@ public class HikeActivity extends AppCompatActivity {
     }
 
     private void setRunningButtons(){
-        startButton.setVisibility(View.INVISIBLE);
-        pauseButton.setVisibility(View.VISIBLE);
-        resetButton.setVisibility(View.VISIBLE);
-        saveButton.setVisibility(View.INVISIBLE);
-        cancelButton.setVisibility(View.INVISIBLE);
+        startButton.setEnabled(false);
+        pauseButton.setEnabled(true);
+        resetButton.setEnabled(true);
+        saveButton.setEnabled(false);
+        cancelButton.setEnabled(false);
     }
 
     private void setPausedButtons(){
-        startButton.setVisibility(View.VISIBLE);
-        pauseButton.setVisibility(View.INVISIBLE);
-        resetButton.setVisibility(View.VISIBLE);
-        saveButton.setVisibility(View.VISIBLE);
-        cancelButton.setVisibility(View.VISIBLE);
+        startButton.setEnabled(true);
+        pauseButton.setEnabled(false);
+        resetButton.setEnabled(true);
+        saveButton.setEnabled(true);
+        cancelButton.setEnabled(true);
     }
 
     private void setStartingButtons(){
-        startButton.setVisibility(View.VISIBLE);
-        pauseButton.setVisibility(View.INVISIBLE);
-        resetButton.setVisibility(View.INVISIBLE);
-        saveButton.setVisibility(View.INVISIBLE);
-        cancelButton.setVisibility(View.INVISIBLE);
+        startButton.setEnabled(true);
+        pauseButton.setEnabled(false);
+        resetButton.setEnabled(false);
+        saveButton.setEnabled(false);
+        cancelButton.setEnabled(false);
     }
 
     private void saveHike() {
