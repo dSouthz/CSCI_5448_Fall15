@@ -66,6 +66,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
         addMarkers(map);
         setMarkerInteration(map);
         updateCameraPosition(mountains, map);
+        debug(map);
 
     }
 
@@ -124,7 +125,6 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
                             .title(mount.getmName()).draggable(false)
                             .snippet(snippet)
                             .icon(BitmapDescriptorFactory.fromBitmap(BitmapHelper.resizeMapIcons(this, "mountain_marker", 110, 110)))
-                    //.icon(BitmapDescriptorFactory.fromResource(R.drawable.mountain_marker))
             );
         }
     }
@@ -141,5 +141,9 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
      */
     public void manualEntry() {
 
+    }
+
+    public void debug(GoogleMap map) {
+        map.getUiSettings().setZoomControlsEnabled(true);
     }
 }

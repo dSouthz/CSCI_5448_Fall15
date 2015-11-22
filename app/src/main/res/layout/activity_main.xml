@@ -72,7 +72,8 @@
         android:layout_above="@+id/historyButton"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp" />
+        android:layout_marginRight="15dp"
+        android:onClick="showLocatorActivity" />
 
     <Button
         android:layout_width="match_parent"
