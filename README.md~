@@ -10,3 +10,4 @@
 - 9/16/15: Added the PDF for Part 1 of the project: proposal for the semester project
 - 10/20/15: Added the PDF for Part 2 of the project: requirements and UML diagrams
 - 10/27/15: Started coding, working on the backend (data storage)
+- 11/19/15: Backend completed, working on backend interfacing class
