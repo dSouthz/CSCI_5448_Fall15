@@ -32,6 +32,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_locator);
 
+        // asynchronously retrieves mountain data from table
         mountainInfo();
 
         // Get the map and register for the ready callback
@@ -64,7 +65,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap map) {
 
         addMarkers(map);
-        setMarkerInteration(map);
+        setMarkerInteraction(map);
         updateCameraPosition(mountains, map);
         debug(map);
 
@@ -74,7 +75,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
      * Applies and configures an onClick listener for map marker info boxes
      * @param map The map that will be manipulated
      */
-    private void setMarkerInteration(GoogleMap map) {
+    private void setMarkerInteraction(GoogleMap map) {
         map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 
             @Override
@@ -98,16 +99,10 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
 
 
     /**
-     * Populates mountain information with information from database
+     *  Call Asynchronous task methodsto populate mountain information with information from database
      */
     private void mountainInfo() {
-        mountainDataSource = new MountainDataSource(this);  // initialize mountain db
-        if (mountainDataSource.getMountains().size() <= 0) {
-            // Mountains have never been loaded before --> Load mountain data
-            mountainDataSource.loadMountains(); // load mountain data into database
-        }
-
-        mountains = mountainDataSource.getMountains();   // local list of mountain data
+        new GetMountainTask().execute();
     }
 
     /**
@@ -146,4 +141,33 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     public void debug(GoogleMap map) {
         map.getUiSettings().setZoomControlsEnabled(true);
     }
+
+    public class GetMountainTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            Log.d("DoINBackGround", "On doInBackground...");
+            mountains = mountainDataSource.getMountains();      // Load previously stored mountain data
+            if (mountains.size() <= 0) {    // no mountain data has yet been loaded
+                Log.d(TAG, "No mountains loaded, loading mountains");
+                mountainDataSource.loadMountains();  // Load mountain data into the database
+                while (mountainDataSource.getMountains().size() < 58)
+                    // One time, only 8 mountains were correctly loaded for some reason. This prevents that.
+                    try {
+                        wait(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                mountains = mountainDataSource.getMountains();
+                Log.d(TAG, "Mountains Loaded");
+                Log.d(TAG, "Size: " + String.valueOf(mountains.size()));
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+            addMarkers();
+            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        }
 }
