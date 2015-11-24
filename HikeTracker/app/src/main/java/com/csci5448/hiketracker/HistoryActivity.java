@@ -67,7 +67,7 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapter, View v, int position,
                                     long arg3) {
-                String value = (String) adapter.getItemAtPosition(position);
+                String value = adapter.getItemAtPosition(position).toString();
                 Toast.makeText(getApplicationContext(), "You clicked " + value + " at position " + position, Toast.LENGTH_LONG).show();
             }
         });
@@ -123,7 +123,7 @@ public class HistoryActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(HikeDataDisplayActions... types) {
 //            Log.d(TAG, "On doInBackground...");
-            Log.d("Task Action: ", String.valueOf(types[0]));
+            Log.d("On doInBackground... ", String.valueOf(types[0]));
 
             switch (types[0]) {
                 case LOAD_ALL: // Retrieve all saved hike data
@@ -150,7 +150,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void v) {
-            listview.invalidateViews();
+            setupViews();
             Log.d(TAG, "Finished task, new Size = " + hikes.size());
         }
     }

@@ -40,18 +40,18 @@ public class HikeDataAdapter extends ArrayAdapter<HikeData> {
         TextView hikeLength = (TextView) convertView.findViewById(R.id.hikeLength);
 
         // Populate the data into the template view using the data object
-        hikeDate.setText("Hike Date:" + formatter.format(hikeData.getHikeLength() + " -- "));
+        String formattedDate = formatter.format(hikeData.getHikeDate().getDate());
+        hikeDate.setText("Hike Date:" + formattedDate + " -- ");
         hikePeak.setText("Peak: " + hikeData.getPeakName() + " -- ");
 
         //hh:mm
         // TODO: Currently projecting that we'll be storing total seconds; may change to total minutes
         int seconds = hikeData.getHikeLength();
-        hikeLength.setText( "Time: " +
-                String.format("%02d:%02d",
-                        TimeUnit.SECONDS.toHours(seconds),
-                        TimeUnit.SECONDS.toMinutes(seconds) -
-                                TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(seconds))
-                        ));
+        hikeLength.setText("Time: " + String.format("%02d:%02d",
+                TimeUnit.SECONDS.toHours(seconds),
+                TimeUnit.SECONDS.toMinutes(seconds) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(seconds))
+        ));
 
         // Return the completed view to render on screen
         return convertView;

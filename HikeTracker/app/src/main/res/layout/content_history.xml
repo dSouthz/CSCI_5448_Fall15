@@ -16,8 +16,16 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/historyList"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/historyList"
+        android:alwaysDrawnWithCache="true"
+        android:dividerHeight="1dp"
+        android:horizontalSpacing="3dp"
+        android:scrollingCache="true"
+        android:smoothScrollbar="true"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="3dp"
+        android:layout_marginBottom="30dp"/>
 
     <Button
         android:id="@+id/manualEntryHistoryBttn"
