@@ -32,12 +32,20 @@ public class HistoryActivity extends ListActivity {
         // Define custom screen layout
         setContentView(R.layout.activity_history);
 
+        hikes = new ArrayList<>();  // initialize array list to prevent passing null references
+
         // initialize database
         hikeDataSource = new HikeDataSource(this);
 
         // start to asynchronously retrieves mountain data from table
         getHikes();
 
+
+        // Insert test hike into db
+//        test();
+    }
+
+    private void setupAfterLoad(){
         // Set up list display
         // Create the adapter to convert the array to views
         adapter = new HikeDataAdapter(this, hikes);
@@ -45,10 +53,7 @@ public class HistoryActivity extends ListActivity {
         // Attach the adapter to a ListView
         setListAdapter(adapter);
 
-        // Insert test hike into db
-        test();
     }
-
     // Insert test hike data into the database
     private void test(){
         long yourmilliseconds = System.currentTimeMillis();
@@ -111,7 +116,7 @@ public class HistoryActivity extends ListActivity {
 
         @Override
         protected Void doInBackground(HikeDataDisplayActions... types) {
-            Log.d(TAG, "On doInBackground...");
+//            Log.d(TAG, "On doInBackground...");
             Log.d("Task Action: ", String.valueOf(types[0]));
 
             switch (types[0]) {
@@ -119,16 +124,18 @@ public class HistoryActivity extends ListActivity {
                     hikes = (ArrayList)hikeDataSource.getAllHikes();
                     Collections.sort(hikes);    // Sort by date
                     Log.d(TAG, "Hikes Loaded");
-                    Log.d(TAG, "Size: " + String.valueOf(hikes.size()));
                     break;
                 case DELETE_ENTRY:  // Delete chosen entry
                     hikeDataSource.deleteHikeData(hikeDB);
+                    Log.d(TAG, "Hike deleted");
                     break;
                 case UPDATE_ENTRY:  // Edit and update chosen entry
                     hikeDataSource.update(hikeDB);
+                    Log.d(TAG, "Hike updated");
                     break;
                 case SAVE_ENTRY:
                     hikeDataSource.save(hikeDB);
+                    Log.d(TAG, "Hike saved");
                     break;
             }
 
@@ -137,7 +144,8 @@ public class HistoryActivity extends ListActivity {
 
         @Override
         protected void onPostExecute(Void v) {
-            adapter.notifyDataSetChanged(); // Update data in list
+            setupAfterLoad();
+            Log.d("Finished Task", "New Size = " + hikes.size());
         }
     }
 

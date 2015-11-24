@@ -9,6 +9,16 @@ import java.util.Date;
  * Created by Ryan on 10/28/15.
  */
 public class HikeData implements Parcelable, Comparable<HikeData>{
+    @Override
+    public String toString() {
+        return "HikeData{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", peakName='" + peakName + '\'' +
+                ", hikeLength=" + hikeLength +
+                ", hikeDate=" + hikeDate +
+                '}';
+    }
 
     /*******************  Class variables *******************/
     private int id;
