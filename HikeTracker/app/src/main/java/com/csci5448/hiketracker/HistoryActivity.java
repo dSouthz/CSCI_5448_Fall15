@@ -3,6 +3,7 @@ package com.csci5448.hiketracker;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,9 +11,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Ryan on 10/28/15.
@@ -27,10 +30,20 @@ public class HistoryActivity extends AppCompatActivity {
     private HikeDataSource hikeDataSource;
     private HikeData hikeDB;
     private ListView listview;
+    private static int length = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_history);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+
+        toolbar.setTitle(R.string.title_activity_history);
 
         // Define custom screen layout
         setContentView(R.layout.activity_history);
@@ -75,11 +88,19 @@ public class HistoryActivity extends AppCompatActivity {
     }
     // Insert test hike data into the database
     private void test(){
-        long yourmilliseconds = System.currentTimeMillis();
-        Date resultdate = new Date(yourmilliseconds);
 
-        hikeDB = new HikeData("Test Peak Name", 999, resultdate, 1);
-        saveEntry();
+        SimpleDateFormat formatter = new SimpleDateFormat(
+                "MMM-dd-yyyy", Locale.ENGLISH);
+        // Mon Nov 23 00:: MST 2015
+
+        try {
+            Date formattedDate = formatter.parse("11-23-2015");
+            hikeDB = new HikeData("Test Peak Name", length, formattedDate, 1);
+            length+= 100;
+            saveEntry();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     // Task Calls
@@ -128,20 +149,26 @@ public class HistoryActivity extends AppCompatActivity {
             switch (types[0]) {
                 case LOAD_ALL: // Retrieve all saved hike data
                     hikes = (ArrayList)hikeDataSource.getAllHikes();
-                    Collections.sort(hikes);    // Sort by date
+//                    Collections.sort(hikes);    // Sort by date
                     Log.d(TAG, "Hikes Loaded");
                     break;
                 case DELETE_ENTRY:  // Delete chosen entry
                     hikeDataSource.deleteHikeData(hikeDB);
+                    hikes = (ArrayList)hikeDataSource.getAllHikes();
+//                    Collections.sort(hikes);    // Sort by date
                     Log.d(TAG, "Hike deleted");
                     break;
                 case UPDATE_ENTRY:  // Edit and update chosen entry
                     hikeDataSource.update(hikeDB);
+                    hikes = (ArrayList)hikeDataSource.getAllHikes();
+//                    Collections.sort(hikes);    // Sort by date
                     Log.d(TAG, "Hike updated");
                     break;
                 case SAVE_ENTRY:
                     hikeDataSource.save(hikeDB);
-                    Log.d(TAG, "Hike saved");
+                    hikes = (ArrayList)hikeDataSource.getAllHikes();
+//                    Collections.sort(hikes);    // Sort by date
+                    Log.d(TAG, "Hike saved" + hikeDB.getHikeLength());
                     break;
             }
 

@@ -4,6 +4,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_locator">Map</string>
     <string name="title_activity_hike">HikeActivity</string>
+    <string name="title_activity_history">HistoryActivity</string>
 
 
     <string name="timerVal">00:00:00</string>
