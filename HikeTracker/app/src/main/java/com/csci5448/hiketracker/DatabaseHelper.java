@@ -39,7 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String KEY_HIKELENGTH = "hikelength";
     public static final String KEY_HIKEDATE = "hikedate";
 
-    // HIKEDATA Table - column names
+    // USERS Table - column names
     public static final String KEY_USERNAME = "username";
     public static final String KEY_SUMMITCOUNT = "summitcount";
     public static final String KEY_TOTALCOUNT = "totalcount";
@@ -60,7 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     // USER table create statement
     public static final String CREATE_TABLE_USERS = "CREATE TABLE "
-            + TABLE_HIKEDATA + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_USERNAME
+            + TABLE_USERS + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_USERNAME
             + " TEXT, " + KEY_SUMMITCOUNT + " INT, " + KEY_TOTALCOUNT + " INT, "
             + KEY_MOSTRECENT + " TEXT, " + KEY_AVERAGELENGTH + " INT" +")";
 
@@ -74,6 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         Log.d(TAG, "Mountains: " + CREATE_TABLE_MOUNTAIN);
         Log.d(TAG, "Hikes: " + CREATE_TABLE_HIKEDATA);
         Log.d(TAG, "Users: " + CREATE_TABLE_USERS);
+
         // creating required tables
         db.execSQL(CREATE_TABLE_MOUNTAIN);
         db.execSQL(CREATE_TABLE_HIKEDATA);

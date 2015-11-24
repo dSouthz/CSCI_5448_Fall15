@@ -3,6 +3,7 @@ package com.csci5448.hiketracker;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -45,7 +46,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        mapFragment.getMap().setMyLocationEnabled(true);
+        //mapFragment.getMap().setMyLocationEnabled(true);
 
     }
 
@@ -64,6 +65,10 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "Map is ready");
         mMap = googleMap;
+        addMarkers(mMap);
+        setMarkerInteraction(mMap);
+        updateCameraPosition(mountains, mMap);
+        debug(mMap);
     }
 
 
@@ -134,7 +139,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     }
 
 //    private void
-    public class GetMountainTask extends AsyncTask<Void, Void, Void> {
+public class GetMountainTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... arg0) {
@@ -159,11 +164,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
 
         @Override
         protected void onPostExecute(Void v) {
-            addMarkers(mMap);
-            addMarkers(mMap);
-            setMarkerInteraction(mMap);
-            updateCameraPosition(mountains, mMap);
-            debug(mMap);
+
             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         }
     }
