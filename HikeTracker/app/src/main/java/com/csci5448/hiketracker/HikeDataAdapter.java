@@ -31,7 +31,7 @@ public class HikeDataAdapter extends ArrayAdapter<HikeData> {
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_hikedata, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_layout, parent, false);
         }
 
         // Lookup view for data population

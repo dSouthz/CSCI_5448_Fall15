@@ -29,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(myIntent);
     }
 
+    public void viewHistory(View view){
+        Intent myIntent = new Intent(MainActivity.this, HistoryActivity.class);
+        startActivity(myIntent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

@@ -1,15 +1,16 @@
 package com.csci5448.hiketracker;
 
 import android.app.ListActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * Created by Ryan on 10/28/15.
@@ -17,10 +18,12 @@ import java.util.Collections;
 public class HistoryActivity extends ListActivity {
 
     /*******************  Class variables *******************/
+    private static final String TAG = "History Activity";
     private ListView mListView;
-    //private ListViewAdapter TODO: This reference does not resolve, is something else needed?
-    private ArrayList<HikeData> hikeDataArray;
+    private HikeDataAdapter adapter;
+    private ArrayList<HikeData> hikes;
     private HikeDataSource hikeDataSource;
+    private HikeData hikeDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,29 +35,47 @@ public class HistoryActivity extends ListActivity {
         // initialize database
         hikeDataSource = new HikeDataSource(this);
 
-        hikeDataArray = (ArrayList)hikeDataSource.getAllHikes();
-        Collections.sort(hikeDataArray);    // Sort by date
+        // start to asynchronously retrieves mountain data from table
+        getHikes();
 
+        // Set up list display
         // Create the adapter to convert the array to views
-        HikeDataAdapter adapter = new HikeDataAdapter(this, hikeDataArray);
+        adapter = new HikeDataAdapter(this, hikes);
 
         // Attach the adapter to a ListView
-        ListView listView = getListView();
-        listView.setAdapter(adapter);
+        setListAdapter(adapter);
 
-        // Attach ClickListener
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("Module Item Trigger", "Module item was triggered");
-
-                // TODO: Update action for when hikeData item is clicked
-                Toast.makeText(getApplicationContext(), "hello", Toast.LENGTH_SHORT).show();
-
-                // TODO: Display option to edit or delete entry
-            }
-        });
+        // Insert test hike into db
+        test();
     }
 
+    // Insert test hike data into the database
+    private void test(){
+        long yourmilliseconds = System.currentTimeMillis();
+        Date resultdate = new Date(yourmilliseconds);
+
+        hikeDB = new HikeData("Test Peak Name", 999, resultdate, 1);
+        saveEntry();
+    }
+
+    // Task Calls
+    private void getHikes() {new getHikesTask().execute(HikeDataDisplayActions.LOAD_ALL); }
+    private void deleteEntry() {new getHikesTask().execute(HikeDataDisplayActions.DELETE_ENTRY); }
+    private void updateEntry() {new getHikesTask().execute(HikeDataDisplayActions.UPDATE_ENTRY); }
+    private void saveEntry() {new getHikesTask().execute(HikeDataDisplayActions.SAVE_ENTRY); }
+
+
+    // when an item of the list is clicked
+    @Override
+    protected void onListItemClick(ListView list, View view, int position, long id) {
+        Log.d(TAG, "List Item Clicked");
+        super.onListItemClick(list, view, position, id);
+
+        String selectedItem = (String) getListView().getItemAtPosition(position);
+        //String selectedItem = (String) getListAdapter().getItem(position);
+
+        Toast.makeText(this,"You clicked " + selectedItem + " at position " + position, Toast.LENGTH_LONG).show();
+    }
 
     /**
      * Modifies an existing entry in the history
@@ -68,7 +89,7 @@ public class HistoryActivity extends ListActivity {
     /**
      * Deletes an existing entry in the history
      */
-    private void deleteEntry() {
+    private void delete() {
         // TODO: Populate pop-up window with entry's data
         // TODO: Prompt user if they really want to delete entry
         // TODO: Call for HikeDataSource delete to delete entry from database
@@ -80,4 +101,44 @@ public class HistoryActivity extends ListActivity {
     private void newEntry(String entry) {
 
     }
+
+    private enum HikeDataDisplayActions {
+        LOAD_ALL, DELETE_ENTRY, UPDATE_ENTRY, SAVE_ENTRY
+    }
+
+    //    Asynchronous Task to Access SQLite Database
+    public class getHikesTask extends AsyncTask<HikeDataDisplayActions, Void, Void> {
+
+        @Override
+        protected Void doInBackground(HikeDataDisplayActions... types) {
+            Log.d(TAG, "On doInBackground...");
+            Log.d("Task Action: ", String.valueOf(types[0]));
+
+            switch (types[0]) {
+                case LOAD_ALL: // Retrieve all saved hike data
+                    hikes = (ArrayList)hikeDataSource.getAllHikes();
+                    Collections.sort(hikes);    // Sort by date
+                    Log.d(TAG, "Hikes Loaded");
+                    Log.d(TAG, "Size: " + String.valueOf(hikes.size()));
+                    break;
+                case DELETE_ENTRY:  // Delete chosen entry
+                    hikeDataSource.deleteHikeData(hikeDB);
+                    break;
+                case UPDATE_ENTRY:  // Edit and update chosen entry
+                    hikeDataSource.update(hikeDB);
+                    break;
+                case SAVE_ENTRY:
+                    hikeDataSource.save(hikeDB);
+                    break;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+            adapter.notifyDataSetChanged(); // Update data in list
+        }
+    }
+
 }

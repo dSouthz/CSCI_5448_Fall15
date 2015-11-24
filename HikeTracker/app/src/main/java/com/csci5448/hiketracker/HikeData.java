@@ -17,15 +17,16 @@ public class HikeData implements Parcelable, Comparable<HikeData>{
     private int hikeLength;
     private Date hikeDate;
 
-    public HikeData(int id, String peakName, int hikeLength, Date hikeDate, int peakId) {
+    public HikeData(int id, String peakName, int hikeLength, Date hikeDate, int userId) {
         this.id = id;
         this.peakName = peakName;
         this.hikeLength = hikeLength;
         this.hikeDate = hikeDate;
+        this.userId = userId;
     }
 
-    public HikeData(String peakName, int hikeLength, Date hikeDate, int peakId) {
-        this(0, peakName, hikeLength, hikeDate, peakId);
+    public HikeData(String peakName, int hikeLength, Date hikeDate, int userId) {
+        this(0, peakName, hikeLength, hikeDate, userId);
     }
 
     public HikeData() {
@@ -38,6 +39,7 @@ public class HikeData implements Parcelable, Comparable<HikeData>{
         this.peakName = in.readString();
         this.hikeLength = in.readInt();
         this.hikeDate = new Date(in.readLong());
+        this.userId = in.readInt();
     }
 
     public static final Creator<HikeData> CREATOR = new Creator<HikeData>() {
@@ -113,6 +115,7 @@ public class HikeData implements Parcelable, Comparable<HikeData>{
         dest.writeString(getPeakName());
         dest.writeInt(getHikeLength());
         dest.writeLong(getHikeDate().getTime());
+        dest.writeInt(getUserId());
     }
 
     @Override

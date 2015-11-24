@@ -89,7 +89,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:onClick="startHike"/>
+        android:onClick="viewHistory"/>
 
     <TextView
         android:layout_width="wrap_content"
