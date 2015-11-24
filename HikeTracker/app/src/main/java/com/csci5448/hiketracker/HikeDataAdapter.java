@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class HikeDataAdapter extends ArrayAdapter<HikeData> {
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat(
-            "yyyy-MM-dd", Locale.ENGLISH);
+            "MM-dd-yyyy", Locale.ENGLISH);
 
     public HikeDataAdapter(Context context, ArrayList<HikeData> users) {
         super(context, 0, users);
@@ -40,13 +40,13 @@ public class HikeDataAdapter extends ArrayAdapter<HikeData> {
         TextView hikeLength = (TextView) convertView.findViewById(R.id.hikeLength);
 
         // Populate the data into the template view using the data object
-        hikeDate.setText(formatter.format(hikeData.getHikeLength()));
-        hikePeak.setText(hikeData.getPeakName());
+        hikeDate.setText("Hike Date:" + formatter.format(hikeData.getHikeLength() + " -- "));
+        hikePeak.setText("Peak: " + hikeData.getPeakName() + " -- ");
 
         //hh:mm
         // TODO: Currently projecting that we'll be storing total seconds; may change to total minutes
         int seconds = hikeData.getHikeLength();
-        hikeLength.setText(
+        hikeLength.setText( "Time: " +
                 String.format("%02d:%02d",
                         TimeUnit.SECONDS.toHours(seconds),
                         TimeUnit.SECONDS.toMinutes(seconds) -

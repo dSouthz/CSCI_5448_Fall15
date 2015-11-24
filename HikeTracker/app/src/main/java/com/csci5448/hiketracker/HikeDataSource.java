@@ -20,7 +20,7 @@ public class HikeDataSource extends HikeTrackerDBDAO{
             + " =?";
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat(
-            "yyyy-MM-dd", Locale.ENGLISH);
+            "MM-dd-yyyy", Locale.ENGLISH);
 
     private static final String SELECT_QUERY = "SELECT * FROM " + DatabaseHelper.TABLE_HIKEDATA;
 

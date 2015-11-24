@@ -1,10 +1,11 @@
 package com.csci5448.hiketracker;
 
-import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -15,7 +16,7 @@ import java.util.Date;
 /**
  * Created by Ryan on 10/28/15.
  */
-public class HistoryActivity extends ListActivity {
+public class HistoryActivity extends AppCompatActivity {
 
     /*******************  Class variables *******************/
     private static final String TAG = "History Activity";
@@ -24,6 +25,7 @@ public class HistoryActivity extends ListActivity {
     private ArrayList<HikeData> hikes;
     private HikeDataSource hikeDataSource;
     private HikeData hikeDB;
+    private ListView listview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +42,27 @@ public class HistoryActivity extends ListActivity {
         // start to asynchronously retrieves mountain data from table
         getHikes();
 
+        setupViews();
 
         // Insert test hike into db
 //        test();
     }
 
-    private void setupAfterLoad(){
+    private void setupViews(){
         // Set up list display
         // Create the adapter to convert the array to views
         adapter = new HikeDataAdapter(this, hikes);
 
         // Attach the adapter to a ListView
-        setListAdapter(adapter);
+        listview.setAdapter(adapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View v, int position,
+                                    long arg3) {
+                String value = (String) adapter.getItemAtPosition(position);
+                Toast.makeText(getApplicationContext(), "You clicked " + value + " at position " + position, Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
     // Insert test hike data into the database
@@ -68,19 +79,6 @@ public class HistoryActivity extends ListActivity {
     private void deleteEntry() {new getHikesTask().execute(HikeDataDisplayActions.DELETE_ENTRY); }
     private void updateEntry() {new getHikesTask().execute(HikeDataDisplayActions.UPDATE_ENTRY); }
     private void saveEntry() {new getHikesTask().execute(HikeDataDisplayActions.SAVE_ENTRY); }
-
-
-    // when an item of the list is clicked
-    @Override
-    protected void onListItemClick(ListView list, View view, int position, long id) {
-        Log.d(TAG, "List Item Clicked");
-        super.onListItemClick(list, view, position, id);
-
-        String selectedItem = (String) getListView().getItemAtPosition(position);
-        //String selectedItem = (String) getListAdapter().getItem(position);
-
-        Toast.makeText(this,"You clicked " + selectedItem + " at position " + position, Toast.LENGTH_LONG).show();
-    }
 
     /**
      * Modifies an existing entry in the history
@@ -144,7 +142,7 @@ public class HistoryActivity extends ListActivity {
 
         @Override
         protected void onPostExecute(Void v) {
-            setupAfterLoad();
+            listview.invalidateViews();
             Log.d("Finished Task", "New Size = " + hikes.size());
         }
     }
