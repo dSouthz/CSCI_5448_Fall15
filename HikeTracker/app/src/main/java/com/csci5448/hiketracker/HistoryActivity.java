@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -44,8 +45,14 @@ public class HistoryActivity extends AppCompatActivity {
 
         setupViews();
 
-        // Insert test hike into db
-//        test();
+        Button manualEntryBttn = (Button) findViewById(R.id.manualEntryHistoryBttn);
+        manualEntryBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Manual Entry Button clicked");
+                test();
+            }
+        });
     }
 
     private void setupViews(){
@@ -54,6 +61,7 @@ public class HistoryActivity extends AppCompatActivity {
         adapter = new HikeDataAdapter(this, hikes);
 
         // Attach the adapter to a ListView
+        listview = (ListView) findViewById (R.id.historyList);
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -143,7 +151,7 @@ public class HistoryActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void v) {
             listview.invalidateViews();
-            Log.d("Finished Task", "New Size = " + hikes.size());
+            Log.d(TAG, "Finished task, new Size = " + hikes.size());
         }
     }
 

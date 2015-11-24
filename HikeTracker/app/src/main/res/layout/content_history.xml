@@ -24,5 +24,16 @@
         android:layout_width="90dp"
         android:layout_height="45dp"
         android:gravity="center_vertical"
-        android:text="@string/manualEntryHistoryBttnTxt" />
+        android:text="@string/manualEntryHistoryBttnTxt"
+        android:onClick="test"/>
+
+    <!--<Button-->
+        <!--android:id="@+id/deleteAll"-->
+        <!--android:layout_width="90dp"-->
+        <!--android:layout_height="45dp"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:text="Delete Hike"-->
+        <!--android:onClick="deleteEntry"/>-->
+
+
 </LinearLayout>
