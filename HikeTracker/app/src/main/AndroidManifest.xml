@@ -49,12 +49,22 @@
         <activity
             android:name=".HikeActivity"
             android:label="@string/title_activity_hike"
-            android:parentActivityName=".LocatorActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.csci5448.hiketracker.LocatorActivity" />
         </activity>
+        <activity
+            android:name=".NewUserActivity"
+            android:label="@string/title_activity_newuser"
+            android:parentActivityName=".LocatorActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.csci5448.hiketracker.MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>

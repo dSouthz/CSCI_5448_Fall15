@@ -135,7 +135,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     }
 
 //    private void
-public class GetMountainTask extends AsyncTask<Void, Void, Void> {
+    public class GetMountainTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... arg0) {
