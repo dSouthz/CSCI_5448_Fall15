@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Example Name"
-        android:id="@+id/textView"
+        android:id="@+id/userName"
         android:textSize="36dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -30,19 +30,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Summits:"
         android:id="@+id/summitCountLabel"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="53dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Miles Hiked:"
-        android:id="@+id/milesHikedLabel"
-        android:layout_marginTop="37dp"
-        android:layout_below="@+id/summitCountLabel"
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/userName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -52,10 +41,10 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Most Recent:"
         android:id="@+id/mostRecentLabel"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/avgLengthLabel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="37dp" />
+        android:layout_marginTop="100dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -63,10 +52,10 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Average Length:"
         android:id="@+id/avgLengthLabel"
-        android:layout_marginTop="37dp"
-        android:layout_below="@+id/mostRecentLabel"
+        android:layout_below="@+id/summitCountLabel"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="60dp" />
 
     <Button
         android:layout_width="match_parent"
@@ -97,21 +86,10 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="10"
         android:id="@+id/summitCount"
-        android:layout_alignTop="@+id/summitCountLabel"
-        android:layout_toRightOf="@+id/summitCountLabel"
-        android:layout_toEndOf="@+id/summitCountLabel"
-        android:layout_marginLeft="10dp" />
+        android:layout_above="@+id/avgLengthLabel"
+        android:layout_alignRight="@+id/mostRecentLabel"
+        android:layout_alignEnd="@+id/mostRecentLabel" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="10"
-        android:id="@+id/textView2"
-        android:layout_alignTop="@+id/milesHikedLabel"
-        android:layout_toRightOf="@+id/milesHikedLabel"
-        android:layout_toEndOf="@+id/milesHikedLabel"
-        android:layout_marginLeft="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -129,9 +107,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="4 hr. 10 min."
         android:id="@+id/avgLength"
-        android:layout_alignTop="@+id/avgLengthLabel"
-        android:layout_toRightOf="@+id/textView2"
-        android:layout_toEndOf="@+id/textView2"
+        android:layout_above="@+id/mostRecentLabel"
+        android:layout_toRightOf="@+id/avgLengthLabel"
+        android:layout_toEndOf="@+id/avgLengthLabel"
         android:layout_marginLeft="10dp" />
     <!-- -->
     <!--<TextView-->

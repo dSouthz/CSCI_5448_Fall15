@@ -30,7 +30,7 @@ public class UserDataSource extends HikeTrackerDBDAO{
         values.put(DatabaseHelper.KEY_MOSTRECENT, user.getMostRecent());
         values.put(DatabaseHelper.KEY_TOTALCOUNT, user.getTotalCount());
 
-        return database.insert(DatabaseHelper.TABLE_HIKEDATA, null, values);
+        return database.insert(DatabaseHelper.TABLE_USERS, null, values);
     }
 
     public long update(User user) {
@@ -40,7 +40,7 @@ public class UserDataSource extends HikeTrackerDBDAO{
         values.put(DatabaseHelper.KEY_AVERAGELENGTH, user.getAverageLength());
         values.put(DatabaseHelper.KEY_MOSTRECENT, user.getMostRecent());
         values.put(DatabaseHelper.KEY_TOTALCOUNT, user.getTotalCount());
-        long result = database.update(DatabaseHelper.TABLE_HIKEDATA, values,
+        long result = database.update(DatabaseHelper.TABLE_USERS, values,
                 WHERE_ID_EQUALS,
                 new String[] { String.valueOf(user.getUserId()) });
         Log.d("Update Result:", "=" + result);
@@ -49,7 +49,7 @@ public class UserDataSource extends HikeTrackerDBDAO{
     }
 
     public int deleteHikeData(User user) {
-        return database.delete(DatabaseHelper.TABLE_HIKEDATA,
+        return database.delete(DatabaseHelper.TABLE_USERS,
                 WHERE_ID_EQUALS, new String[] { String.valueOf(user.getUserId()) });
     }
 
