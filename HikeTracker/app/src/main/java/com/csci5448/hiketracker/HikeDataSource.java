@@ -5,11 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by diana on 10/22/15.
@@ -18,9 +16,9 @@ public class HikeDataSource extends HikeTrackerDBDAO{
 
     private static final String WHERE_ID_EQUALS = DatabaseHelper.KEY_ID
             + " =?";
-
-    private static final SimpleDateFormat formatter = new SimpleDateFormat(
-            "MM-dd-yyyy", Locale.ENGLISH);
+//
+//    private static final SimpleDateFormat formatter = new SimpleDateFormat(
+//            "MM-dd-yyyy", Locale.ENGLISH);
 
     private static final String SELECT_QUERY = "SELECT * FROM " + DatabaseHelper.TABLE_HIKEDATA;
 
@@ -30,7 +28,7 @@ public class HikeDataSource extends HikeTrackerDBDAO{
 
     public long save(HikeData hikeData) {
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.KEY_HIKEDATE, formatter.format(hikeData.getHikeLength()));
+        values.put(DatabaseHelper.KEY_HIKEDATE, persistDate(hikeData.getHikeDate()));
         values.put(DatabaseHelper.KEY_HIKELENGTH, hikeData.getHikeLength());
         values.put(DatabaseHelper.KEY_PEAKNAME, hikeData.getPeakName());
 
@@ -39,7 +37,7 @@ public class HikeDataSource extends HikeTrackerDBDAO{
 
     public long update(HikeData hikeData) {
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.KEY_HIKEDATE, formatter.format(hikeData.getHikeLength()));
+        values.put(DatabaseHelper.KEY_HIKEDATE, persistDate(hikeData.getHikeDate()));
         values.put(DatabaseHelper.KEY_HIKELENGTH, hikeData.getHikeLength());
         values.put(DatabaseHelper.KEY_PEAKNAME, hikeData.getPeakName());
 
@@ -69,11 +67,7 @@ public class HikeDataSource extends HikeTrackerDBDAO{
                         HikeData hikeData = new HikeData();
                         hikeData.setId(cursor.getInt(0));
                         hikeData.setHikeLength(cursor.getInt(1));
-                        try {
-                            hikeData.setHikeDate(formatter.parse(cursor.getString(2)));
-                        } catch (ParseException e) {
-                            hikeData.setHikeDate(null);
-                        }
+                        hikeData.setHikeDate(loadDate(cursor, 2));
                         hikeData.setPeakName(cursor.getString(3));
 
                         hikes.add(hikeData);
@@ -88,6 +82,17 @@ public class HikeDataSource extends HikeTrackerDBDAO{
         }
 
         return hikes;
+    }
+
+    public static Long persistDate(Date date){
+        return (date == null)? null: date.getTime();
+    }
+
+    public static Date loadDate(Cursor cursor, int index) {
+        if (cursor.isNull(index)) {
+            return null;
+        }
+        return new Date(cursor.getLong(index));
     }
 
     public int getHikeDataCount(){

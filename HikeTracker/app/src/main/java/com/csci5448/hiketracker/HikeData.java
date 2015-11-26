@@ -3,7 +3,8 @@ package com.csci5448.hiketracker;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Date;
+import java.sql.Date;
+import java.util.Calendar;
 
 /**
  * Created by Ryan on 10/28/15.
@@ -40,7 +41,7 @@ public class HikeData implements Parcelable, Comparable<HikeData>{
     }
 
     public HikeData() {
-        this(0, "Na", 0, new Date(), 0);
+        this(0, "N/A", 0, new Date(Calendar.getInstance().getTime().getTime()), 0);
     }
 
     private HikeData(Parcel in){

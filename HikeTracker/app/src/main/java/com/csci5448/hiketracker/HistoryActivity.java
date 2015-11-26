@@ -3,7 +3,6 @@ package com.csci5448.hiketracker;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,11 +10,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by Ryan on 10/28/15.
@@ -37,17 +32,6 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_history);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-
-        toolbar.setTitle(R.string.title_activity_history);
-
-        // Define custom screen layout
-        setContentView(R.layout.activity_history);
-
         hikes = new ArrayList<>();  // initialize array list to prevent passing null references
 
         // initialize database
@@ -89,18 +73,8 @@ public class HistoryActivity extends AppCompatActivity {
     // Insert test hike data into the database
     private void test(){
 
-        SimpleDateFormat formatter = new SimpleDateFormat(
-                "MMM-dd-yyyy", Locale.ENGLISH);
-        // Mon Nov 23 00:: MST 2015
-
-        try {
-            Date formattedDate = formatter.parse("11-23-2015");
-            hikeDB = new HikeData("Test Peak Name", length, formattedDate, 1);
-            length+= 100;
-            saveEntry();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        hikeDB = new HikeData();
+        saveEntry();
     }
 
     // Task Calls

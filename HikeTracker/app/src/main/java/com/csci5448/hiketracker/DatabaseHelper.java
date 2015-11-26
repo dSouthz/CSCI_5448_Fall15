@@ -56,7 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     // HIKEDATA table create statement
     public static final String CREATE_TABLE_HIKEDATA = "CREATE TABLE "
             + TABLE_HIKEDATA + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_HIKELENGTH
-            + " TEXT, " + KEY_HIKEDATE + " DATETIME, " + KEY_PEAKNAME + " TEXT" + ")";
+            + " TEXT, " + KEY_HIKEDATE + " INT, " + KEY_PEAKNAME + " TEXT" + ")";
 
     // USER table create statement
     public static final String CREATE_TABLE_USERS = "CREATE TABLE "
