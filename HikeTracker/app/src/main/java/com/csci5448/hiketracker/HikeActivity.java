@@ -119,7 +119,7 @@ public class HikeActivity extends AppCompatActivity {
 
     private void saveHike() {
 // TODO Implement saving hike to database, updating user information, updating mountain information
-        // Launch HikeDialogFragment w/ dialog displaying collected info, option to save
+        // Launch HikeDialog Fragment w/ dialog displaying collected info, option to save
     }
 
     private void exit() {

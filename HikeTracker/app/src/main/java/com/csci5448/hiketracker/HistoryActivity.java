@@ -25,7 +25,6 @@ public class HistoryActivity extends AppCompatActivity {
     private HikeDataSource hikeDataSource;
     private HikeData hikeDB;
     private ListView listview;
-    private static int length = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +73,7 @@ public class HistoryActivity extends AppCompatActivity {
     private void test(){
 
         hikeDB = new HikeData();
+        Log.d(TAG, hikeDB.toString());
         saveEntry();
     }
 
