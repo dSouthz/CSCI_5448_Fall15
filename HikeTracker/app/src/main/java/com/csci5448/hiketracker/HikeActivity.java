@@ -27,6 +27,9 @@ public class HikeActivity extends AppCompatActivity {
     long timeSwapBuff = 0L;
     long updatedTime = 0L;
 
+    // Mountain variable
+    Mountain mountain;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +39,13 @@ public class HikeActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Retrieve Mountain object
+        Bundle bundle = getIntent().getExtras();
+        mountain = bundle.getParcelable(LocatorActivity.PARCEL_NAME);
+
         timerValue = (TextView) findViewById(R.id.timerValue);
         TextView peakName = (TextView) findViewById(R.id.hikepeakname);
-        peakName.setText("Set Name Here");  // TODO pull info from mountain parcel
+        peakName.setText(mountain.getmName());
 
         startButton = (Button) findViewById(R.id.startButton);
         pauseButton = (Button) findViewById(R.id.pauseButton);

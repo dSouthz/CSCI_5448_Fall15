@@ -3,7 +3,6 @@ package com.csci5448.hiketracker;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +28,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     private GoogleMap mMap;
     private List<Mountain> mountains;
     private MountainDataSource mountainDataSource;
+    public static final String PARCEL_NAME = "com.csci5448.hiketracker.Mountain";
 
     private final float DEFAULT_ZOOM = 6;
 
@@ -82,9 +82,17 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
             public void onInfoWindowClick(Marker marker) {
 
                 Log.d(TAG, "Clicked on: " + marker.getTitle());
-                startHikeActivity();
+                startHikeActivity(retrieveMountain(marker.getTitle()));
             }
         });
+    }
+
+    private Mountain retrieveMountain(String peakName){
+        for (Mountain mount : mountains){
+            if (mount.getmName().equals(peakName))
+                return mount;
+        }
+        return new Mountain();
     }
 
     /**
@@ -129,8 +137,10 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
         map.getUiSettings().setZoomControlsEnabled(true);
     }
 
-    public void startHikeActivity() {
+    public void startHikeActivity(Mountain mount) {
         Intent myIntent = new Intent(LocatorActivity.this, HikeActivity.class);
+        myIntent.putExtra(PARCEL_NAME, mount);
+
         startActivity(myIntent);
     }
 
