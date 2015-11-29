@@ -26,7 +26,8 @@ public class SaveHikeDataActivity extends AppCompatActivity {
             finish();
         }
 
-        HikeData hikeData = bundle.getParcelable();
+        HikeData hikeData = bundle.getParcelable(MainActivity.SHARED_PARCEL);
+        String source = bundle.getString(MainActivity.SOURCE_STRING);
 
         if (source.equals(HikeActivity.TAG)) {
             // Pull from HikeData parcel

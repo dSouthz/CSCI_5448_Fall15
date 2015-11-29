@@ -30,6 +30,7 @@ public class HikeActivity extends AppCompatActivity {
 
     // Mountain variable
     Mountain mountain;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +41,10 @@ public class HikeActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Retrieve Mountain object
+        // Retrieve parceled object
         Bundle bundle = getIntent().getExtras();
         mountain = bundle.getParcelable(LocatorActivity.PARCEL_NAME);
+        user = bundle.getParcelable(MainActivity.USER_PARCEL);
 
         timerValue = (TextView) findViewById(R.id.timerValue);
         TextView peakName = (TextView) findViewById(R.id.hikepeakname);
@@ -128,10 +130,13 @@ public class HikeActivity extends AppCompatActivity {
     private void saveHike() {
 // TODO Implement saving hike to database, updating user information, updating mountain information
         // Launch HikeDialog Fragment w/ dialog displaying collected info, option to save
+        HikeData hikeData = new HikeData();
+
     }
 
     private void exit() {
 // TODO Return to main activity
+        finish();
     }
 
     private Runnable updateTimerThread = new Runnable() {

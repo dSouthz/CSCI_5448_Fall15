@@ -70,6 +70,18 @@ public class Mountain implements Parcelable, Comparable<Mountain>{
         this.hiked = (in.readInt() != 0);
     }
 
+    public static final Creator<Mountain> CREATOR = new Creator<Mountain>() {
+        @Override
+        public Mountain createFromParcel(Parcel in) {
+            return new Mountain(in);
+        }
+
+        @Override
+        public Mountain[] newArray(int size) {
+            return new Mountain[size];
+        }
+    };
+
     /*******************  Getter/Setter Methods *******************/
 
     public void setmName(String mName) {

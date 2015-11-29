@@ -26,6 +26,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
 
     private static String TAG = "Locator Activity"; // for debugging logs
     private GoogleMap mMap;
+    private User user;
     private List<Mountain> mountains;
     private MountainDataSource mountainDataSource;
     public static final String PARCEL_NAME = "com.csci5448.hiketracker.Mountain";
@@ -37,6 +38,8 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_locator);
+
+        user = getIntent().getExtras().getParcelable(MainActivity.USER_PARCEL);
 
         mountainDataSource = new MountainDataSource(this);
 
@@ -140,7 +143,8 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
 
     public void startHikeActivity(Mountain mount) {
         Intent myIntent = new Intent(LocatorActivity.this, HikeActivity.class);
-        myIntent.putExtra(PARCEL_NAME, mount);
+        myIntent.putExtra(MainActivity.HIKEDATA_PARCEL, mount);
+        myIntent.putExtra(MainActivity.USER_PARCEL, user);
 
         startActivity(myIntent);
     }

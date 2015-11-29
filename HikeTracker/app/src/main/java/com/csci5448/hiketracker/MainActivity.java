@@ -15,8 +15,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+
     UserDataSource userDataSource;
     List<User> users;
+
+    public static final String TAG = "MainActivity";
+    public static final String HIKEDATA_PARCEL = "HikeData";
+    public static final String USER_PARCEL = "User";
+    public static final String SOURCE_STRING = "Source String Key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startLocator(View view){
         Intent myIntent = new Intent(MainActivity.this, LocatorActivity.class);
+        myIntent.putExtra(USER_PARCEL, users.get(0));
         startActivity(myIntent);
     }
 
@@ -72,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            Log.d("DoINBackGround", "On doInBackground...");
-            users = userDataSource.getUsers();      // Load previously stored mountain data
+            Log.d(TAG, "On doInBackground...");
+            users = userDataSource.getUsers();      // Load previously stored user data
 
             return null;
         }
