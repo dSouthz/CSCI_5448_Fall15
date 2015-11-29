@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -17,7 +18,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class SaveHikeDataActivity extends AppCompatActivity {
+public class SaveHikeDataActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener{
 
     private static final String TAG = "SaveHikeDatActivity";
     private Button saveHikeBttn;
@@ -27,10 +28,11 @@ public class SaveHikeDataActivity extends AppCompatActivity {
     User user;
     HikeDataSource hikeDataSource;
 
-    private long oldTime;
+    private long oldTime;   // used for updating hikes
 
     // Layout Variables
     TextView mountainNameField, hikeDateField, hikeLengthField;
+    NumberPicker hr1, hr0, min1, min0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,20 +103,72 @@ public class SaveHikeDataActivity extends AppCompatActivity {
                 + String.format("%02d", secs));
     }
 
+    private long longFromTime(){
+        int hrs = hr1.getValue()*10+hr0.getValue();
+        int mins = min1.getValue()*10 + min0.getValue();
+        long secs = mins*60+hrs*60*60;
+        return secs;
+    }
+
     private void setupForEditing() {
         RadioGroup radioGroup = (RadioGroup)findViewById(R.id.mountainListRadioGroup);
 
 
+
         // Change save button to update button
         saveHikeBttn.setText(R.string.updateBttnLabel);
-
         saveHikeBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Save Hike Button clicked");
+                updateHikeData();
                 updateEntry();
             }
         });
+
+        oldTime = hikeData.getHikeLength();
+    }
+
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal)
+    {
+        // Update hike length field
+        hikeLengthField.setText(String.format("%d%d:%d%d:00",
+                hr1.getValue(), hr0.getValue(),
+                min1.getValue(), min0.getValue()));
+    }
+
+    private void updateHikeData() {
+        hikeData.setHikeLength(longFromTime());
+        hikeData.setPeakName(String.valueOf(mountainNameField.getText()));
+    }
+
+    private void setupPickers(){
+    // Setup Number Pickers
+        hr1 = (NumberPicker)findViewById(R.id.hr1picker);
+        hr0 = (NumberPicker)findViewById(R.id.hr0picker);
+        min1 = (NumberPicker)findViewById(R.id.min1picker);
+        min0 = (NumberPicker)findViewById(R.id.min0picker);
+
+        hr0.setMinValue(0);
+        hr0.setMaxValue(9);
+        hr0.setMinValue(0);
+        hr1.setMaxValue(9);
+
+        min0.setMinValue(0);
+        min0.setMaxValue(9);
+        min1.setMinValue(0);
+        min1.setMaxValue(9);
+
+        hr0.setWrapSelectorWheel(true);
+        hr1.setWrapSelectorWheel(true);
+        min0.setWrapSelectorWheel(true);
+        min1.setWrapSelectorWheel(true);
+
+        hr0.setOnValueChangedListener(this);
+        hr1.setOnValueChangedListener(this);
+        min0.setOnValueChangedListener(this);
+        min1.setOnValueChangedListener(this);
     }
 
     private void setupforSaving() {
@@ -223,6 +277,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Hike was UPDATED",
                             Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "Hike updated");
+
                     break;
                 case SAVE_ENTRY:
                     hikeDataSource.save(hikeData);

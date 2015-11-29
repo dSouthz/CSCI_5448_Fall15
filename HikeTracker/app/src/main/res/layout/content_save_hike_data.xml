@@ -123,12 +123,12 @@
         <NumberPicker
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/numberPicker" />
+            android:id="@+id/hr1picker" />
 
         <NumberPicker
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/numberPicker2" />
+            android:id="@+id/hr0picker" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -142,12 +142,12 @@
         <NumberPicker
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/numberPicker3" />
+            android:id="@+id/min1picker" />
 
         <NumberPicker
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/numberPicker4" />
+            android:id="@+id/min0picker" />
     </LinearLayout>
 
 </LinearLayout>
