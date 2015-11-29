@@ -1,5 +1,6 @@
 package com.csci5448.hiketracker;
 
+import android.app.DatePickerDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,8 +16,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Locale;
 
 public class SaveHikeDataActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener{
 
@@ -29,10 +34,12 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
     HikeDataSource hikeDataSource;
 
     private long oldTime;   // used for updating hikes
+    private Calendar calendar;
 
     // Layout Variables
     TextView mountainNameField, hikeDateField, hikeLengthField;
     NumberPicker hr1, hr0, min1, min0;
+    DatePicker datePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,9 +118,11 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
     }
 
     private void setupForEditing() {
-        RadioGroup radioGroup = (RadioGroup)findViewById(R.id.mountainListRadioGroup);
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.mountainListRadioGroup);
 
-
+        // Setup Editing fields
+        setupDatePicker();
+        setupPickers();
 
         // Change save button to update button
         saveHikeBttn.setText(R.string.updateBttnLabel);
@@ -122,11 +131,17 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
             public void onClick(View view) {
                 Log.d(TAG, "Save Hike Button clicked");
                 updateHikeData();
-                updateEntry();
+                finish();
             }
         });
 
         oldTime = hikeData.getHikeLength();
+    }
+
+    private void updateLabel() {
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        hikeDateField.setText(sdf.format(calendar));
     }
 
     @Override
@@ -139,12 +154,20 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
     }
 
     private void updateHikeData() {
+        // Delete old data
+        deleteEntry();
+
+        // Insert new data into hikeData
         hikeData.setHikeLength(longFromTime());
         hikeData.setPeakName(String.valueOf(mountainNameField.getText()));
+        hikeData.setHikeDate(new Date(calendar.getTimeInMillis()));
+
+        // Save new data
+        saveEntry();
     }
 
     private void setupPickers(){
-    // Setup Number Pickers
+        // Setup Number Pickers
         hr1 = (NumberPicker)findViewById(R.id.hr1picker);
         hr0 = (NumberPicker)findViewById(R.id.hr0picker);
         min1 = (NumberPicker)findViewById(R.id.min1picker);
@@ -171,10 +194,36 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
         min1.setOnValueChangedListener(this);
     }
 
+    private void setupDatePicker(){
+        datePicker = (DatePicker) findViewById(R.id.datePicker);
+        calendar = Calendar.getInstance();
+
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+        };
+
+        datePicker.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(SaveHikeDataActivity.this, date, calendar
+                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+    }
+
     private void setupforSaving() {
         // Hide editing fields
         hideEditingFields();
-
     }
 
     // Hide editing fields
@@ -212,6 +261,7 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
             public void onClick(View view) {
                 Log.d(TAG, "Save Hike Button clicked");
                 deleteEntry();
+                finish();
             }
         });
     }
@@ -222,6 +272,7 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
             public void onClick(View view) {
                 Log.d(TAG, "Save Hike Button clicked");
                 saveEntry();
+                finish();
 
             }
         });
@@ -295,7 +346,7 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
 
         @Override
         protected void onPostExecute(Void v) {
-            finish();   // Exit activity
+//            finish();   // Exit activity
         }
 
         private void updateMountainHikedField(boolean insertion){
@@ -343,6 +394,6 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
 
         }
 
-   }
+    }
 
 }
