@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 public class HikeActivity extends AppCompatActivity {
 
+    public static final String TAG = "HikeActivity";
 
     private Button startButton;
     private Button pauseButton;

@@ -18,5 +18,6 @@
     <string name="nameQueryLabel">What is your name?</string>
     <string name="submitButtonLabel">Submit</string>
     <string name="title_activity_hike_dialog_fragment">HikeDialogFragmentActivity</string>
+    <string name="title_activity_save_hike_data">SaveHikeData</string>
 
 </resources>

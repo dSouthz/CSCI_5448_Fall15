@@ -18,13 +18,16 @@ import java.util.ArrayList;
 public class HistoryActivity extends AppCompatActivity {
 
     /*******************  Class variables *******************/
-    private static final String TAG = "History Activity";
+    public static final String TAG = "History Activity";
     private ListView mListView;
     private HikeDataAdapter adapter;
     private ArrayList<HikeData> hikes;
     private HikeDataSource hikeDataSource;
     private HikeData hikeDB;
     private ListView listview;
+
+    public static final String EDIT_TAG = "edit tag";   // used to indicate hikedata will be editted
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

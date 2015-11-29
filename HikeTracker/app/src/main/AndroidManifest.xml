@@ -62,9 +62,9 @@
                 android:value="com.csci5448.hiketracker.MainActivity" />
         </activity>
         <activity
-            android:name=".HikeDialogFragmentActivity"
-            android:label="@string/title_activity_hike_dialog_fragment"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".SaveHikeDataActivity"
+            android:label="@string/title_activity_save_hike_data"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

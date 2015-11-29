@@ -31,6 +31,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     public static final String PARCEL_NAME = "com.csci5448.hiketracker.Mountain";
 
     private final float DEFAULT_ZOOM = 6;
+    static final int START_NEW_HIKE = 1;    // Request code for new hike activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +145,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
         startActivity(myIntent);
     }
 
-//    private void
+//    Asynchronous Task to revtrieve saved mountain information from database
     public class GetMountainTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -177,7 +178,4 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         }
     }
-
-
-
 }
