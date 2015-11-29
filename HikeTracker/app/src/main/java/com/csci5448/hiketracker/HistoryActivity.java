@@ -26,9 +26,6 @@ public class HistoryActivity extends AppCompatActivity {
     private HikeData hikeDB;
     private ListView listview;
 
-    public static final String EDIT_TAG = "edit tag";   // used to indicate hikedata will be editted
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

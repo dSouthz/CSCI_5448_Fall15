@@ -20,4 +20,22 @@
     <string name="title_activity_hike_dialog_fragment">HikeDialogFragmentActivity</string>
     <string name="title_activity_save_hike_data">SaveHikeData</string>
 
+    <!-- Passing Parcel String Keys -->
+    <string name="passHikeData">Hike Data Parcel</string>
+    <string name="passUser">User Parcel</string>
+    <string name="passMountain">Mountain Parcel</string>
+    <string name="sourceString">Source Strings</string>
+    <string name="editString">Edit Strings</string>
+    <string name="updateBttnLabel">Update</string>
+    <string name="deleteBttnLabel">DELETE</string>
+    <string name="chosePeakLabel">Choose Peak!</string>
+    <string name="defaultHikeDateLabel">Hike Date: xx/xx/xx</string>
+    <string name="defaultHikeLengthLabel">Hike Length: 00:00:00</string>
+    <string name="saveBttnLabel">Save</string>
+    <string name="cancelBttnLabel">Cancel</string>
+    <string name="pickMountainLabel">Pick Mountain</string>
+    <string name="pickDateLabel">Pick Date</string>
+    <string name="pickNameLabel">Pick Time</string>
+    <string name="colonLabel">:</string>
+
 </resources>

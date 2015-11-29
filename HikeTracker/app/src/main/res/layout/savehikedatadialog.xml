@@ -7,7 +7,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Sample Peak Name"
+        android:text="@string/chosePeakLabel"
         android:id="@+id/mountainNameField"
         android:layout_gravity="center_horizontal" />
 
@@ -21,11 +21,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Hike Date: xx/xx/xx"
+            android:text="@string/defaultHikeDateLabel"
             android:id="@+id/hikeDateField" />
 
         <Space
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.86" />
 
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Hike Length: 00:00:00"
+            android:text="@string/defaultHikeLengthLabel"
             android:id="@+id/hikeLengthField"
             android:layout_gravity="center_horizontal" />
     </LinearLayout>
@@ -48,13 +48,13 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
+            android:text="@string/saveBttnLabel"
             android:id="@+id/saveHikeBttn" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="@string/cancelBttnLabel"
             android:id="@+id/cancelHikeBttn" />
     </LinearLayout>
 
@@ -62,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Pick Mountain"
+        android:text="@string/pickMountainLabel"
         android:id="@+id/pickMountainLabel"
         android:layout_gravity="center_horizontal" />
 
@@ -74,14 +74,14 @@
 
         <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></RadioGroup>
+            android:layout_height="wrap_content"/>
     </ScrollView>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Pick Date"
+        android:text="@string/pickDateLabel"
         android:id="@+id/pickDateLabel"
         android:layout_gravity="center_horizontal" />
 
@@ -98,7 +98,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Pick Time"
+        android:text="@string/pickNameLabel"
         android:id="@+id/pickTimeLabel"
         android:layout_gravity="center_horizontal" />
 
@@ -122,10 +122,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text=":"
+            android:text="@string/colonLabel"
             android:id="@+id/colon"
             android:textIsSelectable="false"
-            android:textSize="100dp" />
+            android:textSize="100sp" />
 
         <NumberPicker
             android:layout_width="wrap_content"

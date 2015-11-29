@@ -1,5 +1,6 @@
 package com.csci5448.hiketracker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -43,8 +44,8 @@ public class HikeActivity extends AppCompatActivity {
 
         // Retrieve parceled object
         Bundle bundle = getIntent().getExtras();
-        mountain = bundle.getParcelable(LocatorActivity.PARCEL_NAME);
-        user = bundle.getParcelable(MainActivity.USER_PARCEL);
+        mountain = bundle.getParcelable(getString(R.string.passMountain));
+        user = bundle.getParcelable(getString(R.string.passUser));
 
         timerValue = (TextView) findViewById(R.id.timerValue);
         TextView peakName = (TextView) findViewById(R.id.hikepeakname);
@@ -131,7 +132,17 @@ public class HikeActivity extends AppCompatActivity {
 // TODO Implement saving hike to database, updating user information, updating mountain information
         // Launch HikeDialog Fragment w/ dialog displaying collected info, option to save
         HikeData hikeData = new HikeData();
+        hikeData.setUserId(user.getUserId());
+        hikeData.setHikeLength(updatedTime);
+        hikeData.setPeakName(mountain.getmName());
+//        hikeData.setHikeDate(new Date(Calendar.getInstance().getTime().getTime()));  // Should be set to the current date with constructor
 
+        // Start SaveHikeData Activity with Tag
+        Intent myIntent = new Intent(HikeActivity.this, SaveHikeDataActivity.class);
+        myIntent.putExtra(getString(R.string.passHikeData), hikeData);
+        myIntent.putExtra(getString(R.string.sourceString), TAG);
+
+        startActivity(myIntent);
     }
 
     private void exit() {

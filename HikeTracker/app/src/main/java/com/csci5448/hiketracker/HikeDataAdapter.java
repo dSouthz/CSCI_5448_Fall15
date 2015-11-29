@@ -10,7 +10,6 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by diana on 11/18/15.
@@ -58,16 +57,20 @@ public class HikeDataAdapter extends ArrayAdapter<HikeData> {
         hikePeak.setText(String.format("Peak: %s", hikeData.getPeakName()));
 
         //hh:mm
-        // TODO: Currently projecting that we'll be storing total seconds; may change to total minutes
-        int seconds = hikeData.getHikeLength();
-        hikeLength.setText(String.format("Time: %s", String.format("%02d:%02d",
-                TimeUnit.SECONDS.toHours(seconds),
-                TimeUnit.SECONDS.toMinutes(seconds) -
-                        TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(seconds))
-        )));
+        hikeLength.setText(timeFromLong(hikeData.getHikeLength()));
 
         // Return the completed view to render on screen
         return view;
+    }
+
+    private String timeFromLong(Long time){
+        int secs = (int)(time / 1000);
+        int mins = secs / 60;
+        int hrs = mins / 60;
+        secs = secs % 60;
+        return (String.format("%02d", hrs) + ":"
+                + String.format("%02d", mins) + ":"
+                + String.format("%02d", secs));
     }
 
 }

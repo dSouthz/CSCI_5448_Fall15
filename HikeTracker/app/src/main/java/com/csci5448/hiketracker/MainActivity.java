@@ -20,9 +20,6 @@ public class MainActivity extends AppCompatActivity {
     List<User> users;
 
     public static final String TAG = "MainActivity";
-    public static final String HIKEDATA_PARCEL = "HikeData";
-    public static final String USER_PARCEL = "User";
-    public static final String SOURCE_STRING = "Source String Key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startLocator(View view){
         Intent myIntent = new Intent(MainActivity.this, LocatorActivity.class);
-        myIntent.putExtra(USER_PARCEL, users.get(0));
+        myIntent.putExtra(getString(R.string.passUser), users.get(0));
         startActivity(myIntent);
     }
 

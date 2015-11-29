@@ -25,10 +25,10 @@ public class HikeData implements Parcelable, Comparable<HikeData>{
     private int id;
     private int userId;
     private String peakName;
-    private int hikeLength;
+    private long hikeLength;
     private Date hikeDate;
 
-    public HikeData(int id, String peakName, int hikeLength, Date hikeDate, int userId) {
+    public HikeData(int id, String peakName, long hikeLength, Date hikeDate, int userId) {
         this.id = id;
         this.peakName = peakName;
         this.hikeLength = hikeLength;
@@ -48,7 +48,7 @@ public class HikeData implements Parcelable, Comparable<HikeData>{
         super();
         this.id = in.readInt();
         this.peakName = in.readString();
-        this.hikeLength = in.readInt();
+        this.hikeLength = in.readLong();
         this.hikeDate = new Date(in.readLong());
         this.userId = in.readInt();
     }
@@ -73,11 +73,11 @@ public class HikeData implements Parcelable, Comparable<HikeData>{
         this.peakName = peakName;
     }
 
-    public int getHikeLength() {
+    public long getHikeLength() {
         return hikeLength;
     }
 
-    public void setHikeLength(int hikeLength) {
+    public void setHikeLength(long hikeLength) {
         this.hikeLength = hikeLength;
     }
 
@@ -124,7 +124,7 @@ public class HikeData implements Parcelable, Comparable<HikeData>{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(getId());
         dest.writeString(getPeakName());
-        dest.writeInt(getHikeLength());
+        dest.writeLong(getHikeLength());
         dest.writeLong(getHikeDate().getTime());
         dest.writeInt(getUserId());
     }

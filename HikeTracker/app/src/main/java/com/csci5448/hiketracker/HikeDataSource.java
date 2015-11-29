@@ -66,7 +66,7 @@ public class HikeDataSource extends HikeTrackerDBDAO{
                     do {
                         HikeData hikeData = new HikeData();
                         hikeData.setId(cursor.getInt(0));
-                        hikeData.setHikeLength(cursor.getInt(1));
+                        hikeData.setHikeLength(cursor.getLong(1));
                         hikeData.setHikeDate(loadDate(cursor, 2));
                         hikeData.setPeakName(cursor.getString(3));
 

@@ -39,7 +39,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_locator);
 
-        user = getIntent().getExtras().getParcelable(MainActivity.USER_PARCEL);
+        user = getIntent().getExtras().getParcelable(getString(R.string.passUser));
 
         mountainDataSource = new MountainDataSource(this);
 
@@ -143,8 +143,9 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
 
     public void startHikeActivity(Mountain mount) {
         Intent myIntent = new Intent(LocatorActivity.this, HikeActivity.class);
-        myIntent.putExtra(MainActivity.HIKEDATA_PARCEL, mount);
-        myIntent.putExtra(MainActivity.USER_PARCEL, user);
+        myIntent.putExtra(getString(R.string.passHikeData), mount);
+        myIntent.putExtra(getString(R.string.passMountain), user);
+        myIntent.putExtra(getString(R.string.sourceString), TAG);
 
         startActivity(myIntent);
     }

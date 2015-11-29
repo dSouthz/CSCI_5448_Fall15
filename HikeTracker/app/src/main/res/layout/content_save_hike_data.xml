@@ -83,6 +83,7 @@
 
         <RadioGroup
             android:layout_width="match_parent"
+            android:id="@+id/mountainListRadioGroup"
             android:layout_height="wrap_content"></RadioGroup>
     </ScrollView>
 
@@ -115,6 +116,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/timePickerLayout"
         android:gravity="center_horizontal">
 
         <NumberPicker
