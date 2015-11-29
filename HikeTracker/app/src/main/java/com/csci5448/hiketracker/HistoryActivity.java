@@ -1,5 +1,8 @@
 package com.csci5448.hiketracker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -63,12 +65,34 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapter, View v, int position,
                                     long arg3) {
-                String value = adapter.getItemAtPosition(position).toString();
-                Toast.makeText(getApplicationContext(), "You clicked " + value + " at position " + position, Toast.LENGTH_LONG).show();
-            }
-        });
+                hikeDB = (HikeData)adapter.getItemAtPosition(position);
+                String value = hikeDB.toString();
+//                Toast.makeText(getApplicationContext(), "You clicked " + value + " at position " + position, Toast.LENGTH_LONG).show();
 
-    }
+                // Show dialog
+                AlertDialog.Builder adb = new AlertDialog.Builder(
+                        HistoryActivity.this);
+                adb.setTitle("What do you want to do?");
+                adb.setMessage("You selected " + value);
+                adb.setPositiveButton("Edit Hike", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        editEntry();
+                    }
+                });
+                adb.setCancelable(true);
+                adb.setNegativeButton("Delete Hike",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        deleteEntry();
+                    }
+                });
+                adb.setNeutralButton("Cancel", null);
+                adb.show();
+
+            }
+        }
+    );
+
+}
     // Insert test hike data into the database
     private void test(){
 
@@ -79,81 +103,94 @@ public class HistoryActivity extends AppCompatActivity {
 
     // Task Calls
     private void getHikes() {new getHikesTask().execute(HikeDataDisplayActions.LOAD_ALL); }
-    private void deleteEntry() {new getHikesTask().execute(HikeDataDisplayActions.DELETE_ENTRY); }
-    private void updateEntry() {new getHikesTask().execute(HikeDataDisplayActions.UPDATE_ENTRY); }
     private void saveEntry() {new getHikesTask().execute(HikeDataDisplayActions.SAVE_ENTRY); }
 
     /**
      * Modifies an existing entry in the history
      */
     private void editEntry() {
-        // TODO: Populate pop-up window with entry's data
-        // TODO: Allow entry data to be manipulated
-        // TODO: Call for HikeDataSource update to push to database
+        // Start SaveHikeData Activity with Tag
+        Intent myIntent = new Intent(HistoryActivity.this, SaveHikeDataActivity.class);
+        myIntent.putExtra(getString(R.string.passHikeData), hikeDB);
+        myIntent.putExtra(getString(R.string.sourceString), TAG);
+        myIntent.putExtra(getString(R.string.editString), true);
+
+        startActivity(myIntent);
     }
 
     /**
      * Deletes an existing entry in the history
      */
-    private void delete() {
-        // TODO: Populate pop-up window with entry's data
-        // TODO: Prompt user if they really want to delete entry
-        // TODO: Call for HikeDataSource delete to delete entry from database
+    private void deleteEntry() {
+        // Start SaveHikeData Activity with Tag
+        Intent myIntent = new Intent(HistoryActivity.this, SaveHikeDataActivity.class);
+        myIntent.putExtra(getString(R.string.passHikeData), hikeDB);
+        myIntent.putExtra(getString(R.string.sourceString), TAG);
+        myIntent.putExtra(getString(R.string.editString), false);
+
+        startActivity(myIntent);
     }
 
     /**
      * Creates a new entry in the history
      */
     private void newEntry(String entry) {
+        // Start SaveHikeData Activity with Tag
+        hikeDB = new HikeData();
+        Intent myIntent = new Intent(HistoryActivity.this, SaveHikeDataActivity.class);
+        myIntent.putExtra(getString(R.string.passHikeData), hikeDB);
+        myIntent.putExtra(getString(R.string.sourceString), TAG);
+        myIntent.putExtra(getString(R.string.editString), true);
 
+        startActivity(myIntent);
     }
 
-    private enum HikeDataDisplayActions {
-        LOAD_ALL, DELETE_ENTRY, UPDATE_ENTRY, SAVE_ENTRY
-    }
+private enum HikeDataDisplayActions {
+    LOAD_ALL, DELETE_ENTRY, UPDATE_ENTRY, SAVE_ENTRY
+}
 
-    //    Asynchronous Task to Access SQLite Database
-    public class getHikesTask extends AsyncTask<HikeDataDisplayActions, Void, Void> {
+//    Asynchronous Task to Access SQLite Database
+public class getHikesTask extends AsyncTask<HikeDataDisplayActions, Void, Void> {
 
-        @Override
-        protected Void doInBackground(HikeDataDisplayActions... types) {
+    @Override
+    protected Void doInBackground(HikeDataDisplayActions... types) {
 //            Log.d(TAG, "On doInBackground...");
-            Log.d("On doInBackground... ", String.valueOf(types[0]));
+        Log.d("On doInBackground... ", String.valueOf(types[0]));
 
-            switch (types[0]) {
-                case LOAD_ALL: // Retrieve all saved hike data
-                    hikes = (ArrayList)hikeDataSource.getAllHikes();
+        switch (types[0]) {
+            case LOAD_ALL: // Retrieve all saved hike data
+                hikes = (ArrayList)hikeDataSource.getAllHikes();
 //                    Collections.sort(hikes);    // Sort by date
-                    Log.d(TAG, "Hikes Loaded");
-                    break;
-                case DELETE_ENTRY:  // Delete chosen entry
-                    hikeDataSource.deleteHikeData(hikeDB);
-                    hikes = (ArrayList)hikeDataSource.getAllHikes();
+                Log.d(TAG, "Hikes Loaded");
+                break;
+            case DELETE_ENTRY:  // Delete chosen entry
+                hikeDataSource.deleteHikeData(hikeDB);
+                hikes = (ArrayList)hikeDataSource.getAllHikes();
 //                    Collections.sort(hikes);    // Sort by date
-                    Log.d(TAG, "Hike deleted");
-                    break;
-                case UPDATE_ENTRY:  // Edit and update chosen entry
-                    hikeDataSource.update(hikeDB);
-                    hikes = (ArrayList)hikeDataSource.getAllHikes();
+                Log.d(TAG, "Hike deleted");
+                break;
+            case UPDATE_ENTRY:  // Edit and update chosen entry
+                hikeDataSource.update(hikeDB);
+                hikes = (ArrayList)hikeDataSource.getAllHikes();
 //                    Collections.sort(hikes);    // Sort by date
-                    Log.d(TAG, "Hike updated");
-                    break;
-                case SAVE_ENTRY:
-                    hikeDataSource.save(hikeDB);
-                    hikes = (ArrayList)hikeDataSource.getAllHikes();
+                Log.d(TAG, "Hike updated");
+                break;
+            case SAVE_ENTRY:
+                hikeDataSource.save(hikeDB);
+                hikes = (ArrayList)hikeDataSource.getAllHikes();
 //                    Collections.sort(hikes);    // Sort by date
-                    Log.d(TAG, "Hike saved" + hikeDB.getHikeLength());
-                    break;
-            }
-
-            return null;
+                Log.d(TAG, "Hike saved" + hikeDB.getHikeLength());
+                break;
         }
 
-        @Override
-        protected void onPostExecute(Void v) {
-            setupViews();
-            Log.d(TAG, "Finished task, new Size = " + hikes.size());
-        }
+        return null;
     }
+
+    @Override
+    protected void onPostExecute(Void v) {
+        setupViews();
+        Log.d(TAG, "Finished task, new Size = " + hikes.size());
+    }
+}
 
 }

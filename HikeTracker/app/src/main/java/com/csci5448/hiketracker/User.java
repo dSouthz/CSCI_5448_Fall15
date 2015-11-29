@@ -50,6 +50,21 @@ public class User implements Parcelable, Comparable<User>{
         this.averageLength = averageLength;
     }
 
+    public void addNewHike(long newTime){
+        long totalTime = averageLength*(totalCount);
+        totalTime += newTime;
+        addOneHike();
+        setAverageLength(totalTime/totalCount);
+    }
+
+    public void subtractNewHike(long newTime){
+        long totalTime = averageLength*(totalCount);
+        totalTime -= newTime;
+        subtractOneHike();
+        setAverageLength(totalTime/totalCount);
+    }
+
+
     public int getTotalCount() {
         return totalCount;
     }
@@ -58,8 +73,24 @@ public class User implements Parcelable, Comparable<User>{
         this.totalCount = totalCount;
     }
 
+    public void subtractOneHike(){
+        totalCount--;
+    }
+
+    public void addOneHike(){
+        totalCount++;
+    }
+
     public int getSummitCount() {
         return summitCount;
+    }
+
+    public void addOneSummit() {
+        summitCount++;
+    }
+
+    public void subtractOneSummit(){
+        summitCount--;
     }
 
     public void setSummitCount(int summitCount) {

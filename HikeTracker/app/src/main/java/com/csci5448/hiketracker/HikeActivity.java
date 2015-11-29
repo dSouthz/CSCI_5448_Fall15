@@ -146,6 +146,7 @@ public class HikeActivity extends AppCompatActivity {
         // Start SaveHikeData Activity with Tag
         Intent myIntent = new Intent(HikeActivity.this, SaveHikeDataActivity.class);
         myIntent.putExtra(getString(R.string.passHikeData), hikeData);
+        myIntent.putExtra(getString(R.string.passUser),user);
         myIntent.putExtra(getString(R.string.sourceString), TAG);
 
         startActivity(myIntent);

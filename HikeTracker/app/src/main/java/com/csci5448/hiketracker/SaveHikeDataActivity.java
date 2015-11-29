@@ -23,7 +23,10 @@ public class SaveHikeDataActivity extends AppCompatActivity {
     private Button cancelHikeBttn;
     private Bundle bundle;
     HikeData hikeData;
+    User user;
     HikeDataSource hikeDataSource;
+
+    private long oldTime;
 
     // Layout Variables
     TextView mountainNameField, hikeDateField, hikeLengthField;
@@ -45,6 +48,8 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         }
 
         hikeData = bundle.getParcelable(getString(R.string.passHikeData));
+        user = bundle.getParcelable(getString(R.string.passUser));
+
         String source = bundle.getString(getString(R.string.sourceString));
 
         // Setup Buttons
@@ -199,6 +204,8 @@ public class SaveHikeDataActivity extends AppCompatActivity {
 //            Log.d(TAG, "On doInBackground...");
             Log.d("On doInBackground... ", String.valueOf(types[0]));
 
+
+            UserDataSource userDataSource = new UserDataSource(getApplicationContext());
             switch (types[0]) {
                 case DELETE_ENTRY:  // Delete chosen entry
                     hikeDataSource.deleteHikeData(hikeData);
@@ -206,6 +213,8 @@ public class SaveHikeDataActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Hike was DELETED",
                             Toast.LENGTH_SHORT).show();
                     updateMountainHikedField(false);
+                    user.subtractNewHike(hikeData.getHikeLength());
+                    userDataSource.update(user);
                     break;
                 case UPDATE_ENTRY:  // Edit and update chosen entry
                     hikeDataSource.update(hikeData);
@@ -219,6 +228,9 @@ public class SaveHikeDataActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Hike was SAVED!",
                             Toast.LENGTH_SHORT).show();
                     updateMountainHikedField(true);
+                    user.setMostRecent(hikeData.getPeakName());
+                    user.addNewHike(hikeData.getHikeLength());
+                    userDataSource.update(user);
                     break;
             }
             return null;
@@ -241,6 +253,9 @@ public class SaveHikeDataActivity extends AppCompatActivity {
                             mount.setHiked(true);
                             mountainDataSource.save(mount);
                             Log.d(TAG, "Set " + mount.getmName() + " to HIKED");
+                            user.addOneSummit();
+                            Log.d(TAG, "Incremented summit count");
+
                         }
                     }
                     else {
@@ -258,11 +273,15 @@ public class SaveHikeDataActivity extends AppCompatActivity {
                             mount.setHiked(false);
                             mountainDataSource.save(mount); // Update hiked record
                             Log.d(TAG, "Set " + mount.getmName() + " to NOT Hiked");
+                            user.subtractOneSummit();
+                            Log.d(TAG, "Decremented summit count");
                         }
                     }
                 }
             }
         }
-    }
+
+
+   }
 
 }
