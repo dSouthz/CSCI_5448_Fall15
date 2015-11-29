@@ -163,16 +163,20 @@ public class SaveHikeDataActivity extends AppCompatActivity {
 
             }
         });
+        saveHikeBttn.setEnabled(true);
+        saveHikeBttn.setVisibility(View.VISIBLE);
 
         cancelHikeBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Cancel Button clicked");
-                Toast.makeText(getApplicationContext(),"This hike was not saved",
+                Toast.makeText(getApplicationContext(), "This hike was not saved",
                         Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
+        cancelHikeBttn.setEnabled(true);
+        cancelHikeBttn.setVisibility(View.VISIBLE);
     }
 
     // Task Calls

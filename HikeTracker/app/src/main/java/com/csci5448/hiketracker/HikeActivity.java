@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -62,6 +63,7 @@ public class HikeActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
+                Log.d(TAG, "Clicked on Start Button");
                 setRunningButtons();
                 startTime = System.currentTimeMillis();
                 customHandler.postDelayed(updateTimerThread, 0);
@@ -71,6 +73,7 @@ public class HikeActivity extends AppCompatActivity {
         pauseButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
+                Log.d(TAG, "Clicked on Pause Button");
                 customHandler.removeCallbacks(updateTimerThread);
                 setPausedButtons();
                 timeSwapBuff += timeInMilliseconds;
@@ -80,6 +83,7 @@ public class HikeActivity extends AppCompatActivity {
         resetButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
+                Log.d(TAG, "Clicked on Reset Button");
                 startTime = System.currentTimeMillis();
                 timeInMilliseconds = 0L;
                 timeSwapBuff = 0L;
@@ -91,6 +95,7 @@ public class HikeActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
+                Log.d(TAG, "Clicked on Save Button");
                 saveHike();
                 exit();
             }
@@ -99,6 +104,7 @@ public class HikeActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
+                Log.d(TAG, "Clicked on Cancel Button");
                 exit();
             }
         });

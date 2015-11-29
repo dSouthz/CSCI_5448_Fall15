@@ -143,8 +143,8 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
 
     public void startHikeActivity(Mountain mount) {
         Intent myIntent = new Intent(LocatorActivity.this, HikeActivity.class);
-        myIntent.putExtra(getString(R.string.passHikeData), mount);
-        myIntent.putExtra(getString(R.string.passMountain), user);
+        myIntent.putExtra(getString(R.string.passMountain), mount);
+        myIntent.putExtra(getString(R.string.passUser), user);
         myIntent.putExtra(getString(R.string.sourceString), TAG);
 
         startActivity(myIntent);
