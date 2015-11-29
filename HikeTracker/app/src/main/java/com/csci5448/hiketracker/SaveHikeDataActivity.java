@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class SaveHikeDataActivity extends AppCompatActivity {
 
@@ -187,9 +188,9 @@ public class SaveHikeDataActivity extends AppCompatActivity {
     }
 
     // Task Calls
-    private void deleteEntry() {new getHikesTask().execute(HikeDataDisplayActions.DELETE_ENTRY); }
-    private void updateEntry() {new getHikesTask().execute(HikeDataDisplayActions.UPDATE_ENTRY); }
-    private void saveEntry() {new getHikesTask().execute(HikeDataDisplayActions.SAVE_ENTRY); }
+    private void deleteEntry() {new manipulateHikeDataTasks().execute(HikeDataDisplayActions.DELETE_ENTRY); }
+    private void updateEntry() {new manipulateHikeDataTasks().execute(HikeDataDisplayActions.UPDATE_ENTRY); }
+    private void saveEntry() {new manipulateHikeDataTasks().execute(HikeDataDisplayActions.SAVE_ENTRY); }
 
 
     private enum HikeDataDisplayActions {
@@ -197,7 +198,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
     }
 
     //    Asynchronous Task to Access SQLite Database
-    public class getHikesTask extends AsyncTask<HikeDataDisplayActions, Void, Void> {
+    public class manipulateHikeDataTasks extends AsyncTask<HikeDataDisplayActions, Void, Void> {
 
         @Override
         protected Void doInBackground(HikeDataDisplayActions... types) {
@@ -214,6 +215,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     updateMountainHikedField(false);
                     user.subtractNewHike(hikeData.getHikeLength());
+
                     userDataSource.update(user);
                     break;
                 case UPDATE_ENTRY:  // Edit and update chosen entry
@@ -260,16 +262,17 @@ public class SaveHikeDataActivity extends AppCompatActivity {
                     }
                     else {
                         // Check to see if there are other hikes for this mountain
-                        HikeDataSource hikeDataSource = new HikeDataSource(getApplicationContext());
                         ArrayList<HikeData> hikes = (ArrayList)hikeDataSource.getAllHikes();
+                        Collections.sort(hikes); // Sorted by date
+                        user.setMostRecent(hikes.get(0).getPeakName());  // also update LastPeakHiked field
                         int hikeCount = 0;
                         for (HikeData hikeData:hikes){
                             if (hikeData.getPeakName().equals(hikeData.getPeakName())){
                                 hikeCount++;
                             }
                         }
-                        if (hikeCount == 1) {
-                            // This was the only hike for this mountain
+                        if (hikeCount == 0) {
+                            // Removed was the only hike for this mountain
                             mount.setHiked(false);
                             mountainDataSource.save(mount); // Update hiked record
                             Log.d(TAG, "Set " + mount.getmName() + " to NOT Hiked");
@@ -281,6 +284,9 @@ public class SaveHikeDataActivity extends AppCompatActivity {
             }
         }
 
+        private void updateLastPeakHikedField(){
+
+        }
 
    }
 
