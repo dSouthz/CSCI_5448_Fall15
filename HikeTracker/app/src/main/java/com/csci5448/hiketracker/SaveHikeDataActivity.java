@@ -14,6 +14,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class SaveHikeDataActivity extends AppCompatActivity {
 
     private static final String TAG = "SaveHikeDatActivity";
@@ -203,6 +205,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
                     Log.d(TAG, "Hike deleted");
                     Toast.makeText(getApplicationContext(),"Hike was DELETED",
                             Toast.LENGTH_SHORT).show();
+                    updateMountainHikedField(false);
                     break;
                 case UPDATE_ENTRY:  // Edit and update chosen entry
                     hikeDataSource.update(hikeData);
@@ -215,6 +218,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
                     Log.d(TAG, "Hike saved");
                     Toast.makeText(getApplicationContext(),"Hike was SAVED!",
                             Toast.LENGTH_SHORT).show();
+                    updateMountainHikedField(true);
                     break;
             }
             return null;
@@ -223,6 +227,41 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void v) {
             finish();   // Exit activity
+        }
+
+        private void updateMountainHikedField(boolean insertion){
+            MountainDataSource mountainDataSource = new MountainDataSource(getApplicationContext());
+            ArrayList<Mountain> mountains = (ArrayList) mountainDataSource.getMountains();
+            for (Mountain mount : mountains) {
+                // Find mountain just hiked
+                if (mount.getmName().equals(hikeData.getPeakName())) {
+                    if (insertion){
+                        // Change mountain hiked to true if not already
+                        if (!mount.isHiked()) {
+                            mount.setHiked(true);
+                            mountainDataSource.save(mount);
+                            Log.d(TAG, "Set " + mount.getmName() + " to HIKED");
+                        }
+                    }
+                    else {
+                        // Check to see if there are other hikes for this mountain
+                        HikeDataSource hikeDataSource = new HikeDataSource(getApplicationContext());
+                        ArrayList<HikeData> hikes = (ArrayList)hikeDataSource.getAllHikes();
+                        int hikeCount = 0;
+                        for (HikeData hikeData:hikes){
+                            if (hikeData.getPeakName().equals(hikeData.getPeakName())){
+                                hikeCount++;
+                            }
+                        }
+                        if (hikeCount == 1) {
+                            // This was the only hike for this mountain
+                            mount.setHiked(false);
+                            mountainDataSource.save(mount); // Update hiked record
+                            Log.d(TAG, "Set " + mount.getmName() + " to NOT Hiked");
+                        }
+                    }
+                }
+            }
         }
     }
 
