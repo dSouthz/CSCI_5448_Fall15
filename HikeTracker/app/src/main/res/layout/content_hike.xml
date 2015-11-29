@@ -72,18 +72,18 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/saveButton"
+            android:id="@+id/reviewButton"
             android:layout_width="170dp"
             android:layout_height="55dp"
             android:gravity="center_horizontal"
-            android:text="Save &amp; Exit" />
+            android:text="@string/reviewBttnLabel" />
 
         <Button
             android:id="@+id/cancelButton"
             android:layout_width="170dp"
             android:layout_height="55dp"
             android:gravity="center_horizontal"
-            android:text="Exit Without Saving" />
+            android:text="@string/cancelHikeBttnLabel" />
 
     </LinearLayout>
 

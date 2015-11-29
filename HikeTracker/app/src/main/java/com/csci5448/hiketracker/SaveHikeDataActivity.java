@@ -201,14 +201,20 @@ public class SaveHikeDataActivity extends AppCompatActivity {
                 case DELETE_ENTRY:  // Delete chosen entry
                     hikeDataSource.deleteHikeData(hikeData);
                     Log.d(TAG, "Hike deleted");
+                    Toast.makeText(getApplicationContext(),"Hike was DELETED",
+                            Toast.LENGTH_SHORT).show();
                     break;
                 case UPDATE_ENTRY:  // Edit and update chosen entry
                     hikeDataSource.update(hikeData);
+                    Toast.makeText(getApplicationContext(),"Hike was UPDATED",
+                            Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "Hike updated");
                     break;
                 case SAVE_ENTRY:
                     hikeDataSource.save(hikeData);
                     Log.d(TAG, "Hike saved");
+                    Toast.makeText(getApplicationContext(),"Hike was SAVED!",
+                            Toast.LENGTH_SHORT).show();
                     break;
             }
             return null;
@@ -216,8 +222,6 @@ public class SaveHikeDataActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void v) {
-            Toast.makeText(getApplicationContext(),"This hike was not saved",
-                    Toast.LENGTH_SHORT).show();
             finish();   // Exit activity
         }
     }

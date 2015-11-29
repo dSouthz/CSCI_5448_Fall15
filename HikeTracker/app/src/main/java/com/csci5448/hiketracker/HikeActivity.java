@@ -55,7 +55,7 @@ public class HikeActivity extends AppCompatActivity {
         startButton = (Button) findViewById(R.id.startButton);
         pauseButton = (Button) findViewById(R.id.pauseButton);
         resetButton = (Button) findViewById(R.id.resetButton);
-        saveButton = (Button) findViewById(R.id.saveButton);
+        saveButton = (Button) findViewById(R.id.reviewButton);
         cancelButton = (Button) findViewById(R.id.cancelButton);
 
         setStartingButtons();
