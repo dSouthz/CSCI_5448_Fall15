@@ -39,5 +39,6 @@
     <string name="colonLabel">:</string>
     <string name="reviewBttnLabel">Review Hike Data</string>
     <string name="cancelHikeBttnLabel">Exit Without Saving</string>
+    <string name="nothingYetLabel">Nothing yet</string>
 
 </resources>

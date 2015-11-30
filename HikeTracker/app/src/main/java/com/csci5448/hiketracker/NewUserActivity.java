@@ -1,25 +1,14 @@
 package com.csci5448.hiketracker;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.app.IntentService;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-
-import java.util.List;
 
 public class NewUserActivity extends AppCompatActivity {
 
@@ -91,7 +80,7 @@ public class NewUserActivity extends AppCompatActivity {
             User newUser = new User();
             newUser.setUserName(name[0]);
             newUser.setAverageLength(0);
-            newUser.setMostRecent("Nothing yet");
+            newUser.setMostRecent(getString(R.string.nothingYetLabel));
             newUser.setSummitCount(0);
             newUser.setTotalCount(0);
             userDataSource.save(newUser);

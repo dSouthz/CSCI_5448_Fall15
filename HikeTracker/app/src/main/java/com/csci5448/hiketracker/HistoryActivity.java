@@ -73,7 +73,7 @@ public class HistoryActivity extends AppCompatActivity {
                 AlertDialog.Builder adb = new AlertDialog.Builder(
                         HistoryActivity.this);
                 adb.setTitle("What do you want to do?");
-                adb.setMessage("You selected " + value);
+//                adb.setMessage("You selected " + value);
                 adb.setPositiveButton("Edit Hike", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         editEntry();

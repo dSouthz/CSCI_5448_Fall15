@@ -1,6 +1,7 @@
 package com.csci5448.hiketracker;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +12,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,11 +34,18 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
 
     private long oldTime;   // used for updating hikes
     private Calendar calendar;
+    private int year;
+    private int month;
+    private int day;
+
+    static final int DATE_DIALOG_ID = 100;
+    static final int TIME_DIALOG_ID = 200;
+    static final int PEAK_DIALOG_ID = 200;
 
     // Layout Variables
     TextView mountainNameField, hikeDateField, hikeLengthField;
     NumberPicker hr1, hr0, min1, min0;
-    DatePicker datePicker;
+//    DatePicker datePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,35 +119,117 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
     private long longFromTime(){
         int hrs = hr1.getValue()*10+hr0.getValue();
         int mins = min1.getValue()*10 + min0.getValue();
-        long secs = mins*60+hrs*60*60;
-        return secs;
+        return (long) (mins*60+hrs*60*60);
     }
 
     private void setupForEditing() {
-        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.mountainListRadioGroup);
+//        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.mountainListRadioGroup);
 
-        // Setup Editing fields
-        setupDatePicker();
-        setupPickers();
+        setCurrentDate();
+
+        Button editPeakBttn = (Button) findViewById(R.id.editPeakBttn);
+        Button editDateBttn = (Button) findViewById(R.id.editDateBttn);
+        Button editLengthBttn = (Button) findViewById(R.id.editLengthBttn);
+
+        editDateBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Edit Date Button clicked");
+                showDialog(DATE_DIALOG_ID);
+            }
+        });
+
+        editPeakBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Edit Peak Button clicked");
+                showDialog(PEAK_DIALOG_ID);
+            }
+        });
+
+        editLengthBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Edit Length Button clicked");
+                showDialog(TIME_DIALOG_ID);
+            }
+        });
 
         // Change save button to update button
         saveHikeBttn.setText(R.string.updateBttnLabel);
         saveHikeBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Save Hike Button clicked");
+                Log.d(TAG, "Update Button clicked");
                 updateHikeData();
+                Toast.makeText(getApplicationContext(),"Hike was Updated!",
+                        Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
 
-        oldTime = hikeData.getHikeLength();
+//        oldTime = hikeData.getHikeLength();
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+
+        switch (id) {
+            case DATE_DIALOG_ID:
+                // set date picker as current date
+                return new DatePickerDialog(this, datePickerListener, year, month,day);
+            case TIME_DIALOG_ID:
+
+        }
+        return null;
+    }
+
+    private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+
+        // when dialog box is closed, below method will be called.
+        public void onDateSet(DatePicker view, int selectedYear,int selectedMonth, int selectedDay) {
+            year = selectedYear;
+            month = selectedMonth;
+            day = selectedDay;
+
+            // set selected date into Text View
+            hikeDateField.setText(new StringBuilder().append(month + 1)
+                    .append("-").append(day).append("-").append(year).append(" "));
+
+            // set selected date into Date Picker
+//            datePicker.init(year, month, day, null);
+
+        }
+    };
+
+
+    // display current date both on the text view and the Date Picker when the application starts.
+    public void setCurrentDate() {
+
+//        datePicker = (DatePicker) findViewById(R.id.datePicker);
+
+        final Calendar calendar = Calendar.getInstance();
+
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // set current date into textview
+        hikeDateField.setText(new StringBuilder()
+                // Month is 0 based, so you have to add 1
+                .append(month + 1).append("-")
+                .append(day).append("-")
+                .append(year).append(" "));
+
+        // set current date into Date Picker
+//        datePicker.init(year, month, day, null);
+
     }
 
     private void updateLabel() {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        hikeDateField.setText(sdf.format(calendar));
+        hikeDateField.setText(sdf.format(calendar.getTimeInMillis()));
     }
 
     @Override
@@ -195,7 +283,7 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
     }
 
     private void setupDatePicker(){
-        datePicker = (DatePicker) findViewById(R.id.datePicker);
+//        datePicker = (DatePicker) findViewById(R.id.datePicker);
         calendar = Calendar.getInstance();
 
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -210,15 +298,15 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
             }
         };
 
-        datePicker.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(SaveHikeDataActivity.this, date, calendar
-                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
+//        datePicker.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                new DatePickerDialog(SaveHikeDataActivity.this, date, calendar
+//                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+//                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+//            }
+//        });
     }
 
     private void setupforSaving() {
@@ -228,25 +316,8 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
 
     // Hide editing fields
     private void hideEditingFields(){
-        TextView pickMountainLabel, pickDateLabel, pickTimeLabel, colon;
-        pickMountainLabel = (TextView)findViewById(R.id.pickMountainLabel);
-        pickDateLabel = (TextView)findViewById(R.id.pickDateLabel);
-        pickTimeLabel = (TextView)findViewById(R.id.pickTimeLabel);
-        colon = (TextView)findViewById(R.id.colon);
-
-        pickMountainLabel.setVisibility(View.INVISIBLE);
-        pickDateLabel.setVisibility(View.INVISIBLE);
-        pickTimeLabel.setVisibility(View.INVISIBLE);
-        colon.setVisibility(View.INVISIBLE);
-
-        ScrollView scrollView = (ScrollView)findViewById(R.id.scrollView);
-        scrollView.setVisibility(View.INVISIBLE);
-
-        DatePicker datePicker = (DatePicker)findViewById(R.id.datePicker);
-        datePicker.setVisibility(View.INVISIBLE);
-
-        LinearLayout timePicker = (LinearLayout)findViewById(R.id.timePickerLayout);
-        timePicker.setVisibility(View.INVISIBLE);
+        LinearLayout editLayout = (LinearLayout)findViewById(R.id.editBttnsLayout);
+        editLayout.setVisibility(View.INVISIBLE);
     }
 
     private void setupForDeleting() {
@@ -261,6 +332,8 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
             public void onClick(View view) {
                 Log.d(TAG, "Save Hike Button clicked");
                 deleteEntry();
+                Toast.makeText(getApplicationContext(),"Hike was DELETED!",
+                        Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -272,6 +345,8 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
             public void onClick(View view) {
                 Log.d(TAG, "Save Hike Button clicked");
                 saveEntry();
+                Toast.makeText(getApplicationContext(),"Hike was SAVED!",
+                        Toast.LENGTH_SHORT).show();
                 finish();
 
             }
@@ -316,8 +391,6 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
                 case DELETE_ENTRY:  // Delete chosen entry
                     hikeDataSource.deleteHikeData(hikeData);
                     Log.d(TAG, "Hike deleted");
-                    Toast.makeText(getApplicationContext(),"Hike was DELETED",
-                            Toast.LENGTH_SHORT).show();
                     updateMountainHikedField(false);
                     user.subtractNewHike(hikeData.getHikeLength());
 
@@ -325,16 +398,13 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
                     break;
                 case UPDATE_ENTRY:  // Edit and update chosen entry
                     hikeDataSource.update(hikeData);
-                    Toast.makeText(getApplicationContext(),"Hike was UPDATED",
-                            Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "Hike updated");
 
                     break;
                 case SAVE_ENTRY:
                     hikeDataSource.save(hikeData);
                     Log.d(TAG, "Hike saved");
-                    Toast.makeText(getApplicationContext(),"Hike was SAVED!",
-                            Toast.LENGTH_SHORT).show();
+
                     updateMountainHikedField(true);
                     user.setMostRecent(hikeData.getPeakName());
                     user.addNewHike(hikeData.getHikeLength());
@@ -369,8 +439,14 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
                     else {
                         // Check to see if there are other hikes for this mountain
                         ArrayList<HikeData> hikes = (ArrayList)hikeDataSource.getAllHikes();
+                        try {
+                            wait(500);  // wait for hikes to load
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         Collections.sort(hikes); // Sorted by date
-                        user.setMostRecent(hikes.get(0).getPeakName());  // also update LastPeakHiked field
+                        if (hikes.size() > 0) user.setMostRecent(hikes.get(0).getPeakName());  // also update LastPeakHiked field
+                        else user.setMostRecent(getString(R.string.nothingYetLabel));
                         int hikeCount = 0;
                         for (HikeData hikeData:hikes){
                             if (hikeData.getPeakName().equals(hikeData.getPeakName())){
