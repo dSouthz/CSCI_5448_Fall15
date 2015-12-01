@@ -7,9 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,13 +22,11 @@ public class PeakPickerDialog extends Dialog implements View.OnClickListener {
 
     private static final String TAG = "PeakPickerDialog";
     private TextView toUpdate;
-    private Dialog dialog;
     private Button okPickerButton, cancelPickerButton;
     ArrayList<Mountain> mountains;
     Activity activity;
     Spinner peakPicker;
-
-    NumberPicker hr1, hr0, min1, min0;
+    String selectedItem;
 
     public PeakPickerDialog(Activity activity, TextView toUpdate) {
         super(activity);
@@ -47,11 +44,24 @@ public class PeakPickerDialog extends Dialog implements View.OnClickListener {
 
         getList();
 
-        okPickerButton = (Button) findViewById(R.id.okPickerBttn);
-        cancelPickerButton = (Button) findViewById(R.id.cancelPickerBttn);
+        okPickerButton = (Button) findViewById(R.id.okPeakPickerBttn);
+        cancelPickerButton = (Button) findViewById(R.id.cancelPeakPickerBttn);
 
         peakPicker = (Spinner)findViewById(R.id.peakPicker);
 
+        peakPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // your code here
+                selectedItem = (String)peakPicker.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
         okPickerButton.setOnClickListener(this);
         cancelPickerButton.setOnClickListener(this);
     }
@@ -60,7 +70,10 @@ public class PeakPickerDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.okPickerBttn:
-                toUpdate.setText(String.valueOf(peakPicker.getSelectedItem()));
+//                toUpdate.setText(peakPicker.getSelectedItem().toString());
+                toUpdate.invalidate();
+                toUpdate.setText("Can");
+                toUpdate.invalidate();
                 break;
             case R.id.cancelPickerBttn:
                 dismiss();
@@ -70,6 +83,7 @@ public class PeakPickerDialog extends Dialog implements View.OnClickListener {
         }
         dismiss();
     }
+
 
     private void getList(){
         new GetMountainTask().execute();
@@ -103,19 +117,11 @@ public class PeakPickerDialog extends Dialog implements View.OnClickListener {
         @Override
         protected void onPostExecute(Void v) {
             updateSpinner();
-            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         }
 
         private void updateSpinner(){
             List<String> list = new ArrayList<>();
-            for (Mountain mount:mountains){
-                list.add(mount.getmName());
-            }
-            ArrayAdapter<String> peakAdapter =
-                    new ArrayAdapter<String>(activity.getBaseContext(), android.R.layout.simple_spinner_item, list);
 
-            peakAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            peakPicker.setAdapter(peakAdapter);
         }
     }
 }

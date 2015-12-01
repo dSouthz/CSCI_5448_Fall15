@@ -76,11 +76,18 @@
         android:id="@+id/editBttnsLayout"
         android:gravity="center_vertical|center_horizontal">
 
-        <Button
-            android:layout_width="wrap_content"
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Change Peak"-->
+            <!--android:id="@+id/editPeakBttn" />-->
+
+        <Spinner
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Change Peak"
-            android:id="@+id/editPeakBttn" />
+            android:visibility="invisible"
+            android:id="@+id/peakPicker"
+            android:spinnerMode="dialog" />
 
         <Button
             android:layout_width="wrap_content"
@@ -95,42 +102,6 @@
             android:id="@+id/editLengthBttn" />
     </LinearLayout>
 
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
-        <!--android:text="Pick Mountain"-->
-        <!--android:id="@+id/pickMountainLabel"-->
-        <!--android:layout_gravity="center_horizontal" />-->
 
-    <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="85dp"-->
-        <!--android:id="@+id/scrollView"-->
-        <!--android:layout_gravity="center_horizontal" >-->
-
-        <!--<RadioGroup-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:id="@+id/mountainListRadioGroup"-->
-            <!--android:layout_height="wrap_content"></RadioGroup>-->
-    <!--</ScrollView>-->
-
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
-        <!--android:text="Pick Date"-->
-        <!--android:id="@+id/pickDateLabel"-->
-        <!--android:layout_gravity="center_horizontal" />-->
-
-
-
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
-        <!--android:text="Pick Time"-->
-        <!--android:id="@+id/pickTimeLabel"-->
-        <!--android:layout_gravity="center_horizontal" />-->
 
 </LinearLayout>

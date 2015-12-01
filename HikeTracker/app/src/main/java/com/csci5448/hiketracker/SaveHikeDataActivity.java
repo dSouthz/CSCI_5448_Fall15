@@ -10,9 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,9 +32,12 @@ public class SaveHikeDataActivity extends AppCompatActivity {
     private Button cancelHikeBttn;
     private Bundle bundle;
     HikeData hikeData, newHikeData;
-//    User user;
+    ArrayList<Mountain> mountains;
+    ArrayList<String> mountainNameList;
+    //    User user;
     HikeDataSource hikeDataSource;
     private boolean readyToFinish = false;
+    Spinner peakPicker;
 
     private long oldTime;   // used for updating hikes
     private Calendar calendar;
@@ -133,11 +138,11 @@ public class SaveHikeDataActivity extends AppCompatActivity {
     }
 
     private void setupForEditing() {
-//        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.mountainListRadioGroup);
-
         getCurrentDate();
 
-        Button editPeakBttn = (Button) findViewById(R.id.editPeakBttn);
+        peakPicker = (Spinner)findViewById(R.id.peakPicker);
+//        peakPicker.setVisibility(View.VISIBLE);
+
         Button editDateBttn = (Button) findViewById(R.id.editDateBttn);
         Button editLengthBttn = (Button) findViewById(R.id.editLengthBttn);
 
@@ -146,14 +151,6 @@ public class SaveHikeDataActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG, "Edit Date Button clicked");
                 showDialog(DATE_DIALOG_ID);
-            }
-        });
-
-        editPeakBttn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Edit Peak Button clicked");
-                showDialog(PEAK_DIALOG_ID);
             }
         });
 
@@ -182,6 +179,31 @@ public class SaveHikeDataActivity extends AppCompatActivity {
             }
         });
     }
+
+//    private void setChangePeakButtn(){
+//        Button editPeakBttn = (Button) findViewById(R.id.editPeakBttn);
+//        editPeakBttn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.d(TAG, "Edit Peak Button clicked");
+//                AlertDialog.Builder builder = new AlertDialog.Builder(SaveHikeDataActivity.this);
+//                builder.setTitle("Change Peak");
+//                final String[] list = mountainNameList.toArray(new String[mountainNameList.size()]);
+//                builder.setItems(list, new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                        mountainNameField.setText(list[which]);
+//                        dialog.dismiss();
+//                    }
+//                });
+//
+//
+//                builder.show();
+//            };
+//        });
+//    }
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -224,8 +246,8 @@ public class SaveHikeDataActivity extends AppCompatActivity {
 
     public void setCurrentDate(){
         calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH,month);
-        calendar.set(Calendar.DAY_OF_MONTH,day);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
     }
 
     private void updateLabel() {
@@ -324,7 +346,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
 
 
     private enum HikeDataDisplayActions {
-        DELETE_ENTRY, UPDATE_ENTRY, SAVE_ENTRY
+        DELETE_ENTRY, UPDATE_ENTRY, SAVE_ENTRY, LOAD_MOUNTAINS;
     }
 
     //    Asynchronous Task to Access SQLite Database
@@ -333,7 +355,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         HikeDataDisplayActions hikeDataDisplayActions;
         UserDataSource userDataSource;
         MountainDataSource mountainDataSource;
-        ArrayList<Mountain> mountains;
+        //        ArrayList<Mountain> mountains;
         ArrayList<HikeData> hikes;
 
         @Override
@@ -383,30 +405,39 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         protected void onPostExecute(Void v) {
             Log.d(TAG, "starting postexecute");
 //            synchronized (MainActivity.user) {
-                Log.d(TAG, "synchronized user");
-                switch (hikeDataDisplayActions) {
-                    case DELETE_ENTRY:
-                        updateMountainHikedField(false);
-                        MainActivity.user.subtractNewHike(hikeData.getHikeLength());
+//            Log.d(TAG, "synchronized user");
+            switch (hikeDataDisplayActions) {
+                case DELETE_ENTRY:
+                    updateMountainHikedField(false);
+                    MainActivity.user.subtractNewHike(hikeData.getHikeLength());
 //                        userDataSource.update(user);
-                        break;
-                    case SAVE_ENTRY:
-                        Log.d(TAG, "updating hiked field");
-                        updateMountainHikedField(true);
-                        Log.d(TAG, "Updated Hiked field");
-                        MainActivity.user.setMostRecent(hikeData.getPeakName());
-                        MainActivity.user.addNewHike(hikeData.getHikeLength());
+                    break;
+                case SAVE_ENTRY:
+                    Log.d(TAG, "updating hiked field");
+                    updateMountainHikedField(true);
+                    Log.d(TAG, "Updated Hiked field");
+                    MainActivity.user.setMostRecent(hikeData.getPeakName());
+                    MainActivity.user.addNewHike(hikeData.getHikeLength());
 //                        userDataSource.update(user);
-                        break;
-                    case UPDATE_ENTRY:
-                        updateMountainHikedField(true);
-                        updateLastPeakHikedField();
-                        MainActivity.user.addNewHike(hikeData.getHikeLength());
+                    break;
+                case UPDATE_ENTRY:
+                    updateMountainHikedField(true);
+                    updateLastPeakHikedField();
+                    MainActivity.user.addNewHike(hikeData.getHikeLength());
+                    break;
+                case LOAD_MOUNTAINS:
+                    for (Mountain mount:mountains){
+                        mountainNameList.add(mount.getmName());
+                    }
+//                    setChangePeakButtn();
+                    ArrayAdapter<String> peakAdapter =
+                            new ArrayAdapter<String>(SaveHikeDataActivity.this, android.R.layout.simple_spinner_item, mountainNameList);
 
-                        break;
-                }
+                    peakAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    peakPicker.setAdapter(peakAdapter);
+            }
             userDataSource.update(MainActivity.user);
-                Log.d(TAG, "Updated user");
+            Log.d(TAG, "Updated user");
 //            }
             readyToFinish = true;
             Log.d(TAG, "Finished in post execute");
@@ -434,23 +465,23 @@ public class SaveHikeDataActivity extends AppCompatActivity {
 //                        ArrayList<HikeData> hikes = (ArrayList)hikeDataSource.getAllHikes();
 //                        synchronized (hikes){
                         Log.d(TAG, "Sorting by date");
-                            Collections.sort(hikes); // Sorted by date
-                            if (hikes.size() > 0) MainActivity.user.setMostRecent(hikes.get(0).getPeakName());  // also update LastPeakHiked field
-                            else MainActivity.user.setMostRecent(getString(R.string.nothingYetLabel));
-                            int hikeCount = 0;
-                            for (HikeData hikeData:hikes){
-                                if (hikeData.getPeakName().equals(hikeData.getPeakName())){
-                                    hikeCount++;
-                                }
+                        Collections.sort(hikes); // Sorted by date
+                        if (hikes.size() > 0) MainActivity.user.setMostRecent(hikes.get(0).getPeakName());  // also update LastPeakHiked field
+                        else MainActivity.user.setMostRecent(getString(R.string.nothingYetLabel));
+                        int hikeCount = 0;
+                        for (HikeData hike:hikes){
+                            if (hike.getPeakName().equals(hikeData.getPeakName())){
+                                hikeCount++;
                             }
-                            if (hikeCount == 0) {
-                                // Removed was the only hike for this mountain
-                                mount.setHiked(false);
-                                mountainDataSource.update(mount); // Update hiked record
-                                Log.d(TAG, "Set " + mount.getmName() + " to NOT Hiked");
-                                MainActivity.user.subtractOneSummit();
-                                Log.d(TAG, "Decremented summit count");
-                            }
+                        }
+                        if (hikeCount == 0) {
+                            // Removed was the only hike for this mountain
+                            mount.setHiked(false);
+                            mountainDataSource.update(mount); // Update hiked record
+                            Log.d(TAG, "Set " + mount.getmName() + " to NOT Hiked");
+                            MainActivity.user.subtractOneSummit();
+                            Log.d(TAG, "Decremented summit count");
+                        }
 //                        }
                     }
                 }
