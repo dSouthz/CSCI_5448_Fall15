@@ -44,9 +44,8 @@ public class LengthPickerDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.okPickerBttn:
-                toUpdate.setText(String.format("%d%d:%d%d:00",
-                        hr1.getValue(), hr0.getValue(),
-                        min1.getValue(), min0.getValue()));
+                toUpdate.setText(String.valueOf(hr1.getValue()) + String.valueOf(hr0.getValue() + ":")
+                        + String.valueOf(min1.getValue()) + String.valueOf(min0.getValue()) + ":00");
                 break;
             case R.id.cancelPickerBttn:
                 dismiss();
@@ -72,7 +71,7 @@ public class LengthPickerDialog extends Dialog implements View.OnClickListener {
         min0.setMinValue(0);
         min0.setMaxValue(9);
         min1.setMinValue(0);
-        min1.setMaxValue(9);
+        min1.setMaxValue(5);
 
         hr0.setWrapSelectorWheel(true);
         hr1.setWrapSelectorWheel(true);
@@ -80,5 +79,4 @@ public class LengthPickerDialog extends Dialog implements View.OnClickListener {
         min1.setWrapSelectorWheel(true);
 
     }
-
 }

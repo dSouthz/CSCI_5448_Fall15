@@ -130,6 +130,7 @@ public class HistoryActivity extends AppCompatActivity {
     private void newEntry() {
         // Start SaveHikeData Activity with Tag
         hikeDB = new HikeData();
+        hikeDB.setPeakName("Mt. Sneffels");   // Default title
         Intent myIntent = new Intent(HistoryActivity.this, SaveHikeDataActivity.class);
         myIntent.putExtra(getString(R.string.passHikeData), hikeDB);
         myIntent.putExtra(getString(R.string.sourceString), TAG);

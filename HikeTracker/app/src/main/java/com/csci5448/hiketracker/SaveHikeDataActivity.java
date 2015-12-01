@@ -1,8 +1,10 @@
 package com.csci5448.hiketracker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
@@ -30,13 +31,11 @@ public class SaveHikeDataActivity extends AppCompatActivity {
     private static final String TAG = "SaveHikeDatActivity";
     private Button saveHikeBttn;
     private Button cancelHikeBttn;
-    private Bundle bundle;
     HikeData hikeData, newHikeData;
     ArrayList<Mountain> mountains;
     ArrayList<String> mountainNameList;
     //    User user;
     HikeDataSource hikeDataSource;
-    private boolean readyToFinish = false;
     Spinner peakPicker;
 
     private long oldTime;   // used for updating hikes
@@ -63,7 +62,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
 
         hikeDataSource = new HikeDataSource(this);
 
-        bundle = getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
         if (bundle == null) {
             // No extras were put in --> something went wrong
             Log.d(TAG, "Bundle is empty");
@@ -71,8 +70,6 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         }
 
         hikeData = bundle.getParcelable(getString(R.string.passHikeData));
-//        user = bundle.getParcelable(getString(R.string.passUser));
-
         String source = bundle.getString(getString(R.string.sourceString));
 
         // Setup Buttons
@@ -82,6 +79,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
 
         calendar = Calendar.getInstance();
         calendar.setTime(hikeData.getHikeDate());
+        Log.d(TAG, "Calender is: " + calendar.toString());
 
         // Set up values
         mountainNameField = (TextView)findViewById(R.id.mountainNameField);
@@ -132,17 +130,19 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         String time = (String) hikeLengthField.getText();
         String hrs = time.substring(0,2);
         String minutes = time.substring(3,5);
+        String seconds = time.substring((7));
         int hour = Integer.parseInt(hrs);
         int minute = Integer.parseInt(minutes);
-        return (hour*60+minute)*60;
+        int sec = Integer.parseInt(seconds);
+        Log.d(TAG, "Time was: " + time+ ".\n Hrs = " + hrs + ", Min = " + minutes + ", Sec = " + seconds);
+        Log.d(TAG, "Time parsed was: Hrs = " + String.valueOf(hour) + ", Min = " + String.valueOf(minute) + ", Sec = " + String.valueOf(sec));
+        return ((hour*60+minute)*60 + sec%60) * 1000;   // Return time in milliseconds
     }
 
     private void setupForEditing() {
         getCurrentDate();
 
-        peakPicker = (Spinner)findViewById(R.id.peakPicker);
-//        peakPicker.setVisibility(View.VISIBLE);
-
+        loadMountains();
         Button editDateBttn = (Button) findViewById(R.id.editDateBttn);
         Button editLengthBttn = (Button) findViewById(R.id.editLengthBttn);
 
@@ -180,34 +180,33 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         });
     }
 
-//    private void setChangePeakButtn(){
-//        Button editPeakBttn = (Button) findViewById(R.id.editPeakBttn);
-//        editPeakBttn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.d(TAG, "Edit Peak Button clicked");
-//                AlertDialog.Builder builder = new AlertDialog.Builder(SaveHikeDataActivity.this);
-//                builder.setTitle("Change Peak");
-//                final String[] list = mountainNameList.toArray(new String[mountainNameList.size()]);
-//                builder.setItems(list, new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                        mountainNameField.setText(list[which]);
-//                        dialog.dismiss();
-//                    }
-//                });
-//
-//
-//                builder.show();
-//            };
-//        });
-//    }
+    private void setChangePeakButtn(){
+        Button editPeakBttn = (Button) findViewById(R.id.editPeakBttn);
+        editPeakBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Edit Peak Button clicked");
+                AlertDialog.Builder builder = new AlertDialog.Builder(SaveHikeDataActivity.this);
+                builder.setTitle("Change Peak");
+                final String[] list = mountainNameList.toArray(new String[mountainNameList.size()]);
+                builder.setItems(list, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(SaveHikeDataActivity.this, "Clicked on " + list[which], Toast.LENGTH_SHORT).show();
+                        mountainNameField.setText(list[which]);
+                        dialog.dismiss();
+                    }
+                });
+
+
+                builder.show();
+            };
+        });
+    }
 
     @Override
     protected Dialog onCreateDialog(int id) {
-
         switch (id) {
             case DATE_DIALOG_ID:
                 // set date picker as current date
@@ -238,13 +237,13 @@ public class SaveHikeDataActivity extends AppCompatActivity {
 
 
     // display current date both on the text view and the Date Picker when the application starts.
-    public void getCurrentDate() {
+    private void getCurrentDate() {
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
     }
 
-    public void setCurrentDate(){
+    private void setCurrentDate(){
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, day);
@@ -258,6 +257,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
 
     private void updateHikeData() {
         // Copy over old data
+        Log.d(TAG, "Old Hike Data = " + hikeData.toString());
         newHikeData = hikeData;
 
         // Delete old data
@@ -270,6 +270,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         setCurrentDate();
         newHikeData.setHikeDate(new Date(calendar.getTimeInMillis()));
 
+        Log.d(TAG, "New Hike Data = " + newHikeData.toString());
         // Save new data
         updateEntry();
     }
@@ -298,7 +299,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
                 Log.d(TAG, "Save Hike Button clicked");
                 deleteEntry();
 //                while (!readyToFinish); // Wait for updates to occur
-                Toast.makeText(getApplicationContext(),"Hike was DELETED!",
+                Toast.makeText(getApplicationContext(), "Hike was DELETED!",
                         Toast.LENGTH_SHORT).show();
                 Intent returnIntent = new Intent();
                 setResult(Activity.RESULT_OK, returnIntent);
@@ -343,10 +344,11 @@ public class SaveHikeDataActivity extends AppCompatActivity {
     private void deleteEntry() {new manipulateHikeDataTasks().execute(HikeDataDisplayActions.DELETE_ENTRY); }
     private void updateEntry() {new manipulateHikeDataTasks().execute(HikeDataDisplayActions.UPDATE_ENTRY); }
     private void saveEntry() {new manipulateHikeDataTasks().execute(HikeDataDisplayActions.SAVE_ENTRY); }
+    private void loadMountains() {new manipulateHikeDataTasks().execute(HikeDataDisplayActions.LOAD_MOUNTAINS); }
 
 
     private enum HikeDataDisplayActions {
-        DELETE_ENTRY, UPDATE_ENTRY, SAVE_ENTRY, LOAD_MOUNTAINS;
+        DELETE_ENTRY, UPDATE_ENTRY, SAVE_ENTRY, LOAD_MOUNTAINS
     }
 
     //    Asynchronous Task to Access SQLite Database
@@ -355,7 +357,6 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         HikeDataDisplayActions hikeDataDisplayActions;
         UserDataSource userDataSource;
         MountainDataSource mountainDataSource;
-        //        ArrayList<Mountain> mountains;
         ArrayList<HikeData> hikes;
 
         @Override
@@ -394,8 +395,14 @@ public class SaveHikeDataActivity extends AppCompatActivity {
 //                    userDataSource.update(user);
 //                    mountains = (ArrayList) mountainDataSource.getMountains();
                     break;
+                case LOAD_MOUNTAINS:
+                    hikeDataDisplayActions = HikeDataDisplayActions.LOAD_MOUNTAINS;
+                    Log.d(TAG, "Loaded all mountains");
+                    break;
             }
-            mountains = (ArrayList) mountainDataSource.getMountains();
+            if (mountains == null) {
+                mountains = (ArrayList) mountainDataSource.getMountains();
+            }
             hikes = (ArrayList)hikeDataSource.getAllHikes();
             Log.d(TAG, "Finished in background");
             return null;
@@ -426,30 +433,28 @@ public class SaveHikeDataActivity extends AppCompatActivity {
                     MainActivity.user.addNewHike(hikeData.getHikeLength());
                     break;
                 case LOAD_MOUNTAINS:
+                    mountainNameList = new ArrayList<>();
                     for (Mountain mount:mountains){
                         mountainNameList.add(mount.getmName());
                     }
-//                    setChangePeakButtn();
-                    ArrayAdapter<String> peakAdapter =
-                            new ArrayAdapter<String>(SaveHikeDataActivity.this, android.R.layout.simple_spinner_item, mountainNameList);
-
-                    peakAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    peakPicker.setAdapter(peakAdapter);
+                    setChangePeakButtn();
+//                    ArrayAdapter<String> peakAdapter =
+//                            new ArrayAdapter<String>(SaveHikeDataActivity.this, android.R.layout.simple_spinner_item, mountainNameList);
+//
+//                    peakAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                    peakPicker.setAdapter(peakAdapter);
             }
             userDataSource.update(MainActivity.user);
             Log.d(TAG, "Updated user");
 //            }
-            readyToFinish = true;
             Log.d(TAG, "Finished in post execute");
         }
 
         private void updateMountainHikedField(boolean insertion){
 //            ArrayList<Mountain> mountains = (ArrayList) mountainDataSource.getMountains();
             for (Mountain mount : mountains) {
-                Log.d(TAG, "Finding mountain just hiked");
                 // Find mountain just hiked
                 if (mount.getmName().equals(hikeData.getPeakName())) {
-                    Log.d(TAG, "Found it");
                     if (insertion){
                         // Change mountain hiked to true if not already
                         if (!mount.isHiked()) {
