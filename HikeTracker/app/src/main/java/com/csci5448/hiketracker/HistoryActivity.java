@@ -39,7 +39,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         // initialize database
         hikeDataSource = new HikeDataSource(this);
-        user = getIntent().getExtras().getParcelable(getString(R.string.passUser));
+//        user = getIntent().getExtras().getParcelable(getString(R.string.passUser));
 
         // start to asynchronously retrieves mountain data from table
         getHikes();
@@ -115,7 +115,7 @@ public class HistoryActivity extends AppCompatActivity {
         // Start SaveHikeData Activity with Tag
         Intent myIntent = new Intent(HistoryActivity.this, SaveHikeDataActivity.class);
         myIntent.putExtra(getString(R.string.passHikeData), hikeDB);
-        myIntent.putExtra(getString(R.string.passUser), user);
+//        myIntent.putExtra(getString(R.string.passUser), user);
         myIntent.putExtra(getString(R.string.sourceString), TAG);
         myIntent.putExtra(getString(R.string.editString), true);
 

@@ -18,8 +18,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     UserDataSource userDataSource;
-    User user;
+    public static User user;
 
+    private int oldCount;
     public static final String TAG = "MainActivity";
     public static final int NEW_HIKE_DATA = 1;
 
@@ -35,13 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void startLocator(View view){
         Intent myIntent = new Intent(MainActivity.this, LocatorActivity.class);
-        myIntent.putExtra(getString(R.string.passUser), user);
+//        myIntent.putExtra(getString(R.string.passUser), user);
         startActivity(myIntent);
     }
 
     public void viewHistory(View view) {
         Intent myIntent = new Intent(MainActivity.this, HistoryActivity.class);
-        myIntent.putExtra(getString(R.string.passUser), user);
+//        myIntent.putExtra(getString(R.string.passUser), user);
         startActivity(myIntent);
     }
 
@@ -76,9 +77,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == NEW_HIKE_DATA) {
-            if(resultCode == Activity.RESULT_OK){
+            if(resultCode == Activity.RESULT_OK) {
                 // New hike was updated, need to update User display
-                getUserData();
+                int tries = 0;
+                while (oldCount == user.getTotalCount() && tries < 500){
+                    getUserData();
+                    tries++;
+                }
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 // Nothing was updated, do nothing
@@ -90,13 +95,12 @@ public class MainActivity extends AppCompatActivity {
 
     //    private void
     public class GetUserData extends AsyncTask<Void, Void, Void> {
-    ArrayList<User> users;
+        ArrayList<User> users;
 
         @Override
         protected Void doInBackground(Void... arg0) {
             Log.d(TAG, "On doInBackground...");
             users = (ArrayList)userDataSource.getUsers();      // Load previously stored user data
-
             return null;
         }
 
@@ -115,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
 
                 TextView userName = (TextView)findViewById(R.id.userName);
                 userName.setText(String.valueOf(user.getUserName()));
+
+                oldCount = user.getTotalCount();
             } else {
                 startNewUser();
             }

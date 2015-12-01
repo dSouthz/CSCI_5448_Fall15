@@ -1,6 +1,8 @@
 package com.csci5448.hiketracker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,13 +36,14 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
 
     private final float DEFAULT_ZOOM = 6;
     static final int START_NEW_HIKE = 1;    // Request code for new hike activity
+    private boolean newHike = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_locator);
 
-        user = getIntent().getExtras().getParcelable(getString(R.string.passUser));
+//        user = getIntent().getExtras().getParcelable(getString(R.string.passUser));
 
         mountainDataSource = new MountainDataSource(this);
 
@@ -149,7 +152,7 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     public void startHikeActivity(Mountain mount) {
         Intent myIntent = new Intent(LocatorActivity.this, HikeActivity.class);
         myIntent.putExtra(getString(R.string.passMountain), mount);
-        myIntent.putExtra(getString(R.string.passUser), user);
+//        myIntent.putExtra(getString(R.string.passUser), user);
         myIntent.putExtra(getString(R.string.sourceString), TAG);
 
         startActivityForResult(myIntent, START_NEW_HIKE);
@@ -172,13 +175,33 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
         finish();   // Return to MainActivity
     }
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Really Exit?")
+                .setMessage("Are you sure you want to exit?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface arg0, int arg1) {
+//                        LocatorActivity.super.onBackPressed();
+                        Intent returnIntent = new Intent();
+                        setResult(Activity.RESULT_CANCELED, returnIntent);
+                        finish();
+                    }
+
+                }).create().show();
+    }
+
 //    Asynchronous Task to revtrieve saved mountain information from database
     public class GetMountainTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... arg0) {
             Log.d("DoINBackGround", "On doInBackground...");
+            // One time, only 8 mountains were correctly loaded for some reason. This prevents that.
             mountains = mountainDataSource.getMountains();      // Load previously stored mountain data
+
             if (mountains.size() <= 0) {    // no mountain data has yet been loaded
                 Log.d(TAG, "No mountains loaded, loading mountains");
                 mountainDataSource.loadMountains();  // Load mountain data into the database
