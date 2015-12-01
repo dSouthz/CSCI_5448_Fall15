@@ -1,5 +1,6 @@
 package com.csci5448.hiketracker;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,15 +12,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
 
     UserDataSource userDataSource;
-    List<User> users;
+    User user;
 
     public static final String TAG = "MainActivity";
+    public static final int NEW_HIKE_DATA = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +35,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void startLocator(View view){
         Intent myIntent = new Intent(MainActivity.this, LocatorActivity.class);
-        myIntent.putExtra(getString(R.string.passUser), users.get(0));
+        myIntent.putExtra(getString(R.string.passUser), user);
         startActivity(myIntent);
     }
 
     public void viewHistory(View view) {
         Intent myIntent = new Intent(MainActivity.this, HistoryActivity.class);
+        myIntent.putExtra(getString(R.string.passUser), user);
         startActivity(myIntent);
     }
 
@@ -69,15 +72,30 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == NEW_HIKE_DATA) {
+            if(resultCode == Activity.RESULT_OK){
+                // New hike was updated, need to update User display
+                getUserData();
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                // Nothing was updated, do nothing
+            }
+        }
+    }
+
     private void getUserData() { new GetUserData().execute(); }
 
     //    private void
     public class GetUserData extends AsyncTask<Void, Void, Void> {
+    ArrayList<User> users;
 
         @Override
         protected Void doInBackground(Void... arg0) {
             Log.d(TAG, "On doInBackground...");
-            users = userDataSource.getUsers();      // Load previously stored user data
+            users = (ArrayList)userDataSource.getUsers();      // Load previously stored user data
 
             return null;
         }
@@ -85,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void v) {
             if(users.size() > 0) {
-                User user = users.get(0);
+                user = users.get(0);
                 TextView summitCount = (TextView)findViewById(R.id.summitCount);
                 summitCount.setText(String.valueOf(user.getSummitCount()));
 

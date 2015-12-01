@@ -1,5 +1,6 @@
 package com.csci5448.hiketracker;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -147,7 +148,24 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
         myIntent.putExtra(getString(R.string.passUser), user);
         myIntent.putExtra(getString(R.string.sourceString), TAG);
 
-        startActivity(myIntent);
+        startActivityForResult(myIntent, START_NEW_HIKE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Intent returnIntent = new Intent();
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                // New hike was saved,remove all map markers and update map
+                mMap.clear();
+                setResult(Activity.RESULT_OK, returnIntent);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                // Saving Hike was canceled, no need to update map
+                setResult(Activity.RESULT_CANCELED, returnIntent);
+            }
+        }
+        finish();   // Return to MainActivity
     }
 
 //    Asynchronous Task to revtrieve saved mountain information from database

@@ -1,7 +1,9 @@
 package com.csci5448.hiketracker;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +30,7 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
     private Button saveHikeBttn;
     private Button cancelHikeBttn;
     private Bundle bundle;
-    HikeData hikeData;
+    HikeData hikeData, newHikeData;
     User user;
     HikeDataSource hikeDataSource;
 
@@ -40,7 +42,7 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
 
     static final int DATE_DIALOG_ID = 100;
     static final int TIME_DIALOG_ID = 200;
-    static final int PEAK_DIALOG_ID = 200;
+    static final int PEAK_DIALOG_ID = 300;
 
     // Layout Variables
     TextView mountainNameField, hikeDateField, hikeLengthField;
@@ -164,6 +166,8 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
                 updateHikeData();
                 Toast.makeText(getApplicationContext(),"Hike was Updated!",
                         Toast.LENGTH_SHORT).show();
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
         });
@@ -177,9 +181,14 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
         switch (id) {
             case DATE_DIALOG_ID:
                 // set date picker as current date
+                Log.d(TAG, "Change Date Button pressed");
                 return new DatePickerDialog(this, datePickerListener, year, month,day);
             case TIME_DIALOG_ID:
-
+                Log.d(TAG, "Change Length Button pressed");
+                break;
+            case PEAK_DIALOG_ID:
+                Log.d(TAG, "Change Peak Button pressed");
+                break;
         }
         return null;
     }
@@ -195,10 +204,6 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
             // set selected date into Text View
             hikeDateField.setText(new StringBuilder().append(month + 1)
                     .append("-").append(day).append("-").append(year).append(" "));
-
-            // set selected date into Date Picker
-//            datePicker.init(year, month, day, null);
-
         }
     };
 
@@ -215,11 +220,11 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
         day = calendar.get(Calendar.DAY_OF_MONTH);
 
         // set current date into textview
-        hikeDateField.setText(new StringBuilder()
-                // Month is 0 based, so you have to add 1
-                .append(month + 1).append("-")
-                .append(day).append("-")
-                .append(year).append(" "));
+//        hikeDateField.setText(new StringBuilder()
+//                // Month is 0 based, so you have to add 1
+//                .append(month + 1).append("-")
+//                .append(day).append("-")
+//                .append(year).append(" "));
 
         // set current date into Date Picker
 //        datePicker.init(year, month, day, null);
@@ -242,16 +247,19 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
     }
 
     private void updateHikeData() {
+        // Copy over old data
+        newHikeData = hikeData;
+
         // Delete old data
         deleteEntry();
 
-        // Insert new data into hikeData
-        hikeData.setHikeLength(longFromTime());
-        hikeData.setPeakName(String.valueOf(mountainNameField.getText()));
-        hikeData.setHikeDate(new Date(calendar.getTimeInMillis()));
+        // Insert new data into newHikeData
+        newHikeData.setHikeLength(longFromTime());
+        newHikeData.setPeakName(String.valueOf(mountainNameField.getText()));
+        newHikeData.setHikeDate(new Date(calendar.getTimeInMillis()));
 
         // Save new data
-        saveEntry();
+        updateEntry();
     }
 
     private void setupPickers(){
@@ -334,6 +342,8 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
                 deleteEntry();
                 Toast.makeText(getApplicationContext(),"Hike was DELETED!",
                         Toast.LENGTH_SHORT).show();
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
         });
@@ -347,6 +357,8 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
                 saveEntry();
                 Toast.makeText(getApplicationContext(),"Hike was SAVED!",
                         Toast.LENGTH_SHORT).show();
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_OK, returnIntent);
                 finish();
 
             }
@@ -360,6 +372,8 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
                 Log.d(TAG, "Cancel Button clicked");
                 Toast.makeText(getApplicationContext(), "This hike was not saved",
                         Toast.LENGTH_SHORT).show();
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish();
             }
         });
@@ -383,35 +397,39 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
         @Override
         protected Void doInBackground(HikeDataDisplayActions... types) {
 //            Log.d(TAG, "On doInBackground...");
-            Log.d("On doInBackground... ", String.valueOf(types[0]));
+//            synchronized (hikeData) {
+                Log.d("On doInBackground... ", String.valueOf(types[0]));
 
 
-            UserDataSource userDataSource = new UserDataSource(getApplicationContext());
-            switch (types[0]) {
-                case DELETE_ENTRY:  // Delete chosen entry
-                    hikeDataSource.deleteHikeData(hikeData);
-                    Log.d(TAG, "Hike deleted");
-                    updateMountainHikedField(false);
-                    user.subtractNewHike(hikeData.getHikeLength());
+                UserDataSource userDataSource = new UserDataSource(getApplicationContext());
+                switch (types[0]) {
+                    case DELETE_ENTRY:  // Delete chosen entry
+                        hikeDataSource.deleteHikeData(hikeData);
+                        Log.d(TAG, "Hike deleted");
+                        updateMountainHikedField(false);
+                        user.subtractNewHike(hikeData.getHikeLength());
 
-                    userDataSource.update(user);
-                    break;
-                case UPDATE_ENTRY:  // Edit and update chosen entry
-                    hikeDataSource.update(hikeData);
-                    Log.d(TAG, "Hike updated");
-
-                    break;
-                case SAVE_ENTRY:
-                    hikeDataSource.save(hikeData);
-                    Log.d(TAG, "Hike saved");
-
-                    updateMountainHikedField(true);
-                    user.setMostRecent(hikeData.getPeakName());
-                    user.addNewHike(hikeData.getHikeLength());
-                    userDataSource.update(user);
-                    break;
-            }
-            return null;
+                        userDataSource.update(user);
+                        break;
+                    case UPDATE_ENTRY:  // Edit and update chosen entry
+                        hikeDataSource.save(newHikeData);
+                        Log.d(TAG, "Hike updated");
+                        updateMountainHikedField(true);
+                        updateLastPeakHikedField();
+                        user.addNewHike(hikeData.getHikeLength());
+                        userDataSource.update(user);
+                        break;
+                    case SAVE_ENTRY:
+                        hikeDataSource.save(hikeData);
+                        Log.d(TAG, "Hike saved");
+                        updateMountainHikedField(true);
+                        user.setMostRecent(hikeData.getPeakName());
+                        user.addNewHike(hikeData.getHikeLength());
+                        userDataSource.update(user);
+                        break;
+                }
+                return null;
+//            }
         }
 
         @Override
@@ -440,34 +458,45 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
                         // Check to see if there are other hikes for this mountain
                         ArrayList<HikeData> hikes = (ArrayList)hikeDataSource.getAllHikes();
                         try {
-                            wait(500);  // wait for hikes to load
+                            wait(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        Collections.sort(hikes); // Sorted by date
-                        if (hikes.size() > 0) user.setMostRecent(hikes.get(0).getPeakName());  // also update LastPeakHiked field
-                        else user.setMostRecent(getString(R.string.nothingYetLabel));
-                        int hikeCount = 0;
-                        for (HikeData hikeData:hikes){
-                            if (hikeData.getPeakName().equals(hikeData.getPeakName())){
-                                hikeCount++;
+//                        synchronized (hikes){
+                            Collections.sort(hikes); // Sorted by date
+                            if (hikes.size() > 0) user.setMostRecent(hikes.get(0).getPeakName());  // also update LastPeakHiked field
+                            else user.setMostRecent(getString(R.string.nothingYetLabel));
+                            int hikeCount = 0;
+                            for (HikeData hikeData:hikes){
+                                if (hikeData.getPeakName().equals(hikeData.getPeakName())){
+                                    hikeCount++;
+                                }
                             }
-                        }
-                        if (hikeCount == 0) {
-                            // Removed was the only hike for this mountain
-                            mount.setHiked(false);
-                            mountainDataSource.save(mount); // Update hiked record
-                            Log.d(TAG, "Set " + mount.getmName() + " to NOT Hiked");
-                            user.subtractOneSummit();
-                            Log.d(TAG, "Decremented summit count");
-                        }
+                            if (hikeCount == 0) {
+                                // Removed was the only hike for this mountain
+                                mount.setHiked(false);
+                                mountainDataSource.save(mount); // Update hiked record
+                                Log.d(TAG, "Set " + mount.getmName() + " to NOT Hiked");
+                                user.subtractOneSummit();
+                                Log.d(TAG, "Decremented summit count");
+                            }
+//                        }
+//                        try {
+//                            wait(1000);  // wait for hikes to load
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+
                     }
                 }
             }
         }
 
         private void updateLastPeakHikedField(){
-
+            ArrayList<HikeData> hikes = (ArrayList)hikeDataSource.getAllHikes();
+            Collections.sort(hikes);    // Sort by date
+            if (hikes.size() > 0) user.setMostRecent(hikes.get(0).getPeakName());
+            else user.setMostRecent(getString(R.string.nothingYetLabel));
         }
 
     }

@@ -1,5 +1,6 @@
 package com.csci5448.hiketracker;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +28,7 @@ public class HistoryActivity extends AppCompatActivity {
     private HikeDataSource hikeDataSource;
     private HikeData hikeDB;
     private ListView listview;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         // initialize database
         hikeDataSource = new HikeDataSource(this);
+        user = getIntent().getExtras().getParcelable(getString(R.string.passUser));
 
         // start to asynchronously retrieves mountain data from table
         getHikes();
@@ -62,35 +65,35 @@ public class HistoryActivity extends AppCompatActivity {
         listview = (ListView) findViewById (R.id.historyList);
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapter, View v, int position,
-                                    long arg3) {
-                hikeDB = (HikeData)adapter.getItemAtPosition(position);
-                String value = hikeDB.toString();
+                                            @Override
+                                            public void onItemClick(AdapterView<?> adapter, View v, int position,
+                                                                    long arg3) {
+                                                hikeDB = (HikeData) adapter.getItemAtPosition(position);
+                                                String value = hikeDB.toString();
 //                Toast.makeText(getApplicationContext(), "You clicked " + value + " at position " + position, Toast.LENGTH_LONG).show();
 
-                // Show dialog
-                AlertDialog.Builder adb = new AlertDialog.Builder(
-                        HistoryActivity.this);
-                adb.setTitle("What do you want to do?");
+                                                // Show dialog
+                                                AlertDialog.Builder adb = new AlertDialog.Builder(
+                                                        HistoryActivity.this);
+                                                adb.setTitle("What do you want to do?");
 //                adb.setMessage("You selected " + value);
-                adb.setPositiveButton("Edit Hike", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        editEntry();
-                    }
-                });
-                adb.setCancelable(true);
-                adb.setNegativeButton("Delete Hike",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        deleteEntry();
-                    }
-                });
-                adb.setNeutralButton("Cancel", null);
-                adb.show();
+                                                adb.setPositiveButton("Edit Hike", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                        editEntry();
+                                                    }
+                                                });
+                                                adb.setCancelable(true);
+                                                adb.setNegativeButton("Delete Hike", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                        deleteEntry();
+                                                    }
+                                                });
+                                                adb.setNeutralButton("Cancel", null);
+                                                adb.show();
 
-            }
-        }
-    );
+                                            }
+                                        }
+        );
 
 }
     // Insert test hike data into the database
@@ -112,6 +115,7 @@ public class HistoryActivity extends AppCompatActivity {
         // Start SaveHikeData Activity with Tag
         Intent myIntent = new Intent(HistoryActivity.this, SaveHikeDataActivity.class);
         myIntent.putExtra(getString(R.string.passHikeData), hikeDB);
+        myIntent.putExtra(getString(R.string.passUser), user);
         myIntent.putExtra(getString(R.string.sourceString), TAG);
         myIntent.putExtra(getString(R.string.editString), true);
 
@@ -143,6 +147,20 @@ public class HistoryActivity extends AppCompatActivity {
         myIntent.putExtra(getString(R.string.editString), true);
 
         startActivity(myIntent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Intent returnIntent = new Intent();
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                setResult(Activity.RESULT_OK,returnIntent);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                setResult(Activity.RESULT_CANCELED,returnIntent);
+            }
+        }
+        finish();
     }
 
 private enum HikeDataDisplayActions {
