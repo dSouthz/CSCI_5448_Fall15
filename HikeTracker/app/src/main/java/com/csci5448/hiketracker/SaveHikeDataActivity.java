@@ -447,7 +447,7 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
                         // Change mountain hiked to true if not already
                         if (!mount.isHiked()) {
                             mount.setHiked(true);
-                            mountainDataSource.save(mount);
+                            mountainDataSource.update(mount);
                             Log.d(TAG, "Set " + mount.getmName() + " to HIKED");
                             user.addOneSummit();
                             Log.d(TAG, "Incremented summit count");
@@ -475,7 +475,7 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
                             if (hikeCount == 0) {
                                 // Removed was the only hike for this mountain
                                 mount.setHiked(false);
-                                mountainDataSource.save(mount); // Update hiked record
+                                mountainDataSource.update(mount); // Update hiked record
                                 Log.d(TAG, "Set " + mount.getmName() + " to NOT Hiked");
                                 user.subtractOneSummit();
                                 Log.d(TAG, "Decremented summit count");

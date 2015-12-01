@@ -129,11 +129,15 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
                     "Elevation: " + formatter.format(mount.getmElevation()) + "\n" +
                     "Click to begin hike!";
 
+            if (mount.isHiked())
+                Log.d(TAG, mount.getmName() + " is Hiked.");
+
             map.addMarker(new MarkerOptions().
                     position(new LatLng(mount.getmLatitude(), mount.getmLongtidue())).
                     title(mount.getmName()).draggable(false).
                     snippet(snippet).
-                    icon(BitmapDescriptorFactory.fromResource((mount.isHiked()? R.drawable.completed : R.drawable.mountain))));
+                    icon(BitmapDescriptorFactory.fromResource((mount.isHiked() ? R.drawable.completed : R.drawable.mountain))));
+
         }
 
     }

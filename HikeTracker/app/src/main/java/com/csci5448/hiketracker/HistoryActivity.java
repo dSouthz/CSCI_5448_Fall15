@@ -119,7 +119,7 @@ public class HistoryActivity extends AppCompatActivity {
         myIntent.putExtra(getString(R.string.sourceString), TAG);
         myIntent.putExtra(getString(R.string.editString), true);
 
-        startActivity(myIntent);
+        startActivityForResult(myIntent, MainActivity.NEW_HIKE_DATA);
     }
 
     /**
@@ -132,7 +132,7 @@ public class HistoryActivity extends AppCompatActivity {
         myIntent.putExtra(getString(R.string.sourceString), TAG);
         myIntent.putExtra(getString(R.string.editString), false);
 
-        startActivity(myIntent);
+        startActivityForResult(myIntent, MainActivity.NEW_HIKE_DATA);
     }
 
     /**
@@ -146,13 +146,13 @@ public class HistoryActivity extends AppCompatActivity {
         myIntent.putExtra(getString(R.string.sourceString), TAG);
         myIntent.putExtra(getString(R.string.editString), true);
 
-        startActivity(myIntent);
+        startActivityForResult(myIntent, MainActivity.NEW_HIKE_DATA);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Intent returnIntent = new Intent();
-        if (requestCode == 1) {
+        if (requestCode == MainActivity.NEW_HIKE_DATA) {
             if(resultCode == Activity.RESULT_OK){
                 setResult(Activity.RESULT_OK,returnIntent);
             }
