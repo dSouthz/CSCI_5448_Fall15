@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +23,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Locale;
 
-public class SaveHikeDataActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener{
+public class SaveHikeDataActivity extends AppCompatActivity {
 
     private static final String TAG = "SaveHikeDatActivity";
     private Button saveHikeBttn;
@@ -47,7 +46,7 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
 
     // Layout Variables
     TextView mountainNameField, hikeDateField, hikeLengthField;
-    NumberPicker hr1, hr0, min1, min0;
+
 //    DatePicker datePicker;
 
     @Override
@@ -120,9 +119,16 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
     }
 
     private long longFromTime(){
-        int hrs = hr1.getValue()*10+hr0.getValue();
-        int mins = min1.getValue()*10 + min0.getValue();
-        return (long) (mins*60+hrs*60*60);
+//        int hrs = hr1.getValue()*10+hr0.getValue();
+//        int mins = min1.getValue()*10 + min0.getValue();
+//        return (long) (mins*60+hrs*60*60);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        String time = (String) hikeLengthField.getText();
+        String hrs = time.substring(0,2);
+        String minutes = time.substring(3,5);
+        int hour = Integer.parseInt(hrs);
+        int minute = Integer.parseInt(minutes);
+        return (hour*60+minute)*60;
     }
 
     private void setupForEditing() {
@@ -154,7 +160,9 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Edit Length Button clicked");
-                showDialog(TIME_DIALOG_ID);
+                // custom dialog
+                LengthPickerDialog lengthPickerDialog = new LengthPickerDialog(SaveHikeDataActivity.this, hikeLengthField);
+                lengthPickerDialog.show();
             }
         });
 
@@ -246,14 +254,14 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
         hikeDateField.setText(sdf.format(calendar.getTimeInMillis()));
     }
 
-    @Override
-    public void onValueChange(NumberPicker picker, int oldVal, int newVal)
-    {
-        // Update hike length field
-        hikeLengthField.setText(String.format("%d%d:%d%d:00",
-                hr1.getValue(), hr0.getValue(),
-                min1.getValue(), min0.getValue()));
-    }
+//    @Override
+//    public void onValueChange(NumberPicker picker, int oldVal, int newVal)
+//    {
+//        // Update hike length field
+//        hikeLengthField.setText(String.format("%d%d:%d%d:00",
+//                hr1.getValue(), hr0.getValue(),
+//                min1.getValue(), min0.getValue()));
+//    }
 
     private void updateHikeData() {
         // Copy over old data
@@ -271,33 +279,7 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
         updateEntry();
     }
 
-    private void setupPickers(){
-        // Setup Number Pickers
-        hr1 = (NumberPicker)findViewById(R.id.hr1picker);
-        hr0 = (NumberPicker)findViewById(R.id.hr0picker);
-        min1 = (NumberPicker)findViewById(R.id.min1picker);
-        min0 = (NumberPicker)findViewById(R.id.min0picker);
 
-        hr0.setMinValue(0);
-        hr0.setMaxValue(9);
-        hr0.setMinValue(0);
-        hr1.setMaxValue(9);
-
-        min0.setMinValue(0);
-        min0.setMaxValue(9);
-        min1.setMinValue(0);
-        min1.setMaxValue(9);
-
-        hr0.setWrapSelectorWheel(true);
-        hr1.setWrapSelectorWheel(true);
-        min0.setWrapSelectorWheel(true);
-        min1.setWrapSelectorWheel(true);
-
-        hr0.setOnValueChangedListener(this);
-        hr1.setOnValueChangedListener(this);
-        min0.setOnValueChangedListener(this);
-        min1.setOnValueChangedListener(this);
-    }
 
     private void setupDatePicker(){
 //        datePicker = (DatePicker) findViewById(R.id.datePicker);
@@ -349,7 +331,7 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
             public void onClick(View view) {
                 Log.d(TAG, "Save Hike Button clicked");
                 deleteEntry();
-                while (!readyToFinish); // Wait for updates to occur
+//                while (!readyToFinish); // Wait for updates to occur
                 Toast.makeText(getApplicationContext(),"Hike was DELETED!",
                         Toast.LENGTH_SHORT).show();
                 Intent returnIntent = new Intent();
@@ -365,13 +347,12 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
             public void onClick(View view) {
                 Log.d(TAG, "Save Hike Button clicked");
                 saveEntry();
-                while (!readyToFinish); // Wait for updates to occur
+//                while (!readyToFinish); // Wait for updates to occur
                 Toast.makeText(getApplicationContext(),"Hike was SAVED!",
                         Toast.LENGTH_SHORT).show();
                 Intent returnIntent = new Intent();
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
-
             }
         });
         saveHikeBttn.setEnabled(true);
@@ -457,7 +438,7 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
         @Override
         protected void onPostExecute(Void v) {
             Log.d(TAG, "starting postexecute");
-            synchronized (MainActivity.user) {
+//            synchronized (MainActivity.user) {
                 Log.d(TAG, "synchronized user");
                 switch (hikeDataDisplayActions) {
                     case DELETE_ENTRY:
@@ -482,7 +463,7 @@ public class SaveHikeDataActivity extends AppCompatActivity implements NumberPic
                 }
             userDataSource.update(MainActivity.user);
                 Log.d(TAG, "Updated user");
-            }
+//            }
             readyToFinish = true;
             Log.d(TAG, "Finished in post execute");
         }

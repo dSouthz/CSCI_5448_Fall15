@@ -42,22 +42,22 @@ public class User implements Parcelable, Comparable<User>{
     }
 
     /*******************  Getter/Setter Methods *******************/
-    public long getAverageLength() {
+    public synchronized long getAverageLength() {
         return averageLength;
     }
 
-    public void setAverageLength(long averageLength) {
+    public synchronized void setAverageLength(long averageLength) {
         this.averageLength = averageLength;
     }
 
-    public void addNewHike(long newTime){
+    public synchronized void addNewHike(long newTime){
         long totalTime = averageLength*(totalCount);
         totalTime += newTime;
         addOneHike();
         setAverageLength(totalTime/totalCount);
     }
 
-    public void subtractNewHike(long newTime){
+    public synchronized void subtractNewHike(long newTime){
         long totalTime = averageLength*(totalCount);
         totalTime -= newTime;
         subtractOneHike();
@@ -65,75 +65,75 @@ public class User implements Parcelable, Comparable<User>{
     }
 
 
-    public int getTotalCount() {
+    public synchronized int getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(int totalCount) {
+    public synchronized void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
     }
 
-    public void subtractOneHike(){
+    public synchronized void subtractOneHike(){
         totalCount--;
     }
 
-    public void addOneHike(){
+    public synchronized void addOneHike(){
         totalCount++;
     }
 
-    public int getSummitCount() {
+    public synchronized int getSummitCount() {
         return summitCount;
     }
 
-    public void addOneSummit() {
+    public synchronized void addOneSummit() {
         summitCount++;
     }
 
-    public void subtractOneSummit(){
+    public synchronized void subtractOneSummit(){
         summitCount--;
     }
 
-    public void setSummitCount(int summitCount) {
+    public synchronized void setSummitCount(int summitCount) {
         this.summitCount = summitCount;
     }
 
-    public String getMostRecent() {
+    public synchronized String getMostRecent() {
         return mostRecent;
     }
 
-    public void setMostRecent(String mostRecent) {
+    public synchronized void setMostRecent(String mostRecent) {
         this.mostRecent = mostRecent;
     }
 
-    public String getUserName() {
+    public synchronized String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public synchronized void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public int getUserId() {
+    public synchronized int getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public synchronized void setUserId(int userId) {
         this.userId = userId;
     }
 
 
     @Override
-    public int compareTo(User user) {
+    public synchronized int compareTo(User user) {
         return userId - user.getUserId();
     }
 
     @Override
-    public int describeContents() {
+    public synchronized int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public synchronized void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(userId);
         parcel.writeString(userName);
         parcel.writeString(mostRecent);
