@@ -16,9 +16,6 @@ public class HikeDataSource extends HikeTrackerDBDAO{
 
     private static final String WHERE_ID_EQUALS = DatabaseHelper.KEY_ID
             + " =?";
-//
-//    private static final SimpleDateFormat formatter = new SimpleDateFormat(
-//            "MM-dd-yyyy", Locale.ENGLISH);
 
     private static final String SELECT_QUERY = "SELECT * FROM " + DatabaseHelper.TABLE_HIKEDATA;
 
@@ -78,7 +75,7 @@ public class HikeDataSource extends HikeTrackerDBDAO{
             }
 
         } finally {
-//            try { database.close(); } catch (Exception ignore) {}
+
         }
 
         return hikes;

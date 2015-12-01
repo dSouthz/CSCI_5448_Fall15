@@ -44,8 +44,7 @@ public class LengthPickerDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.okPickerBttn:
-                toUpdate.setText(String.valueOf(hr1.getValue()) + String.valueOf(hr0.getValue() + ":")
-                        + String.valueOf(min1.getValue()) + String.valueOf(min0.getValue()) + ":00");
+                toUpdate.setText(String.format("%s%s%s%s:00", String.valueOf(hr1.getValue()), String.valueOf(hr0.getValue() + ":"), String.valueOf(min1.getValue()), String.valueOf(min0.getValue())));
                 break;
             case R.id.cancelPickerBttn:
                 dismiss();

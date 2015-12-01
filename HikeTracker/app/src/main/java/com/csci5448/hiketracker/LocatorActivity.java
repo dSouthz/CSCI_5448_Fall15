@@ -43,8 +43,6 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_locator);
 
-//        user = getIntent().getExtras().getParcelable(getString(R.string.passUser));
-
         mountainDataSource = new MountainDataSource(this);
 
         // asynchronously retrieves mountain data from table

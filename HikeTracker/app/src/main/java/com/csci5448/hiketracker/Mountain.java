@@ -20,30 +20,6 @@ public class Mountain implements Parcelable, Comparable<Mountain>{
 
     public static final int TOTAL_MOUNTAINS = 53;   // Total number of peaks
 
-    /*******************  Constructor *******************/
-
-//    public Mountain(String mName, String mRange, int mElevation, double mlatitude, double mLongtidue, int id, boolean hiked){
-//        super();
-//        this.mName = mName;
-//        this.mRange = mRange;
-//        this.mElevation = mElevation;
-//        this.id = id;
-//        this.hiked = hiked;
-//    }
-//
-//    // Constructor Variations
-//    public Mountain(String mName, String mRange, int mElevation, int id) {
-//        this(mName, mRange, mElevation, 0, 0, id, false);
-//    }
-//
-//    public Mountain(String mName, String mRange, int mElevation, int id, boolean hiked){
-//        this(mName, mRange, mElevation, 0, 0, id, hiked);
-//    }
-//
-//    public Mountain(String mName, String mRange, int mElevation, double mlatitude, double mLongtidue, boolean hiked){
-//        this(mName, mRange, mElevation, mlatitude, mLongtidue, 0, hiked);
-//    }
-
     public Mountain(String mName, String mRange, int mElevation, double mlatitude, double mLongtidue){
         super();
         this.mName = mName;

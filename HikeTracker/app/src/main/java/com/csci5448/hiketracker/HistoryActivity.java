@@ -36,7 +36,6 @@ public class HistoryActivity extends AppCompatActivity {
 
         // initialize database
         hikeDataSource = new HikeDataSource(this);
-//        user = getIntent().getExtras().getParcelable(getString(R.string.passUser));
 
         // start to asynchronously retrieves mountain data from table
         getHikes();
@@ -66,14 +65,11 @@ public class HistoryActivity extends AppCompatActivity {
                                             public void onItemClick(AdapterView<?> adapter, View v, int position,
                                                                     long arg3) {
                                                 hikeDB = (HikeData) adapter.getItemAtPosition(position);
-//                                                String value = hikeDB.toString();
-//                Toast.makeText(getApplicationContext(), "You clicked " + value + " at position " + position, Toast.LENGTH_LONG).show();
 
                                                 // Show dialog
                                                 AlertDialog.Builder adb = new AlertDialog.Builder(
                                                         HistoryActivity.this);
                                                 adb.setTitle("What do you want to do?");
-//                adb.setMessage("You selected " + value);
                                                 adb.setPositiveButton("Edit Hike", new DialogInterface.OnClickListener() {
                                                     public void onClick(DialogInterface dialog, int id) {
                                                         editEntry();
@@ -104,7 +100,6 @@ public class HistoryActivity extends AppCompatActivity {
         // Start SaveHikeData Activity with Tag
         Intent myIntent = new Intent(HistoryActivity.this, SaveHikeDataActivity.class);
         myIntent.putExtra(getString(R.string.passHikeData), hikeDB);
-//        myIntent.putExtra(getString(R.string.passUser), user);
         myIntent.putExtra(getString(R.string.sourceString), TAG);
         myIntent.putExtra(getString(R.string.editString), true);
 

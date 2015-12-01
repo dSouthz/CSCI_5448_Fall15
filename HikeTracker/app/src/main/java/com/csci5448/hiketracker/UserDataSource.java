@@ -79,7 +79,6 @@ public class UserDataSource extends HikeTrackerDBDAO{
             }
 
         } finally {
-//            try { database.close(); } catch (Exception ignore) {}
         }
 
         return users;

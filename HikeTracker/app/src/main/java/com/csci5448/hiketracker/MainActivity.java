@@ -36,13 +36,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void startLocator(View view){
         Intent myIntent = new Intent(MainActivity.this, LocatorActivity.class);
-//        myIntent.putExtra(getString(R.string.passUser), user);
         startActivity(myIntent);
     }
 
     public void viewHistory(View view) {
         Intent myIntent = new Intent(MainActivity.this, HistoryActivity.class);
-//        myIntent.putExtra(getString(R.string.passUser), user);
         startActivity(myIntent);
     }
 
@@ -79,11 +77,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == NEW_HIKE_DATA) {
             if(resultCode == Activity.RESULT_OK) {
                 // New hike was updated, need to update User display
-                int tries = 0;
-                while (oldCount == user.getTotalCount() && tries < 500){
-                    getUserData();
-                    tries++;
-                }
+                getUserData();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 // Nothing was updated, do nothing

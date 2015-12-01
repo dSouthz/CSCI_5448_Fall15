@@ -141,12 +141,10 @@ public class HikeActivity extends AppCompatActivity {
         hikeData.setUserId(MainActivity.user.getUserId());
         hikeData.setHikeLength(updatedTime);
         hikeData.setPeakName(mountain.getmName());
-//        hikeData.setHikeDate(new Date(Calendar.getInstance().getTime().getTime()));  // Should be set to the current date with constructor
 
         // Start SaveHikeData Activity with Tag
         Intent myIntent = new Intent(HikeActivity.this, SaveHikeDataActivity.class);
         myIntent.putExtra(getString(R.string.passHikeData), hikeData);
-//        myIntent.putExtra(getString(R.string.passUser),user);
         myIntent.putExtra(getString(R.string.sourceString), TAG);
 
         startActivity(myIntent);

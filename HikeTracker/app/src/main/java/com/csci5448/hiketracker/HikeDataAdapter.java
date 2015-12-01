@@ -40,12 +40,6 @@ public class HikeDataAdapter extends ArrayAdapter<HikeData> {
             view = (View)convertView;
         }
 
-        // Check if an existing view is being reused, otherwise inflate the view
-//        if (convertView == null) {
-//            convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_layout, parent, false);
-//        }
-
-//        view = inflater.inflate(R.layout.row_layout, null);
         // Lookup view for data population
         TextView hikeDate = (TextView) view.findViewById(R.id.hikeDate);
         TextView hikePeak = (TextView) view.findViewById(R.id.hikePeak);

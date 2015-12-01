@@ -94,7 +94,7 @@ public class MountainDataSource extends HikeTrackerDBDAO{
             }
 
         } finally {
-//            try { database.close(); } catch (Exception ignore) {}
+
         }
 
         Log.d(TAG, "Mountain data retrieval complete, size = " + String.valueOf(mountains.size()));
