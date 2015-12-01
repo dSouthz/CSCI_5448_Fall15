@@ -131,6 +131,6 @@ public class HikeData implements Parcelable, Comparable<HikeData>{
 
     @Override
     public int compareTo(HikeData another) {
-        return getHikeDate().compareTo(another.getHikeDate());
+        return another.getHikeDate().compareTo(getHikeDate());
     }
 }

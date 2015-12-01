@@ -75,6 +75,9 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         cancelHikeBttn = (Button)findViewById(R.id.cancelHikeBttn);
         buttonSetup();
 
+        calendar = Calendar.getInstance();
+        calendar.setTime(hikeData.getHikeDate());
+
         // Set up values
         mountainNameField = (TextView)findViewById(R.id.mountainNameField);
         hikeDateField  = (TextView)findViewById(R.id.hikeDateField);
@@ -82,7 +85,8 @@ public class SaveHikeDataActivity extends AppCompatActivity {
 
         // Fill in TextView fields
         mountainNameField.setText(hikeData.getPeakName());
-        hikeDateField.setText(String.valueOf(hikeData.getHikeDate()));
+//        hikeDateField.setText(String.valueOf(hikeData.getHikeDate()));
+        updateLabel();  // Setup date field
         hikeLengthField.setText(timeFromLong(hikeData.getHikeLength()));
 
         if (source != null) {
@@ -119,10 +123,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
     }
 
     private long longFromTime(){
-//        int hrs = hr1.getValue()*10+hr0.getValue();
-//        int mins = min1.getValue()*10 + min0.getValue();
-//        return (long) (mins*60+hrs*60*60);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
         String time = (String) hikeLengthField.getText();
         String hrs = time.substring(0,2);
         String minutes = time.substring(3,5);
@@ -134,7 +135,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
     private void setupForEditing() {
 //        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.mountainListRadioGroup);
 
-        setCurrentDate();
+        getCurrentDate();
 
         Button editPeakBttn = (Button) findViewById(R.id.editPeakBttn);
         Button editDateBttn = (Button) findViewById(R.id.editDateBttn);
@@ -173,14 +174,6 @@ public class SaveHikeDataActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG, "Update Button clicked");
                 updateHikeData();
-//                while (!readyToFinish){
-//                                    // Wait for updates to occur
-//                    try {
-//                        wait(1000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
                 Toast.makeText(getApplicationContext(),"Hike was Updated!",
                         Toast.LENGTH_SHORT).show();
                 Intent returnIntent = new Intent();
@@ -188,8 +181,6 @@ public class SaveHikeDataActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-//        oldTime = hikeData.getHikeLength();
     }
 
     @Override
@@ -218,34 +209,23 @@ public class SaveHikeDataActivity extends AppCompatActivity {
             month = selectedMonth;
             day = selectedDay;
 
-            // set selected date into Text View
-            hikeDateField.setText(new StringBuilder().append(month + 1)
-                    .append("-").append(day).append("-").append(year).append(" "));
+            setCurrentDate();
+            updateLabel();
         }
     };
 
 
     // display current date both on the text view and the Date Picker when the application starts.
-    public void setCurrentDate() {
-
-//        datePicker = (DatePicker) findViewById(R.id.datePicker);
-
-        final Calendar calendar = Calendar.getInstance();
-
+    public void getCurrentDate() {
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
+    }
 
-        // set current date into textview
-//        hikeDateField.setText(new StringBuilder()
-//                // Month is 0 based, so you have to add 1
-//                .append(month + 1).append("-")
-//                .append(day).append("-")
-//                .append(year).append(" "));
-
-        // set current date into Date Picker
-//        datePicker.init(year, month, day, null);
-
+    public void setCurrentDate(){
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH,month);
+        calendar.set(Calendar.DAY_OF_MONTH,day);
     }
 
     private void updateLabel() {
@@ -253,15 +233,6 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         hikeDateField.setText(sdf.format(calendar.getTimeInMillis()));
     }
-
-//    @Override
-//    public void onValueChange(NumberPicker picker, int oldVal, int newVal)
-//    {
-//        // Update hike length field
-//        hikeLengthField.setText(String.format("%d%d:%d%d:00",
-//                hr1.getValue(), hr0.getValue(),
-//                min1.getValue(), min0.getValue()));
-//    }
 
     private void updateHikeData() {
         // Copy over old data
@@ -273,39 +244,12 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         // Insert new data into newHikeData
         newHikeData.setHikeLength(longFromTime());
         newHikeData.setPeakName(String.valueOf(mountainNameField.getText()));
+
+        setCurrentDate();
         newHikeData.setHikeDate(new Date(calendar.getTimeInMillis()));
 
         // Save new data
         updateEntry();
-    }
-
-
-
-    private void setupDatePicker(){
-//        datePicker = (DatePicker) findViewById(R.id.datePicker);
-        calendar = Calendar.getInstance();
-
-        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, monthOfYear);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
-            }
-        };
-
-//        datePicker.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                new DatePickerDialog(SaveHikeDataActivity.this, date, calendar
-//                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-//                        calendar.get(Calendar.DAY_OF_MONTH)).show();
-//            }
-//        });
     }
 
     private void setupforSaving() {
