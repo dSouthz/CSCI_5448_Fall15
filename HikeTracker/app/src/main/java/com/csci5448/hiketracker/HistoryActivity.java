@@ -102,6 +102,8 @@ public class HistoryActivity extends AppCompatActivity {
         myIntent.putExtra(getString(R.string.passHikeData), hikeDB);
         myIntent.putExtra(getString(R.string.sourceString), TAG);
         myIntent.putExtra(getString(R.string.editString), true);
+        myIntent.putExtra(getString(R.string.newString), false);
+
 
         startActivityForResult(myIntent, MainActivity.NEW_HIKE_DATA);
     }
@@ -115,6 +117,8 @@ public class HistoryActivity extends AppCompatActivity {
         myIntent.putExtra(getString(R.string.passHikeData), hikeDB);
         myIntent.putExtra(getString(R.string.sourceString), TAG);
         myIntent.putExtra(getString(R.string.editString), false);
+        myIntent.putExtra(getString(R.string.newString), false);
+
 
         startActivityForResult(myIntent, MainActivity.NEW_HIKE_DATA);
     }
@@ -130,6 +134,7 @@ public class HistoryActivity extends AppCompatActivity {
         myIntent.putExtra(getString(R.string.passHikeData), hikeDB);
         myIntent.putExtra(getString(R.string.sourceString), TAG);
         myIntent.putExtra(getString(R.string.editString), true);
+        myIntent.putExtra(getString(R.string.newString), true);
 
         startActivityForResult(myIntent, MainActivity.NEW_HIKE_DATA);
     }

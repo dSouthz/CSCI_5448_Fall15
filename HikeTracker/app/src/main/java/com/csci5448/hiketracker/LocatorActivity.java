@@ -52,7 +52,6 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        mapFragment.getMap().setMyLocationEnabled(true);
 
     }
 
@@ -71,6 +70,12 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "Map is ready");
         mMap = googleMap;
+        mMap.setMyLocationEnabled(true);
+        addMarkers(mMap);
+        setMarkerInteraction(mMap);
+        updateCameraPosition(mountains, mMap);
+        debug(mMap);
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
     }
 
 
@@ -217,13 +222,5 @@ public class LocatorActivity extends FragmentActivity implements OnMapReadyCallb
             return null;
         }
 
-        @Override
-        protected void onPostExecute(Void v) {
-            addMarkers(mMap);
-            setMarkerInteraction(mMap);
-            updateCameraPosition(mountains, mMap);
-            debug(mMap);
-            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-        }
     }
 }

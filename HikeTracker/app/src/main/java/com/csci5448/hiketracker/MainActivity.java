@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -36,12 +37,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void startLocator(View view){
         Intent myIntent = new Intent(MainActivity.this, LocatorActivity.class);
-        startActivity(myIntent);
+        startActivityForResult(myIntent, NEW_HIKE_DATA);
     }
 
     public void viewHistory(View view) {
         Intent myIntent = new Intent(MainActivity.this, HistoryActivity.class);
-        startActivity(myIntent);
+        startActivityForResult(myIntent, NEW_HIKE_DATA);
     }
 
     private void startNewUser() {

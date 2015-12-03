@@ -54,16 +54,23 @@ public class User implements Parcelable, Comparable<User>{
         long totalTime = averageLength*(totalCount);
         totalTime += newTime;
         addOneHike();
-        setAverageLength(totalTime/totalCount);
+        confirmAndSetAverageLength(totalTime);
     }
 
     public synchronized void subtractNewHike(long newTime){
         long totalTime = averageLength*(totalCount);
         totalTime -= newTime;
         subtractOneHike();
-        setAverageLength(totalTime/totalCount);
+        confirmAndSetAverageLength(totalTime);
     }
 
+    public synchronized void confirmAndSetAverageLength(long totalTime) {
+        if(totalCount > 0)
+            setAverageLength(totalTime/totalCount);
+        else {
+            setAverageLength(0);
+        }
+    }
 
     public synchronized int getTotalCount() {
         return totalCount;

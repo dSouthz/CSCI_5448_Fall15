@@ -91,10 +91,11 @@ public class SaveHikeDataActivity extends AppCompatActivity {
             else {
                 // Previously saved hikedata to be edited or deleted
                 // Check to see if this activity will display editing fields
+
                 Boolean check = getIntent().getExtras().getBoolean(getString(R.string.editString));
 
                 if (check) {
-                    setupForEditing();  // Setup fields for editing
+                    setupForEditing(getIntent().getExtras().getBoolean(getString(R.string.newString)));  // Setup fields for editing
                 }
                 else {
                     // If coming from HistoryActivity and it isn't for editing, it's for deleting
@@ -124,12 +125,12 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         int hour = Integer.parseInt(hrs);
         int minute = Integer.parseInt(minutes);
         int sec = Integer.parseInt(seconds);
-        Log.d(TAG, "Time was: " + time+ ".\n Hrs = " + hrs + ", Min = " + minutes + ", Sec = " + seconds);
+        Log.d(TAG, "Time was: " + time + ".\n Hrs = " + hrs + ", Min = " + minutes + ", Sec = " + seconds);
         Log.d(TAG, "Time parsed was: Hrs = " + String.valueOf(hour) + ", Min = " + String.valueOf(minute) + ", Sec = " + String.valueOf(sec));
         return ((hour*60+minute)*60 + sec%60) * 1000;   // Return time in milliseconds
     }
 
-    private void setupForEditing() {
+    private void setupForEditing(Boolean newHike) {
         getCurrentDate();
 
         loadMountains();
@@ -155,19 +156,35 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         });
 
         // Change save button to update button
-        saveHikeBttn.setText(R.string.updateBttnLabel);
-        saveHikeBttn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Update Button clicked");
-                updateHikeData();
-                Toast.makeText(getApplicationContext(),"Hike was Updated!",
-                        Toast.LENGTH_SHORT).show();
-                Intent returnIntent = new Intent();
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
-            }
-        });
+        if(!newHike) {
+            saveHikeBttn.setText(R.string.updateBttnLabel);
+            saveHikeBttn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "Update Button clicked");
+                    updateHikeData(false);
+                    Toast.makeText(getApplicationContext(), "Hike was Updated!",
+                            Toast.LENGTH_SHORT).show();
+                    Intent returnIntent = new Intent();
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }
+            });
+        } else {
+            saveHikeBttn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "Update Button clicked");
+                    updateHikeData(true);
+                    Toast.makeText(getApplicationContext(), "Hike was Saved!",
+                            Toast.LENGTH_SHORT).show();
+                    Intent returnIntent = new Intent();
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }
+            });
+        }
+
     }
 
     private void setChangePeakButtn(){
@@ -237,13 +254,15 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         hikeDateField.setText(sdf.format(calendar.getTimeInMillis()));
     }
 
-    private void updateHikeData() {
+    private void updateHikeData(Boolean newHike) {
         // Copy over old data
         Log.d(TAG, "Old Hike Data = " + hikeData.toString());
         newHikeData = hikeData;
 
         // Delete old data
-        deleteEntry();
+        if(!newHike) {
+            deleteEntry();
+        }
 
         // Insert new data into newHikeData
         newHikeData.setHikeLength(longFromTime());
@@ -255,7 +274,11 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         Log.d(TAG, "New Hike Data = " + newHikeData.toString());
 
         // Save new data
-        updateEntry();
+        if(!newHike) {
+            updateEntry();
+        } else {
+            saveEntry();
+        }
     }
 
     private void setupforSaving() {
@@ -372,6 +395,10 @@ public class SaveHikeDataActivity extends AppCompatActivity {
             }
             if (mountains == null) {
                 mountains = (ArrayList) mountainDataSource.getMountains();
+                if(mountains.size() == 0) {
+                    mountainDataSource.loadMountains();
+                    mountains = (ArrayList) mountainDataSource.getMountains();
+                }
             }
             hikes = (ArrayList)hikeDataSource.getAllHikes();
             Log.d(TAG, "Finished in background");

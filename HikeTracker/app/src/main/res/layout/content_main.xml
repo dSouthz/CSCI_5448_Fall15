@@ -22,7 +22,9 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -33,7 +35,8 @@
         android:layout_marginTop="50dp"
         android:layout_below="@+id/userName"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -44,7 +47,8 @@
         android:layout_below="@+id/avgLengthLabel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="100dp" />
+        android:layout_marginTop="100dp"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -55,7 +59,8 @@
         android:layout_below="@+id/summitCountLabel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="60dp" />
+        android:layout_marginTop="60dp"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:layout_width="match_parent"
@@ -66,7 +71,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:onClick="startLocator" />
+        android:onClick="startLocator"
+        android:background="#666666"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="3dp" />
 
     <Button
         android:layout_width="match_parent"
@@ -78,7 +86,9 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:onClick="viewHistory"/>
+        android:onClick="viewHistory"
+        android:background="#666666"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -88,7 +98,8 @@
         android:id="@+id/summitCount"
         android:layout_above="@+id/avgLengthLabel"
         android:layout_alignRight="@+id/mostRecentLabel"
-        android:layout_alignEnd="@+id/mostRecentLabel" />
+        android:layout_alignEnd="@+id/mostRecentLabel"
+        android:textColor="#FFFFFF" />
 
 
     <TextView
@@ -99,7 +110,8 @@
         android:id="@+id/mostRecent"
         android:layout_alignTop="@+id/mostRecentLabel"
         android:layout_alignRight="@+id/fourteenersButton"
-        android:layout_alignEnd="@+id/fourteenersButton" />
+        android:layout_alignEnd="@+id/fourteenersButton"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -110,7 +122,8 @@
         android:layout_above="@+id/mostRecentLabel"
         android:layout_toRightOf="@+id/avgLengthLabel"
         android:layout_toEndOf="@+id/avgLengthLabel"
-        android:layout_marginLeft="10dp" />
+        android:layout_marginLeft="10dp"
+        android:textColor="#FFFFFF" />
     <!-- -->
     <!--<TextView-->
         <!--android:layout_width="wrap_content"-->

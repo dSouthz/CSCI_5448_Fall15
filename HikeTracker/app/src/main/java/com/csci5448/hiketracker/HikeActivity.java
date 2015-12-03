@@ -1,5 +1,6 @@
 package com.csci5448.hiketracker;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -110,6 +111,20 @@ public class HikeActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Intent returnIntent = new Intent();
+        if (requestCode == MainActivity.NEW_HIKE_DATA) {
+            if(resultCode == Activity.RESULT_OK){
+                setResult(Activity.RESULT_OK,returnIntent);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                setResult(Activity.RESULT_CANCELED,returnIntent);
+            }
+        }
+        finish();
+    }
+
     private void setRunningButtons(){
         startButton.setEnabled(false);
         pauseButton.setEnabled(true);
@@ -147,12 +162,14 @@ public class HikeActivity extends AppCompatActivity {
         myIntent.putExtra(getString(R.string.passHikeData), hikeData);
         myIntent.putExtra(getString(R.string.sourceString), TAG);
 
-        startActivity(myIntent);
+        startActivityForResult(myIntent, MainActivity.NEW_HIKE_DATA);
     }
+
+
 
     private void exit() {
 // TODO Return to main activity
-        finish();
+        //finish();
     }
 
     private Runnable updateTimerThread = new Runnable() {

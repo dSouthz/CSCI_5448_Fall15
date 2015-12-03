@@ -26,6 +26,7 @@
     <string name="passMountain">Mountain Parcel</string>
     <string name="sourceString">Source Strings</string>
     <string name="editString">Edit Strings</string>
+    <string name="newString">New Strings</string>
     <string name="updateBttnLabel">Update</string>
     <string name="deleteBttnLabel">DELETE</string>
     <string name="chosePeakLabel">Choose Peak!</string>
