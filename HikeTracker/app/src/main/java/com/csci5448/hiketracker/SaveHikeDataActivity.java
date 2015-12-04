@@ -80,7 +80,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         // Fill in TextView fields
         mountainNameField.setText(hikeData.getPeakName());
         updateHikeDateLabel();  // Setup date field
-        hikeLengthField.setText(timeFromLong(hikeData.getHikeLength()));
+        hikeLengthField.setText(TimeHelper.timeFromLong(hikeData.getHikeLength()));
 
         if (source != null) {
             if (source.equals(HikeActivity.TAG)) {
@@ -106,29 +106,6 @@ public class SaveHikeDataActivity extends AppCompatActivity {
 
     }
 
-    private String timeFromLong(Long time){
-        int secs = (int) (time / 1000);
-        int mins = secs / 60;
-        int hrs = mins / 60;
-        secs = secs % 60;
-        return (String.format("%02d", hrs) + ":"
-                + String.format("%02d", mins) + ":"
-                + String.format("%02d", secs));
-    }
-
-    private long longFromTime(){
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-        String time = (String) hikeLengthField.getText();
-        String hrs = time.substring(0,2);
-        String minutes = time.substring(3,5);
-        String seconds = time.substring((7));
-        int hour = Integer.parseInt(hrs);
-        int minute = Integer.parseInt(minutes);
-        int sec = Integer.parseInt(seconds);
-        Log.d(TAG, "Time was: " + time + ".\n Hrs = " + hrs + ", Min = " + minutes + ", Sec = " + seconds);
-        Log.d(TAG, "Time parsed was: Hrs = " + String.valueOf(hour) + ", Min = " + String.valueOf(minute) + ", Sec = " + String.valueOf(sec));
-        return ((hour*60+minute)*60 + sec%60) * 1000;   // Return time in milliseconds
-    }
 
     private void setupForEditing(Boolean newHike) {
         getCurrentDate();
@@ -265,7 +242,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         }
 
         // Insert new data into newHikeData
-        newHikeData.setHikeLength(longFromTime());
+        newHikeData.setHikeLength(TimeHelper.longFromTime((String) hikeLengthField.getText()));
         newHikeData.setPeakName(String.valueOf(mountainNameField.getText()));
 
         setCurrentDate();

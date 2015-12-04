@@ -51,20 +51,11 @@ public class HikeDataAdapter extends ArrayAdapter<HikeData> {
         hikePeak.setText(String.format("Peak: %s", hikeData.getPeakName()));
 
         //hh:mm
-        hikeLength.setText(timeFromLong(hikeData.getHikeLength()));
+        hikeLength.setText(TimeHelper.timeFromLong(hikeData.getHikeLength()));
 
         // Return the completed view to render on screen
         return view;
     }
 
-    private String timeFromLong(Long time){
-        int secs = (int)(time / 1000);
-        int mins = secs / 60;
-        int hrs = mins / 60;
-        secs = secs % 60;
-        return (String.format("%02d", hrs) + ":"
-                + String.format("%02d", mins) + ":"
-                + String.format("%02d", secs));
-    }
 
 }

@@ -89,7 +89,7 @@ public class HikeActivity extends AppCompatActivity {
                 timeInMilliseconds = 0L;
                 timeSwapBuff = 0L;
                 updatedTime = 0L;
-
+                setTimerText(0,0,0);
             }
         });
 
@@ -149,6 +149,12 @@ public class HikeActivity extends AppCompatActivity {
         cancelButton.setEnabled(false);
     }
 
+    private void setTimerText(int hrs, int mins, int secs) {
+        timerValue.setText(String.format("%02d", hrs) + ":"
+                + String.format("%02d", mins) + ":"
+                + String.format("%02d", secs));
+    }
+
     private void saveHike() {
 // TODO Implement saving hike to database, updating user information, updating mountain information
         // Launch HikeDialog Fragment w/ dialog displaying collected info, option to save
@@ -183,9 +189,7 @@ public class HikeActivity extends AppCompatActivity {
             int mins = secs / 60;
             int hrs = mins / 60;
             secs = secs % 60;
-            timerValue.setText(String.format("%02d", hrs) + ":"
-                    + String.format("%02d", mins) + ":"
-                    + String.format("%02d", secs));
+            setTimerText(hrs, mins, secs);
             customHandler.postDelayed(this, 0);
         }
 

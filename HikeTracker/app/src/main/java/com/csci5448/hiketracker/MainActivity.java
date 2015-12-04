@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 summitCount.setText(String.valueOf(user.getSummitCount()));
 
                 TextView avgLength = (TextView)findViewById(R.id.avgLength);
-                avgLength.setText(timeFromLong(user.getAverageLength()));
+                avgLength.setText(TimeHelper.timeFromLong(user.getAverageLength()));
 
                 TextView mostRecent = (TextView)findViewById(R.id.mostRecent);
                 mostRecent.setText(String.valueOf(user.getMostRecent()));
@@ -121,14 +121,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        private String timeFromLong(Long time){
-            int secs = (int) (time / 1000);
-            int mins = secs / 60;
-            int hrs = mins / 60;
-            secs = secs % 60;
-            return (String.format("%02d", hrs) + ":"
-                    + String.format("%02d", mins) + ":"
-                    + String.format("%02d", secs));
-        }
     }
 }
