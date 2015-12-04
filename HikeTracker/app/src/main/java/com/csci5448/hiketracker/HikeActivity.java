@@ -2,6 +2,7 @@ package com.csci5448.hiketracker;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,9 @@ import android.widget.TextView;
 public class HikeActivity extends AppCompatActivity {
 
     public static final String TAG = "HikeActivity";
+    public final String ENABLED_COLOR = "#666666";
+    public final String DISABLED_COLOR = "#555555";
+
 
     private Button startButton;
     private Button pauseButton;
@@ -90,6 +94,8 @@ public class HikeActivity extends AppCompatActivity {
                 timeSwapBuff = 0L;
                 updatedTime = 0L;
                 setTimerText(0,0,0);
+                setButtonAvailable(saveButton, false);
+                setButtonAvailable(cancelButton, false);
             }
         });
 
@@ -126,27 +132,36 @@ public class HikeActivity extends AppCompatActivity {
     }
 
     private void setRunningButtons(){
-        startButton.setEnabled(false);
-        pauseButton.setEnabled(true);
-        resetButton.setEnabled(true);
-        saveButton.setEnabled(false);
-        cancelButton.setEnabled(false);
+        setButtonAvailable(startButton, false);
+        setButtonAvailable(pauseButton, true);
+        setButtonAvailable(resetButton, true);
+        setButtonAvailable(saveButton, false);
+        setButtonAvailable(cancelButton, false);
     }
 
     private void setPausedButtons(){
-        startButton.setEnabled(true);
-        pauseButton.setEnabled(false);
-        resetButton.setEnabled(true);
-        saveButton.setEnabled(true);
-        cancelButton.setEnabled(true);
+        setButtonAvailable(startButton, true);
+        setButtonAvailable(pauseButton, false);
+        setButtonAvailable(resetButton, true);
+        setButtonAvailable(saveButton, true);
+        setButtonAvailable(cancelButton, true);
     }
 
     private void setStartingButtons(){
-        startButton.setEnabled(true);
-        pauseButton.setEnabled(false);
-        resetButton.setEnabled(false);
-        saveButton.setEnabled(false);
-        cancelButton.setEnabled(false);
+        setButtonAvailable(startButton, true);
+        setButtonAvailable(pauseButton, false);
+        setButtonAvailable(resetButton, false);
+        setButtonAvailable(saveButton, false);
+        setButtonAvailable(cancelButton, false);
+    }
+
+    private void setButtonAvailable(Button button, Boolean state) {
+        button.setEnabled(state);
+        if(state) {
+            button.setBackgroundColor(Color.parseColor(ENABLED_COLOR));
+        } else {
+            button.setBackgroundColor(Color.parseColor(DISABLED_COLOR));
+        }
     }
 
     private void setTimerText(int hrs, int mins, int secs) {

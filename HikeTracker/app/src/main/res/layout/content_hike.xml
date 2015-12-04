@@ -24,14 +24,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:textColor="#ffffff" />
 
         <Button
             android:id="@+id/resetButton"
             android:layout_width="90dp"
             android:layout_height="45dp"
             android:gravity="right"
-            android:text="Reset" />
+            android:text="Reset"
+            android:background="#666666"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="10dp" />
 
     </LinearLayout>
 
@@ -43,7 +47,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:textSize="60sp"
-        android:text="@string/timerVal" />
+        android:text="@string/timerVal"
+        android:textColor="#ffffff" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,35 +60,49 @@
             android:layout_width="90dp"
             android:layout_height="45dp"
             android:gravity="center_vertical"
-            android:text="@string/startButtonLabel" />
+            android:text="@string/startButtonLabel"
+            android:textColor="#ffffff"
+            android:background="#666666"
+            android:paddingLeft="4dp" />
 
         <Button
             android:id="@+id/pauseButton"
             android:layout_width="90dp"
             android:layout_height="45dp"
             android:gravity="center_vertical"
-            android:text="@string/pauseButtonLabel" />
+            android:text="@string/pauseButtonLabel"
+            android:textColor="#ffffff"
+            android:background="#666666"
+            android:layout_marginLeft="0dp"
+            android:paddingLeft="4dp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="2dp">
 
         <Button
             android:id="@+id/reviewButton"
             android:layout_width="170dp"
             android:layout_height="55dp"
             android:gravity="center_horizontal"
-            android:text="@string/reviewBttnLabel" />
+            android:text="@string/reviewBttnLabel"
+            android:textColor="#ffffff"
+            android:background="#666666" />
 
         <Button
             android:id="@+id/cancelButton"
             android:layout_width="170dp"
             android:layout_height="55dp"
             android:gravity="center_horizontal"
-            android:text="@string/cancelHikeBttnLabel" />
+            android:text="@string/cancelHikeBttnLabel"
+            android:textColor="#ffffff"
+            android:background="#666666"
+            android:layout_marginLeft="2dp"
+            android:paddingLeft="-2dp" />
 
     </LinearLayout>
 

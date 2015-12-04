@@ -8,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/bg_hdpi_blank"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".SaveHikeDataActivity"
     tools:showIn="@layout/activity_save_hike_data"
@@ -19,7 +20,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Sample Peak Name"
         android:id="@+id/mountainNameField"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ffffff" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -59,13 +61,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save"
-            android:id="@+id/saveHikeBttn" />
+            android:id="@+id/saveHikeBttn"
+            android:textColor="#ffffff"
+            android:backgroundTint="#666666" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"
-            android:id="@+id/cancelHikeBttn" />
+            android:id="@+id/cancelHikeBttn"
+            android:textColor="#ffffff"
+            android:backgroundTint="#666666" />
     </LinearLayout>
 
     <LinearLayout
@@ -80,7 +86,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Change Peak"
-            android:id="@+id/editPeakBttn" />
+            android:id="@+id/editPeakBttn"
+            android:textColor="#ffffff"
+            android:backgroundTint="#666666" />
 
         <!--<Spinner-->
             <!--android:layout_width="match_parent"-->
@@ -92,13 +100,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Change Date"
-            android:id="@+id/editDateBttn" />
+            android:id="@+id/editDateBttn"
+            android:textColor="#ffffff"
+            android:backgroundTint="#666666" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Change Length"
-            android:id="@+id/editLengthBttn" />
+            android:id="@+id/editLengthBttn"
+            android:textColor="#ffffff"
+            android:backgroundTint="#666666" />
     </LinearLayout>
 
 

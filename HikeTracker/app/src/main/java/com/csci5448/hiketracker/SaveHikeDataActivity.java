@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,9 @@ import java.util.Locale;
 public class SaveHikeDataActivity extends AppCompatActivity {
 
     private static final String TAG = "SaveHikeDatActivity";
+    public final String ENABLED_COLOR = "#666666";
+    public final String DISABLED_COLOR = "#555555";
+
     private Button saveHikeBttn;
     private Button cancelHikeBttn;
     HikeData hikeData, newHikeData;
@@ -307,6 +311,7 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         });
         saveHikeBttn.setEnabled(true);
         saveHikeBttn.setVisibility(View.VISIBLE);
+        saveHikeBttn.setBackgroundColor(Color.parseColor(ENABLED_COLOR));
 
         cancelHikeBttn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -321,6 +326,8 @@ public class SaveHikeDataActivity extends AppCompatActivity {
         });
         cancelHikeBttn.setEnabled(true);
         cancelHikeBttn.setVisibility(View.VISIBLE);
+        saveHikeBttn.setBackgroundColor(Color.parseColor(ENABLED_COLOR));
+
     }
 
     // Task Calls

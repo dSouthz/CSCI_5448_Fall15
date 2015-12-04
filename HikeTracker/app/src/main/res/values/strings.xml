@@ -39,7 +39,7 @@
     <string name="pickNameLabel">Pick Time</string>
     <string name="colonLabel">:</string>
     <string name="reviewBttnLabel">Review Hike Data</string>
-    <string name="cancelHikeBttnLabel">Exit Without Saving</string>
+    <string name="cancelHikeBttnLabel">Exit W/O Saving</string>
     <string name="nothingYetLabel">Nothing yet</string>
 
 </resources>
