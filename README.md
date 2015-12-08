@@ -9,12 +9,13 @@
 ####Table of Contents
 <ol>
 <li><i>PDFs</i>: Folder containing required documentation (project summary, requirements, reports, etc)</li>
-<li><i>HikeTracker</i>: Folder containing all project source code </li>
-	<ol>
+<ol>
 	<li>HikeTracker_Part1</li>
 	<li>HikeTracker_Part2</li>
 	<li>HikeTracker_Part3</li>
 	<li>HikeTracker_Part4</li>
 	</ol>
+<li><i>HikeTracker</i>: Folder containing all project source code </li>
+	
 </ol>
 
